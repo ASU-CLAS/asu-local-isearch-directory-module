@@ -1,0 +1,128 @@
+<?php
+
+/**
+ * Implements hook_install()
+ */
+function asu_isearch_install() {
+
+  $weight = 100;
+
+  if (module_exists('panopoly_widget')) {
+    // Get the weight of the module we want to compare against
+    $weight += db_select('system', 's')
+      ->fields('s', array('weight'))
+      ->condition('name', 'panopoly_widget', '=')
+      ->execute()
+      ->fetchField();
+  }
+
+  // Set our module to a weight 1 heavier, so ours moves lower in execution order
+  db_update('system')
+    ->fields(array('weight' => $weight))
+    ->condition('name', 'asu_isearch', '=')
+    ->execute();
+}
+
+
+/**
+ * Implements hook_enable().
+ *
+ * Clear iSearch plugin cache so that this plugin shows up.
+ */
+function asu_isearch_enable() {
+	drupal_flush_all_caches();
+	asu_isearch_setup_panelizer_defaults();
+}
+
+/**
+ * Sets up panelizer defaults correctly
+ */
+function asu_isearch_setup_panelizer_defaults() {
+  $bundle = 'asu_isearch_profile.default';
+  $handler = panelizer_entity_plugin_get_handler('node');
+  $name = 'default';
+
+  // load panelizer defaults cache object
+  if ($panelizer = $handler->get_default_panelizer_object($bundle, $name)) {
+    $cache_key = 'panelizer:default:' . $handler->entity_type . ':' . $bundle . ':' . $name;
+    $cache = panels_edit_cache_get($cache_key);
+  }
+
+  // load ctools cache object
+  $ctools_cache = &drupal_static('ctools_export_load_object');
+
+  $tab_panes_map = array(
+    'bio_tab' => array(
+      'pane_uuid' => 'adfb4591-2608-4c80-a849-1c2924acf758',
+      'fpp_uuid' => '61e05864-8ba7-4858-b9ca-3b9b078b4ca3',
+    ),
+    'teaching_tab' => array(
+      'pane_uuid' => 'bc98b089-23f9-4c8f-b93e-138b7b6083ba',
+      'fpp_uuid' => '2ffb11d5-0954-4090-a05e-d21f61573d13',
+    ),
+    'research_tab' => array(
+      'pane_uuid' => '8be2b6de-7166-4f46-9ad6-6a97b32073f1',
+      'fpp_uuid' => 'b3ac9a14-7900-413f-9c00-336674af69a5',
+    ),
+    'public_works_tab' => array(
+      'pane_uuid' => 'ad7abd4f-b4e2-4c77-902e-75b4e3bf7984',
+      'fpp_uuid' => 'e1993e63-c13a-4429-9787-9948ee480191',
+    ),
+  );
+
+  foreach ($tab_panes_map as $tab_key => $tab) {
+    $fpid = db_select('fieldable_panels_panes', 'fpp')
+      ->fields('fpp', array('fpid'))
+      ->condition('uuid', $tab['fpp_uuid'], '=')
+      ->execute()
+      ->fetchField();
+
+    $tab_panes_map[$tab_key]['fpid'] = $fpid;
+    $uuid = $tab['pane_uuid'];
+
+    if (isset($cache->display->content['new-'.$uuid]->subtype)) {
+      $cache->display->content['new-'.$uuid]->subtype = 'fpid:' . $fpid;
+      $ctools_cache['panelizer_defaults']['node:asu_isearch_profile:default:default']->display->content['new-'.$uuid]->subtype = 'fpid:' . $fpid;
+    }
+  }
+
+  $data = current($tab_panes_map);
+  $pane_uuid = $data['pane_uuid'];
+
+  reset($tab_panes_map);
+
+  $results = db_select('cache_form', 'f')
+    ->fields('f', array('cid', 'data'))
+    ->condition('data', '%new-'.$pane_uuid.'%', 'LIKE')
+    ->execute()
+    ->fetchAllKeyed();
+
+  foreach ($results as $cid => $data) {
+
+    if ($form_data = unserialize($data)) {
+      // loop once to retrieve the correct fpid
+      foreach ($tab_panes_map as $tab_key => $tab) {
+        $uuid = $tab['pane_uuid'];
+        $fpid_value = 'fpid:' . $tab['fpid'];
+
+        if (isset($form_data['#panopoly_magic_preview_info']['display']->content['new-'.$uuid]->subtype)) {
+          $form_data['#panopoly_magic_preview_info']['display']->content['new-'.$uuid]->subtype = $fpid_value;
+        }
+
+        if (isset($form_data['display']->content['new-'.$uuid]->subtype)) {
+          $form_data['display']->content['new-'.$uuid]->subtype = $fpid_value;
+        }
+      }
+    }
+
+    $serialized_form = serialize($form_data);
+
+    $result = db_update('cache_form')
+      ->fields(array('data' => $serialized_form))
+      ->condition('cid', $cid, '=')
+      ->execute();
+  }
+
+  panels_edit_cache_set($cache);
+  drupal_set_message('iSearch panelizer defaults setup successfully');
+}

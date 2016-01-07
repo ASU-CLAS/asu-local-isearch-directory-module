@@ -1,0 +1,15 @@
+.isearch-directory-filters .form-item {
+  max-width: 250px;
+  display: inline-block; }
+.isearch-directory-filters input.form-submit {
+  margin-bottom: 15px; }
+.isearch-directory-filters .views-widget-filter-tid {
+  display: none; }
+.isearch-directory-filters .chosen-container-single .chosen-single {
+  background: none;
+  border: none;
+  box-shadow: none;
+  color: #505050;
+  font-family: 'Open Sans', 'Lucida Grande', Tahoma, Verdana, sans-serif;
+  font-size: 16px;
+  padding-left: 0; }
