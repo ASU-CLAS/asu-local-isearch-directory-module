@@ -7,7 +7,7 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
   // hide the profile tabs placeholder field that can be rendered on a node display
   if ($form_id == 'asu_isearch_profile_node_form') {
     $form['field_isearch_profile_tabs']['#access'] = FALSE;
-    $form['field_isearch_hash']['#access'] = FALSE;
+//     $form['field_isearch_hash']['#access'] = FALSE;
     $form['title'] = array(
       '#default_value' => 'Set on save...',
       '#disabled' => TRUE,

@@ -22,8 +22,9 @@ class MigrateIsearchProfileMigration extends Migration {
   private static $titleRanksCache = array();
   private static $titleRanksVocabulary = null;
 
-  private $departmentId;
   private $profilePhotoDirectory = null;
+  
+  public static $currentFeedUrl = null;
 
   public function __construct() {
     parent::__construct();
@@ -116,6 +117,8 @@ class MigrateIsearchProfileMigration extends Migration {
     $this->addFieldMapping('field_isearch_email'                     , 'emailAddress');
     $this->addFieldMapping('field_isearch_phone'                     , 'phone');
     $this->addFieldMapping('field_isearch_fax'                       , 'fax');
+    $this->addFieldMapping('field_isearch_campus_building'           , 'building');
+    $this->addFieldMapping('field_isearch_campus_room'               , 'room');
     $this->addFieldMapping('field_isearch_photo_preference'          , 'photoPreference');
     $this->addFieldMapping('field_isearch_photo_permission'          , 'photoPermission');
     $this->addFieldMapping('field_isearch_social_twitter'            , 'twitterLink');
@@ -278,11 +281,10 @@ class MigrateIsearchProfileMigration extends Migration {
         }
       }
     }
-
-    // If shortBio is not present or an empty string, we insert their assigned titles as shortBio
-    if (!isset($row->shortBio) || trim($row->shortBio) == '') {
-      $row->shortBio = implode(', ', array_unique($additional_titles));
-    }
+    
+    
+    preg_match('/\/([0-9]+)?$/', self::$currentFeedUrl, $matches);
+    $row->localPrimaryAffiliation = $matches[1];
 
     // prepare expertise areas array
     $row->expertise = array();
@@ -331,9 +333,6 @@ class MigrateIsearchProfileMigration extends Migration {
 
     // Setup title rank terms
     $this->setupTitleRanks($entity, $row);
-
-    // Fetch and store profile photo
-    $this->fetchProfilePhoto($entity, $row);
   }
 
   // This will get called after the destination entity has been created,
@@ -342,6 +341,9 @@ class MigrateIsearchProfileMigration extends Migration {
 
     // Setup affiliations
     $this->setupAffiliations($entity, $row);
+    
+    // Fetch and store profile photo
+    $this->fetchProfilePhoto($entity, $row);
   }
 
   private function fetchProfilePhoto($entity, stdClass $row) {
@@ -456,19 +458,22 @@ class MigrateIsearchProfileMigration extends Migration {
     // determine if we need to update or delete existing affiliations
     if (!empty($entity->field_isearch_affiliations)) {
       // loop through existing affiliations and see if we need to delete or update them
-      foreach ($entity->field_isearch_affiliations[LANGUAGE_NONE] as $item) {
+      foreach ($entity->field_isearch_affiliations[LANGUAGE_NONE] as $index => $item) {
         $affiliation = field_collection_item_load($item['value']);
 
         $affiliation_key = $affiliation->field_isearch_affil_dept_id[LANGUAGE_NONE][0]['value'];
 
         if (!isset($row->affiliations_info[$affiliation_key])) {
           entity_delete('field_collection_item', $affiliation->item_id);
+//           unset($entity->field_isearch_affiliations[LANGUAGE_NONE][$index]);
         }
         else {
           $update_affiliations[$affiliation_key] = $affiliation;
         }
       }
     }
+    
+    dpm('here');
 
     // create/update new affiliations
     foreach ($row->affiliations_info as $affiliation_key => $item) {
@@ -492,10 +497,13 @@ class MigrateIsearchProfileMigration extends Migration {
       $affiliation->field_isearch_affil_manager[LANGUAGE_NONE][0]['value']     = ($item->isManager) ? 1 : 0;
       $affiliation->field_isearch_affil_primary[LANGUAGE_NONE][0]['value']     = ($item->isPrimary) ? 1 : 0;
       $affiliation->field_isearch_affil_rank_tenure[LANGUAGE_NONE][0]['value'] = ($item->isRankTenure) ? 1 : 0;
-//       $affiliation->field_isearch_affil_rank_weight[LANGUAGE_NONE][0]['value'] = 0;
       $affiliation->field_isearch_affil_rank[LANGUAGE_NONE][0]['tid']          = $row->existing_ranks[$item->ranksTid];
 
       $affiliation->save();
+      
+      if ($row->localPrimaryAffiliation == $item->deptId) {
+        $entity->field_isearch_primary_aff[LANGUAGE_NONE][0]['target_id'] = $affiliation->item_id;
+      }
     }
   }
 }
@@ -509,5 +517,15 @@ class IsearchProfileJSONReader extends MigrateJSONReader {
     parent::next();
 
     // If we need to tweak
+  }
+  
+  public function current() {
+    $row = parent::current();
+    MigrateIsearchProfileMigration::$currentFeedUrl = $this->url;
+    if ($row->emailAddress == 'Nick.Adamakis@asu.edu') {
+      $row->blah = rand();
+    }
+    
+    return $row;
   }
 }

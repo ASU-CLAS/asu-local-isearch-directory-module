@@ -24,6 +24,7 @@
         var top_level_ids = settings.top_level_ids;
         var dept_nids = [top_level_ids.top_level_nid];
         var standalone = false;
+        var allow_multiple = false;
         var config_target = false;
 
         if (settings.hasOwnProperty('dept_nids')) {

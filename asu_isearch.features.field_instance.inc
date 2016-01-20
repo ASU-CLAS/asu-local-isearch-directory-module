@@ -918,7 +918,7 @@ function asu_isearch_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 16,
+      'weight' => 18,
     ),
   );
 
@@ -1105,7 +1105,7 @@ function asu_isearch_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 13,
+      'weight' => 12,
     ),
   );
 
@@ -1218,7 +1218,7 @@ function asu_isearch_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_isearch_campus_room',
-    'label' => 'Campus',
+    'label' => 'Campus Room',
     'required' => 0,
     'settings' => array(
       'linkit' => array(
@@ -2344,6 +2344,57 @@ function asu_isearch_field_default_field_instances() {
         'manualcrop_thumblist' => 0,
       ),
       'type' => 'media_generic',
+      'weight' => 19,
+    ),
+  );
+
+  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_local_primary_aff'
+  $field_instances['node-asu_isearch_profile-field_isearch_local_primary_aff'] = array(
+    'bundle' => 'asu_isearch_profile',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 52,
+      ),
+      'featured' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'isearch_profile_list' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_isearch_local_primary_aff',
+    'label' => 'Override Primary Affiliation',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
       'weight' => 17,
     ),
   );
@@ -2511,7 +2562,7 @@ function asu_isearch_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 20,
+      'weight' => 22,
     ),
   );
 
@@ -2573,7 +2624,7 @@ function asu_isearch_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 19,
+      'weight' => 21,
     ),
   );
 
@@ -2647,7 +2698,58 @@ function asu_isearch_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 18,
+      'weight' => 20,
+    ),
+  );
+
+  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_primary_aff'
+  $field_instances['node-asu_isearch_profile-field_isearch_primary_aff'] = array(
+    'bundle' => 'asu_isearch_profile',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 53,
+      ),
+      'featured' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'isearch_profile_list' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_isearch_primary_aff',
+    'label' => 'Primary Affiliation',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 16,
     ),
   );
 
@@ -4226,6 +4328,7 @@ function asu_isearch_field_default_field_instances() {
   t('CV');
   t('Campus');
   t('Campus Building');
+  t('Campus Room');
   t('Caption');
   t('Configuration');
   t('Courses');
@@ -4254,6 +4357,7 @@ function asu_isearch_field_default_field_instances() {
   t('Mailcode');
   t('Manager');
   t('Migrate Hash');
+  t('Override Primary Affiliation');
   t('Personal Website');
   t('Phone');
   t('Photo Permission');

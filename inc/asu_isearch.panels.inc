@@ -11,31 +11,30 @@ function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts
 
   // Get permission to display profile image
   if ($pane->subtype == 'node:field_isearch_photo_url') {
-	
-	// check and see if we have uploaded a local image
-	// if so, display it vs whatever settings they currently have
-	if (isset($content->content['#object']->field_isearch_local_photo_url) && !empty($content->content['#object']->field_isearch_local_photo_url)) {
-		$content->content[0]['#item'] = (array) $content->content['#object']->field_isearch_local_photo_url[LANGUAGE_NONE][0];
-	}
-	else {
-		$photo_preference = $content->content['#object']->field_isearch_photo_preference[LANGUAGE_NONE][0]['value'];
-    $photo_permission = $content->content['#object']->field_isearch_photo_permission[LANGUAGE_NONE][0]['value'];
-	
-    if ($photo_preference == 'none' || $photo_permission != 'public') {
+  	// check and see if we have uploaded a local image
+  	// if so, display it vs whatever settings they currently have
+  	if (isset($content->content['#object']->field_isearch_local_photo_url) && !empty($content->content['#object']->field_isearch_local_photo_url)) {
+  		$content->content[0]['#item'] = (array) $content->content['#object']->field_isearch_local_photo_url[LANGUAGE_NONE][0];
+  	}
+  	else {
+  		$photo_preference = $content->content['#object']->field_isearch_photo_preference[LANGUAGE_NONE][0]['value'];
+      $photo_permission = $content->content['#object']->field_isearch_photo_permission[LANGUAGE_NONE][0]['value'];
+      
+      if ($photo_preference == 'none' || $photo_permission != 'public') {
 
-      $display_default_photo = variable_get('isearch_display_default_photo', FALSE);
-      $default_photo = asu_isearch_get_default_photo();
+        $display_default_photo = variable_get('isearch_display_default_photo', FALSE);
+        $default_photo = asu_isearch_get_default_photo();
 
-      if ($display_default_photo && $default_photo) {
-        $content->content[0]['#item'] = (array) $default_photo;
+        if ($display_default_photo && $default_photo) {
+          $content->content[0]['#item'] = (array) $default_photo;
+        }
+        else {
+          $content->content['#access'] = FALSE;
+        }
       }
-      else {
-        $content->content['#access'] = FALSE;
-      }
-    }
-	}
+  	}
   	
-
+  	$content->content[0]['#image_style'] = 'asu_isearch_profile';
   }
 
   // Add email icon to email address
@@ -218,9 +217,58 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       $expertise_areas = implode('+', (array) $view_config->expertise_areas);
     }
 
-    // display only certain employee types?
+    // display only certain tags?
     if (!empty($view_config->local_tags)) {
       $local_tags = implode('+', (array) $view_config->local_tags);
+    }
+
+    // set other display options
+    if ($view->name == 'isearch_directory') {
+      $display_header    = TRUE;
+      $display_photo     = TRUE;
+      $display_name      = TRUE;
+      $display_contact   = TRUE;
+      $display_expertise = TRUE;
+
+      if (isset($view_config->display_header) && (bool) $view_config->display_header == FALSE) {
+        $display_header = FALSE;
+      }
+
+      if (isset($view_config->display_photo) && (bool) $view_config->display_photo == FALSE) {
+        $view->field['field_isearch_local_photo_url']->options['exclude'] = TRUE;
+        $display_photo = FALSE;
+      }
+
+      if (isset($view_config->display_name) && (bool) $view_config->display_name == FALSE) {
+        $view->field['nothing_1']->options['exclude'] = TRUE;
+        $display_name = FALSE;
+      }
+
+      if (isset($view_config->display_contact) && (bool) $view_config->display_contact == FALSE) {
+        $view->field['nothing']->options['exclude'] = TRUE;
+        $display_contact = FALSE;
+      }
+
+      if (isset($view_config->display_expertise) && (bool) $view_config->display_expertise == FALSE) {
+        $view->field['field_isearch_expertise_areas']->options['exclude'] = TRUE;
+        $display_expertise = FALSE;
+      }
+
+      $directory_header = theme_render_template(drupal_get_path('module', 'asu_isearch') . '/theme/asu_isearch_view_header.tpl.php', array(
+        'render_header' => $display_header,
+        'display_photo' => $display_photo,
+        'display_name' => $display_name,
+        'display_contact' => $display_contact,
+        'display_expertise' => $display_expertise,
+      ));
+
+      $view->display_handler->handlers['header']['area_text_custom']->options['content'] = $directory_header;
+
+    }
+
+    if (isset($view_config->display_short_bio) && !$view_config->display_short_bio) {
+      $view->display_handler->handlers['field']['field_isearch_short_bio']->options['alter']['alter_text'] = TRUE;
+      $view->display_handler->handlers['field']['field_isearch_short_bio']->options['alter']['text'] = '&nbsp;';
     }
 
     // set the contextual filters arguments
@@ -336,6 +384,12 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       'pager_offset'          => 0,
       'expertise_areas'       => array(),
       'local_tags'            => array(),
+      'display_short_bio'     => TRUE,
+      'display_header'        => TRUE,
+      'display_photo'         => TRUE,
+      'display_name'          => TRUE,
+      'display_contact'       => TRUE,
+      'display_expertise'     => TRUE,
     );
 
     // we are setting this up for the first time...
@@ -545,6 +599,42 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       '#default_value' => $config->pager_offset,
     );
 
+    $form['isearch_advanced']['display_short_bio'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Display short bio field?',
+      '#default_value' => $config->display_short_bio,
+    );
+
+    $form['isearch_advanced']['display_header'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Display header labels?',
+      '#default_value' => $config->display_header,
+    );
+
+    $form['isearch_advanced']['display_photo'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Display profile photo?',
+      '#default_value' => $config->display_photo,
+    );
+
+    $form['isearch_advanced']['display_name'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Display name column?',
+      '#default_value' => $config->display_name,
+    );
+
+    $form['isearch_advanced']['display_contact'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Display contact column?',
+      '#default_value' => $config->display_contact,
+    );
+
+    $form['isearch_advanced']['display_expertise'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Display expertise column?',
+      '#default_value' => $config->display_expertise,
+    );
+
     // Hide isearch config field
     $form['field_isearch_config']['#access'] = FALSE;
   }
@@ -581,6 +671,12 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     'pager_display'         => $values['pager_display'],
     'pager_items_per_page'  => $values['pager_items_per_page'],
     'pager_offset'          => $values['pager_offset'],
+    'display_short_bio'     => $values['display_short_bio'],
+    'display_header'        => $values['display_header'],
+    'display_photo'         => $values['display_photo'],
+    'display_name'          => $values['display_name'],
+    'display_contact'       => $values['display_contact'],
+    'display_expertise'     => $values['display_expertise'],
   );
 
   $form_state['entity']->field_isearch_config[LANGUAGE_NONE][0]['value'] = json_encode($config);

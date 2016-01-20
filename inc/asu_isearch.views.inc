@@ -6,7 +6,7 @@
 function asu_isearch_views_pre_render(&$view) {
 
   if ($view->name == 'isearch_affiliations') {
-
+    // If we're not displaying all affiliations, hide the title so it isn't redundant.
     $display_affiliations = (bool) variable_get('isearch_display_affiliations', 0);
     if (FALSE === $display_affiliations) {
       $view->field['field_isearch_affil_title']->options['exclude'] = TRUE;
@@ -48,9 +48,17 @@ function asu_isearch_views_pre_view(&$view, &$display_id, &$args) {
       }
 
       $display_affiliations = (bool) variable_get('isearch_display_affiliations', 0);
-
       if (FALSE === $display_affiliations) {
-        $args[1] = 1;
+
+        $local_primary_affiliation = (!empty($node->field_isearch_primary_aff))
+          ? $node->field_isearch_local_primary_aff
+          : null;
+
+        if (!empty($node->field_isearch_local_primary_aff)) {
+          $local_primary_affiliation = $node->field_isearch_local_primary_aff[LANGUAGE_NONE][0]['target_id'];
+        }
+
+        $args[1] = $local_primary_affiliation;
         $view->style_options['tab_field'] = 'affiliation_tab_title';
       }
     }
