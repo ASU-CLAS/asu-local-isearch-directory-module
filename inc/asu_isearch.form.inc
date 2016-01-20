@@ -20,6 +20,7 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
       'field_isearch_local_photo_url',
       'field_isearch_affiliations',
       'field_isearch_affil_rank_weight',
+      'field_isearch_local_primary_aff',
     );
 
     // handle top level fields

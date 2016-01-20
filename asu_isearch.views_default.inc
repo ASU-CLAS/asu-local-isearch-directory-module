@@ -404,14 +404,21 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['fields']['field_isearch_affil_title']['id'] = 'field_isearch_affil_title';
   $handler->display->display_options['fields']['field_isearch_affil_title']['table'] = 'field_data_field_isearch_affil_title';
   $handler->display->display_options['fields']['field_isearch_affil_title']['field'] = 'field_isearch_affil_title';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['label'] = '';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_isearch_affil_title']['element_label_colon'] = FALSE;
   /* Field: Field collection item: Dept */
   $handler->display->display_options['fields']['field_isearch_affil_dept_name']['id'] = 'field_isearch_affil_dept_name';
   $handler->display->display_options['fields']['field_isearch_affil_dept_name']['table'] = 'field_data_field_isearch_affil_dept_name';
   $handler->display->display_options['fields']['field_isearch_affil_dept_name']['field'] = 'field_isearch_affil_dept_name';
+  $handler->display->display_options['fields']['field_isearch_affil_dept_name']['label'] = '';
+  $handler->display->display_options['fields']['field_isearch_affil_dept_name']['element_label_colon'] = FALSE;
   /* Field: Field collection item: Employee Type */
   $handler->display->display_options['fields']['field_isearch_affil_empl_type']['id'] = 'field_isearch_affil_empl_type';
   $handler->display->display_options['fields']['field_isearch_affil_empl_type']['table'] = 'field_data_field_isearch_affil_empl_type';
   $handler->display->display_options['fields']['field_isearch_affil_empl_type']['field'] = 'field_isearch_affil_empl_type';
+  $handler->display->display_options['fields']['field_isearch_affil_empl_type']['label'] = '';
+  $handler->display->display_options['fields']['field_isearch_affil_empl_type']['element_label_colon'] = FALSE;
   /* Field: Field collection item: Campus */
   $handler->display->display_options['fields']['field_isearch_affil_campus']['id'] = 'field_isearch_affil_campus';
   $handler->display->display_options['fields']['field_isearch_affil_campus']['table'] = 'field_data_field_isearch_affil_campus';
@@ -889,7 +896,7 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['fields']['field_isearch_local_photo_url']['alter']['text'] = '[field_isearch_photo_url]';
   $handler->display->display_options['fields']['field_isearch_local_photo_url']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_isearch_local_photo_url']['element_wrapper_type'] = 'div';
-  $handler->display->display_options['fields']['field_isearch_local_photo_url']['element_wrapper_class'] = 'col-md-2 user-photo';
+  $handler->display->display_options['fields']['field_isearch_local_photo_url']['element_wrapper_class'] = 'user-photo';
   $handler->display->display_options['fields']['field_isearch_local_photo_url']['empty'] = '[field_isearch_photo_url]';
   $handler->display->display_options['fields']['field_isearch_local_photo_url']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_isearch_local_photo_url']['settings'] = array(
@@ -933,7 +940,7 @@ function asu_isearch_views_default_views() {
 <div class="shortbio">[field_isearch_short_bio]</div>';
   $handler->display->display_options['fields']['nothing_1']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['nothing_1']['element_wrapper_type'] = 'div';
-  $handler->display->display_options['fields']['nothing_1']['element_wrapper_class'] = 'col-md-4 user-name';
+  $handler->display->display_options['fields']['nothing_1']['element_wrapper_class'] = 'user-name';
   /* Field: Content: Phone */
   $handler->display->display_options['fields']['field_isearch_phone']['id'] = 'field_isearch_phone';
   $handler->display->display_options['fields']['field_isearch_phone']['table'] = 'field_data_field_isearch_phone';
@@ -960,7 +967,7 @@ function asu_isearch_views_default_views() {
 ';
   $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['nothing']['element_wrapper_type'] = 'div';
-  $handler->display->display_options['fields']['nothing']['element_wrapper_class'] = 'col-md-3 user-contact';
+  $handler->display->display_options['fields']['nothing']['element_wrapper_class'] = 'user-contact';
   /* Field: Content: Expertise Areas */
   $handler->display->display_options['fields']['field_isearch_expertise_areas']['id'] = 'field_isearch_expertise_areas';
   $handler->display->display_options['fields']['field_isearch_expertise_areas']['table'] = 'field_data_field_isearch_expertise_areas';
@@ -968,7 +975,7 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['fields']['field_isearch_expertise_areas']['label'] = '';
   $handler->display->display_options['fields']['field_isearch_expertise_areas']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_isearch_expertise_areas']['element_wrapper_type'] = 'div';
-  $handler->display->display_options['fields']['field_isearch_expertise_areas']['element_wrapper_class'] = 'col-md-3 user-expertise';
+  $handler->display->display_options['fields']['field_isearch_expertise_areas']['element_wrapper_class'] = 'user-expertise';
   $handler->display->display_options['fields']['field_isearch_expertise_areas']['delta_offset'] = '0';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['filter_groups']['groups'] = array(

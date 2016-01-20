@@ -14,6 +14,28 @@ function asu_isearch_views_pre_render(&$view) {
   }
 
   if ($view->name == 'isearch_directory') {
+    $display_options = array(
+      'display_header' => $view->view_config->display_header,
+      'display_photo' => $view->view_config->display_photo,
+      'display_name' => $view->view_config->display_name,
+      'display_contact' => $view->view_config->display_contact,
+      'display_expertise' => $view->view_config->display_expertise,
+    );
+    $display_options = (object) $display_options;
+    $view_column_widths = asu_isearch_get_view_column_widths($display_options);
+
+    $column_names = array_keys($view_column_widths);
+    foreach ($view->field as $field_name => $data) {
+      if ($view->field[$field_name]->options['exclude'] == 0) {
+        foreach ($column_names as $column_name) {
+          if (strstr($view->field[$field_name]->options['element_wrapper_class'], 'user-' . $column_name)) {
+            $view->field[$field_name]->options['element_wrapper_class'] .= ' col-md-' . $view_column_widths[$column_name];
+          }
+        }
+      }
+    }
+
+
     foreach ($view->result as $key => $result) {
       $entity = $result->_field_data['nid']['entity'];
       $wrapper = entity_metadata_wrapper('node', $entity);
@@ -51,7 +73,7 @@ function asu_isearch_views_pre_view(&$view, &$display_id, &$args) {
       if (FALSE === $display_affiliations) {
 
         $local_primary_affiliation = (!empty($node->field_isearch_primary_aff))
-          ? $node->field_isearch_local_primary_aff
+          ? $node->field_isearch_primary_aff[LANGUAGE_NONE][0]['target_id']
           : null;
 
         if (!empty($node->field_isearch_local_primary_aff)) {

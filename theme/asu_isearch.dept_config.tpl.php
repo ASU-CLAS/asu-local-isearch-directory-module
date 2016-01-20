@@ -30,10 +30,35 @@
         Show Non-Tenure
       </button>
     </div>
+    <h4>Filter Options</h4>
     <div class="col-md-4 btn-group-vertical asu_isearch_admin_options" role="group">
       <button type="button" id="asu_isearch_show_filters" class="btn-group btn btn-default toggle-control" value="1"
               data-input-target="show_filters">
         Show Filters
+      </button>
+    </div>
+    <div class="col-md-4 btn-group-vertical asu_isearch_admin_options" role="group">
+      <button type="button" id="asu_isearch_show_filter_omni" class="btn-group btn btn-default toggle-control" value="1"
+              data-input-target="show_filter_omni">
+        Show Name/Keyword Filter
+      </button>
+    </div>
+    <div class="col-md-4 btn-group-vertical asu_isearch_admin_options" role="group">
+      <button type="button" id="asu_isearch_show_filter_titles" class="btn-group btn btn-default toggle-control" value="1"
+              data-input-target="show_filter_titles">
+        Show Titles Filter
+      </button>
+    </div>
+    <div class="col-md-4 btn-group-vertical asu_isearch_admin_options" role="group">
+      <button type="button" id="asu_isearch_show_filter_expertise" class="btn-group btn btn-default toggle-control" value="1"
+              data-input-target="show_filter_expertise">
+        Show Expertise Filter
+      </button>
+    </div>
+    <div class="col-md-4 btn-group-vertical asu_isearch_admin_options" role="group">
+      <button type="button" id="asu_isearch_show_filter_sort" class="btn-group btn btn-default toggle-control" value="1"
+              data-input-target="show_filter_sort">
+        Show Sort By Filter
       </button>
     </div>
   </div>
