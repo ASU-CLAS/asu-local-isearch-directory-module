@@ -660,8 +660,6 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       '#default_value' => $config->display_expertise,
     );
 
-    dpm($form);
-
     // Hide isearch config field
     $form['field_isearch_config']['#access'] = FALSE;
   }
