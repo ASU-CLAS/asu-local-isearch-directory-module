@@ -19,7 +19,7 @@ function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts
   	else {
   		$photo_preference = $content->content['#object']->field_isearch_photo_preference[LANGUAGE_NONE][0]['value'];
       $photo_permission = $content->content['#object']->field_isearch_photo_permission[LANGUAGE_NONE][0]['value'];
-      
+
       if ($photo_preference == 'none' || $photo_permission != 'public') {
 
         $display_default_photo = variable_get('isearch_display_default_photo', FALSE);
@@ -33,7 +33,7 @@ function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts
         }
       }
   	}
-  	
+
   	$content->content[0]['#image_style'] = 'asu_isearch_profile';
   }
 
@@ -150,8 +150,11 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       unset($_GET['sort_by']);
     }
 
+    $default_view_config = asu_isearch_get_default_view_config();
+
     // load the configuration saved for this pane
     $view_config = json_decode($content['field_isearch_config']['#object']->field_isearch_config[LANGUAGE_NONE][0]['value']);
+    $view_config = (object) array_merge($default_view_config, (array) $view_config);
 
     if (!isset($view_config->view_display)) {
       $view_config->view_display = 'isearch_directory:directory_list';
@@ -254,12 +257,16 @@ function asu_isearch_preprocess_panels_pane(&$variables){
         $display_expertise = FALSE;
       }
 
-      $directory_header = theme_render_template(drupal_get_path('module', 'asu_isearch') . '/theme/asu_isearch_view_header.tpl.php', array(
-        'render_header' => $display_header,
+      $display_options = (object) array(
+        'display_header' => $display_header,
         'display_photo' => $display_photo,
         'display_name' => $display_name,
         'display_contact' => $display_contact,
         'display_expertise' => $display_expertise,
+      );
+
+      $directory_header = theme_render_template(drupal_get_path('module', 'asu_isearch') . '/theme/asu_isearch_view_header.tpl.php', array(
+        'display_options' => $display_options,
       ));
 
       $view->display_handler->handlers['header']['area_text_custom']->options['content'] = $directory_header;
@@ -292,6 +299,14 @@ function asu_isearch_preprocess_panels_pane(&$variables){
 
     $view->view_config = $view_config;
 
+    if (!$view_config->show_filter_titles
+      && !$view_config->show_filter_expertise
+      && !$view_config->show_filter_sort
+      && !$view_config->show_filter_omni
+    ) {
+      $view_config->show_filters = FALSE;
+    }
+
     // display filters? - Should we display or hide the filters
     if ($view_config->show_filters) {
       // build the exposed form fields
@@ -309,6 +324,11 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       // change some values to correctly display the form
       $form['#action'] = '/' . drupal_get_path_alias(current_path());
       $form['#weight'] = -10;
+
+      $form['field_isearch_affil_title_value']['#access'] = (bool) $view_config->show_filter_titles;
+      $form['field_isearch_expertise_areas_tid']['#access'] = (bool) $view_config->show_filter_expertise;
+      $form['sort_by']['#access'] = (bool) $view_config->show_filter_sort;
+      $form['isearch_omni_search']['#access'] = (bool) $view_config->show_filter_omni;
 
       // set some form defaults when submitted ...
       $params = drupal_get_query_parameters();
@@ -371,26 +391,7 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       '#suffix' => '</div>',
     );
 
-    $config = array(
-      'employee_types'        => array('All'),
-      'employee_type_exclude' => 0,
-      'tenure_display'        => 0,
-      'show_managers'         => 0,
-      'show_filters'          => 1,
-      'include_subdepts'      => 0,
-      'view_display'          => 'isearch_directory:isearch_directory_list',
-      'pager_display'         => 'paged',
-      'pager_items_per_page'  => 10,
-      'pager_offset'          => 0,
-      'expertise_areas'       => array(),
-      'local_tags'            => array(),
-      'display_short_bio'     => TRUE,
-      'display_header'        => TRUE,
-      'display_photo'         => TRUE,
-      'display_name'          => TRUE,
-      'display_contact'       => TRUE,
-      'display_expertise'     => TRUE,
-    );
+    $config = asu_isearch_get_default_view_config();
 
     // we are setting this up for the first time...
     if (!isset($form['#entity']->is_new) || !$form['#entity']->is_new) {
@@ -469,6 +470,30 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       '#type' => 'checkbox',
       '#title' => 'Show Filters',
       '#default_value' => $config->show_filters,
+    );
+
+    $form['isearch_custom']['show_filter_omni'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Show Name/Keyword Filter',
+      '#default_value' => $config->show_filter_omni,
+    );
+
+    $form['isearch_custom']['show_filter_titles'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Show Titles Filter',
+      '#default_value' => $config->show_filter_titles,
+    );
+
+    $form['isearch_custom']['show_filter_expertise'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Show Expertise Filter',
+      '#default_value' => $config->show_filter_expertise,
+    );
+
+    $form['isearch_custom']['show_filter_sort'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Show Sort By Filter',
+      '#default_value' => $config->show_filter_sort,
     );
 
     $form['isearch_custom']['show_managers'] = array(
@@ -635,6 +660,8 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       '#default_value' => $config->display_expertise,
     );
 
+    dpm($form);
+
     // Hide isearch config field
     $form['field_isearch_config']['#access'] = FALSE;
   }
@@ -664,6 +691,10 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     'local_tags'            => $values['isearch_local_tags'],
     'show_managers'         => $values['show_managers'],
     'show_filters'          => $values['show_filters'],
+    'show_filter_omni'      => $values['show_filter_omni'],
+    'show_filter_titles'    => $values['show_filter_titles'],
+    'show_filter_expertise' => $values['show_filter_expertise'],
+    'show_filter_sort'      => $values['show_filter_sort'],
     'tenure_display'        => $values['tenure_display'],
     'view_display'          => $values['isearch_view_display'],
     'include_subdepts'      => $values['include_subdepts'],

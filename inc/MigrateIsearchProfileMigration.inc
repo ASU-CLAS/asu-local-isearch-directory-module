@@ -23,7 +23,7 @@ class MigrateIsearchProfileMigration extends Migration {
   private static $titleRanksVocabulary = null;
 
   private $profilePhotoDirectory = null;
-  
+
   public static $currentFeedUrl = null;
 
   public function __construct() {
@@ -281,8 +281,7 @@ class MigrateIsearchProfileMigration extends Migration {
         }
       }
     }
-    
-    
+
     preg_match('/\/([0-9]+)?$/', self::$currentFeedUrl, $matches);
     $row->localPrimaryAffiliation = $matches[1];
 
@@ -341,7 +340,7 @@ class MigrateIsearchProfileMigration extends Migration {
 
     // Setup affiliations
     $this->setupAffiliations($entity, $row);
-    
+
     // Fetch and store profile photo
     $this->fetchProfilePhoto($entity, $row);
   }
@@ -472,8 +471,6 @@ class MigrateIsearchProfileMigration extends Migration {
         }
       }
     }
-    
-    dpm('here');
 
     // create/update new affiliations
     foreach ($row->affiliations_info as $affiliation_key => $item) {
@@ -500,9 +497,10 @@ class MigrateIsearchProfileMigration extends Migration {
       $affiliation->field_isearch_affil_rank[LANGUAGE_NONE][0]['tid']          = $row->existing_ranks[$item->ranksTid];
 
       $affiliation->save();
-      
+
       if ($row->localPrimaryAffiliation == $item->deptId) {
         $entity->field_isearch_primary_aff[LANGUAGE_NONE][0]['target_id'] = $affiliation->item_id;
+        node_save($entity);
       }
     }
   }
@@ -518,14 +516,10 @@ class IsearchProfileJSONReader extends MigrateJSONReader {
 
     // If we need to tweak
   }
-  
+
   public function current() {
     $row = parent::current();
     MigrateIsearchProfileMigration::$currentFeedUrl = $this->url;
-    if ($row->emailAddress == 'Nick.Adamakis@asu.edu') {
-      $row->blah = rand();
-    }
-    
     return $row;
   }
 }
