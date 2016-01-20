@@ -36,15 +36,13 @@ define('ASU_ISEARCH_DIRECTORY_PHOTO_ENDPOINT', 'https://webapp4.asu.edu/photo-ws
 
 // Feed URLs
 $asu_isearch_devmode = variable_get('asu_isearch_devmode', FALSE);
-
+$feed_endpoint = 'https://isearch.asu.edu/endpoints/dept-profiles/json/';
 
 if ($asu_isearch_devmode) {
-  global $base_url;
-  define('ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT', $base_url . '/sites/default/files/');
+  $feed_endpoint = variable_get('asu_isearch_devmode_endpoint', $feed_endpoint);
 }
-else {
-  define('ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT', 'https://isearch.asu.edu/endpoints/dept-profiles/json/');
-}
+
+define('ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT', $feed_endpoint);
 
 
 /**

@@ -420,6 +420,11 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['fields']['field_isearch_affil_mailcode']['id'] = 'field_isearch_affil_mailcode';
   $handler->display->display_options['fields']['field_isearch_affil_mailcode']['table'] = 'field_data_field_isearch_affil_mailcode';
   $handler->display->display_options['fields']['field_isearch_affil_mailcode']['field'] = 'field_isearch_affil_mailcode';
+  /* Sort criterion: Field collection item: Primary Affiliation (field_isearch_affil_primary) */
+  $handler->display->display_options['sorts']['field_isearch_affil_primary_value']['id'] = 'field_isearch_affil_primary_value';
+  $handler->display->display_options['sorts']['field_isearch_affil_primary_value']['table'] = 'field_data_field_isearch_affil_primary';
+  $handler->display->display_options['sorts']['field_isearch_affil_primary_value']['field'] = 'field_isearch_affil_primary_value';
+  $handler->display->display_options['sorts']['field_isearch_affil_primary_value']['order'] = 'DESC';
   /* Contextual filter: Content: Nid */
   $handler->display->display_options['arguments']['nid']['id'] = 'nid';
   $handler->display->display_options['arguments']['nid']['table'] = 'node';
@@ -435,17 +440,71 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['arguments']['nid']['validate_options']['types'] = array(
     'asu_isearch_profile' => 'asu_isearch_profile',
   );
-  /* Contextual filter: Field collection item: Primary Affiliation (field_isearch_affil_primary) */
-  $handler->display->display_options['arguments']['field_isearch_affil_primary_value']['id'] = 'field_isearch_affil_primary_value';
-  $handler->display->display_options['arguments']['field_isearch_affil_primary_value']['table'] = 'field_data_field_isearch_affil_primary';
-  $handler->display->display_options['arguments']['field_isearch_affil_primary_value']['field'] = 'field_isearch_affil_primary_value';
-  $handler->display->display_options['arguments']['field_isearch_affil_primary_value']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['field_isearch_affil_primary_value']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['field_isearch_affil_primary_value']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['field_isearch_affil_primary_value']['summary_options']['items_per_page'] = '25';
+  /* Contextual filter: Field collection item: Field collection item ID */
+  $handler->display->display_options['arguments']['item_id']['id'] = 'item_id';
+  $handler->display->display_options['arguments']['item_id']['table'] = 'field_collection_item';
+  $handler->display->display_options['arguments']['item_id']['field'] = 'item_id';
+  $handler->display->display_options['arguments']['item_id']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['item_id']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['item_id']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['item_id']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['item_id']['specify_validation'] = TRUE;
+  $handler->display->display_options['arguments']['item_id']['validate']['type'] = 'numeric';
+  $handler->display->display_options['arguments']['item_id']['break_phrase'] = TRUE;
 
   /* Display: iSearch Profile Affiliations */
   $handler = $view->new_display('panel_pane', 'iSearch Profile Affiliations', 'panel_pane_1');
+
+  /* Display: Entity Reference */
+  $handler = $view->new_display('entityreference', 'Entity Reference', 'entityreference_1');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'entityreference_style';
+  $handler->display->display_options['style_options']['search_fields'] = array(
+    'field_isearch_affil_title' => 'field_isearch_affil_title',
+    'field_isearch_affil_dept_name' => 0,
+    'field_isearch_affil_empl_type' => 0,
+    'field_isearch_affil_campus' => 0,
+    'field_isearch_affil_mailcode' => 0,
+  );
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'entityreference_fields';
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Field collection item: Title */
+  $handler->display->display_options['fields']['field_isearch_affil_title']['id'] = 'field_isearch_affil_title';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['table'] = 'field_data_field_isearch_affil_title';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['field'] = 'field_isearch_affil_title';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['label'] = '';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_isearch_affil_title']['element_label_colon'] = FALSE;
+  /* Field: Field collection item: Dept */
+  $handler->display->display_options['fields']['field_isearch_affil_dept_name']['id'] = 'field_isearch_affil_dept_name';
+  $handler->display->display_options['fields']['field_isearch_affil_dept_name']['table'] = 'field_data_field_isearch_affil_dept_name';
+  $handler->display->display_options['fields']['field_isearch_affil_dept_name']['field'] = 'field_isearch_affil_dept_name';
+  $handler->display->display_options['fields']['field_isearch_affil_dept_name']['label'] = '';
+  $handler->display->display_options['fields']['field_isearch_affil_dept_name']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_isearch_affil_dept_name']['alter']['text'] = '[field_isearch_affil_dept_name-value] <em>([field_isearch_affil_title])</em>';
+  $handler->display->display_options['fields']['field_isearch_affil_dept_name']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_isearch_affil_dept_name']['type'] = 'text_plain';
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['relationship'] = 'field_isearch_affiliations_node';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['nid']['specify_validation'] = TRUE;
+  $handler->display->display_options['arguments']['nid']['validate']['type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['validate_options']['types'] = array(
+    'asu_isearch_profile' => 'asu_isearch_profile',
+  );
   $export['isearch_affiliations'] = $view;
 
   $view = new view();
@@ -848,13 +907,14 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['element_wrapper_type'] = 'div';
   $handler->display->display_options['fields']['title']['element_wrapper_class'] = 'col-md-4';
-  /* Field: Content: Employment Title */
-  $handler->display->display_options['fields']['field_isearch_employment_title']['id'] = 'field_isearch_employment_title';
-  $handler->display->display_options['fields']['field_isearch_employment_title']['table'] = 'field_data_field_isearch_employment_title';
-  $handler->display->display_options['fields']['field_isearch_employment_title']['field'] = 'field_isearch_employment_title';
-  $handler->display->display_options['fields']['field_isearch_employment_title']['label'] = '';
-  $handler->display->display_options['fields']['field_isearch_employment_title']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_isearch_employment_title']['element_label_colon'] = FALSE;
+  /* Field: Field collection item: Title */
+  $handler->display->display_options['fields']['field_isearch_affil_title']['id'] = 'field_isearch_affil_title';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['table'] = 'field_data_field_isearch_affil_title';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['field'] = 'field_isearch_affil_title';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['relationship'] = 'field_isearch_affiliations_value';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['label'] = '';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_isearch_affil_title']['element_label_colon'] = FALSE;
   /* Field: Content: Short Bio */
   $handler->display->display_options['fields']['field_isearch_short_bio']['id'] = 'field_isearch_short_bio';
   $handler->display->display_options['fields']['field_isearch_short_bio']['table'] = 'field_data_field_isearch_short_bio';
@@ -869,7 +929,7 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['fields']['nothing_1']['ui_name'] = 'Name / Titles';
   $handler->display->display_options['fields']['nothing_1']['label'] = '';
   $handler->display->display_options['fields']['nothing_1']['alter']['text'] = '<div class="name">[title]</div>
-<div class="title">[field_isearch_employment_title]</div>
+<div class="title">[field_isearch_affil_title]</div>
 <div class="shortbio">[field_isearch_short_bio]</div>';
   $handler->display->display_options['fields']['nothing_1']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['nothing_1']['element_wrapper_type'] = 'div';

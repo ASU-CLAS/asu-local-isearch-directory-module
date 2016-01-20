@@ -68,6 +68,8 @@ function asu_isearch_field_group_info() {
       14 => 'field_isearch_photo_preference',
       15 => 'field_isearch_photo_url',
       16 => 'field_isearch_local_photo_url',
+      17 => 'field_isearch_local_primary_aff',
+      18 => 'field_isearch_primary_aff',
     ),
     'format_type' => 'tab',
     'format_settings' => array(
