@@ -91,7 +91,7 @@ function _asu_isearch_get_migration() {
 /**
  * Begins the iSearch profile migration
  */
-function _asu_isearch_begin_migrate() {
+function _asu_isearch_begin_migrate($force_update = FALSE) {
   $migrate_config = variable_get('isearch_admin_feed_dept', null);
 
   if (is_null($migrate_config)) {
@@ -126,19 +126,19 @@ function _asu_isearch_begin_migrate() {
   $migration->setMigrateSource($source_urls);
 
   $update = $migration->prepareUpdate();
-  $result = $migration->processImport();
+  $result = $migration->processImport(array('force' => $force_update));
 
   variable_set('isearch_last_import', time());
 }
 
 
-function _asu_isearch_begin_batch() {
+function _asu_isearch_begin_batch($force_update = FALSE) {
   $limit = variable_get('isearch_import_limit', 50);
 
   $migration = _asu_isearch_get_migration();
   $migration->prepareUpdate();
 
-  $operations[] = array('migrate_ui_batch', array('import', 'MigrateIsearchProfile', $limit, FALSE));
+  $operations[] = array('migrate_ui_batch', array('import', 'MigrateIsearchProfile', $limit, $force_update));
 
   $batch = array(
     'operations' => $operations,
