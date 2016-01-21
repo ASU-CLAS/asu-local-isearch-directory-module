@@ -153,6 +153,14 @@ function asu_isearch_import_isearch_form() {
   $form['actions']['submit']['#value'] = t('Begin import');
   $form['actions']['submit']['#access'] = $allow_import;
 
+  $form['actions']['force_submit'] = array(
+    '#name' => 'force_update',
+    '#type' => 'submit',
+    '#value' => t('Force Update'),
+    '#description' => t('This will force all records to update and may need to run several times depending on directory size.'),
+    '#access' => $allow_import,
+  );
+
   return $form;
 }
 
@@ -162,7 +170,13 @@ function asu_isearch_import_isearch_form() {
 function asu_isearch_import_isearch_form_submit($form, &$form_state) {
   system_settings_form_submit($form, $form_state);
 
-  _asu_isearch_begin_batch();
+  $force_update = FALSE;
+
+  if ($form_state['clicked_button']['#name'] == 'force_update') {
+    $force_update = TRUE;
+  }
+
+  _asu_isearch_begin_batch($force_update);
 //   _asu_isearch_begin_migrate();
 }
 

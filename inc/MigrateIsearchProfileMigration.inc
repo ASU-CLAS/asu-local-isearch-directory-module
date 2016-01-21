@@ -24,6 +24,8 @@ class MigrateIsearchProfileMigration extends Migration {
 
   private $profilePhotoDirectory = null;
 
+  public $forceUpdate = FALSE;
+
   public static $currentFeedUrl = null;
 
   public function __construct() {
@@ -162,6 +164,11 @@ class MigrateIsearchProfileMigration extends Migration {
   public function setMigrateSource($urls) {
     $this->source = new MigrateSourceJSON($urls, 'eid', $this->getSourceFields(), array('reader_class' => 'IsearchProfileJSONReader'));
   }
+  
+  public function processImport(array $options = array()) {
+    $this->forceUpdate = (isset($options['force']) && $options['force']);
+    parent::processImport($options);
+  }
 
   public function getSourceFields() {
     $source_fields = array(
@@ -245,7 +252,7 @@ class MigrateIsearchProfileMigration extends Migration {
       ->fieldCondition('field_isearch_hash', 'value', $row_hash)
       ->execute();
 
-    if (isset($result['node'])) {
+    if ($this->forceUpdate === FALSE && isset($result['node'])) {
       return FALSE;
     }
 
