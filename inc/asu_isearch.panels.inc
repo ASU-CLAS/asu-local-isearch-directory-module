@@ -9,6 +9,13 @@ function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts
     return;
   }
 
+  if ($pane->subtype == 'node:field_isearch_rsrch_website') {
+    $website = $content->content['#items'][0]['value'];
+    $content->content[0]['#markup'] = l($website, $website, array('attributes' => array(
+      'target' => '_blank',
+    )));
+  }
+
   // Get permission to display profile image
   if ($pane->subtype == 'node:field_isearch_photo_url') {
   	// check and see if we have uploaded a local image
@@ -150,9 +157,8 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       unset($_GET['sort_by']);
     }
 
-    $default_view_config = asu_isearch_get_default_view_config();
-
     // load the configuration saved for this pane
+    $default_view_config = asu_isearch_get_default_view_config();
     $view_config = json_decode($content['field_isearch_config']['#object']->field_isearch_config[LANGUAGE_NONE][0]['value']);
     $view_config = (object) array_merge($default_view_config, (array) $view_config);
 
@@ -174,9 +180,27 @@ function asu_isearch_preprocess_panels_pane(&$variables){
     $expertise_areas = 'all';
     $local_tags = 'all';
 
+
+    // filter content by:
+    // affiliation title
+    $view->filter['field_isearch_affil_title_value_1']->value = $view_config->filter_title;
+
     // display managers - We will unset the value from the sort array if we don't want them at the top.
     if ($view_config->show_managers === 0) {
       unset($view->sort['field_isearch_affil_manager_value']);
+    }
+
+    switch ($view_config->default_sort_by) {
+      case 'field_isearch_firstname_value':
+        unset($view->sort['field_isearch_lastname_value']);
+
+      case 'field_isearch_lastname_value':
+        unset($view->sort['field_isearch_affil_rank_weight_value']);
+        break;
+
+      case 'field_isearch_affil_rank_weight_value':
+      default:
+        break;
     }
 
     // should we include all subdepartments?
@@ -278,6 +302,16 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       $view->display_handler->handlers['field']['field_isearch_short_bio']->options['alter']['text'] = '&nbsp;';
     }
 
+    if (isset($view_config->display_building) && !$view_config->display_building) {
+      $view->display_handler->handlers['field']['field_isearch_campus_building']->options['alter']['alter_text'] = TRUE;
+      $view->display_handler->handlers['field']['field_isearch_campus_building']->options['alter']['text'] = '&nbsp;';
+    }
+
+    if (isset($view_config->display_room) && !$view_config->display_room) {
+      $view->display_handler->handlers['field']['field_isearch_campus_room']->options['alter']['alter_text'] = TRUE;
+      $view->display_handler->handlers['field']['field_isearch_campus_room']->options['alter']['text'] = '&nbsp;';
+    }
+
     // set the contextual filters arguments
     $view->set_arguments(array($employee_types, $departments, $tenure_display, $expertise_areas, $local_tags));
 
@@ -330,6 +364,9 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       $form['sort_by']['#access'] = (bool) $view_config->show_filter_sort;
       $form['isearch_omni_search']['#access'] = (bool) $view_config->show_filter_omni;
 
+      // set the default sort by
+      $form['sort_by']['#value'] = $view_config->default_sort_by;
+
       // set some form defaults when submitted ...
       $params = drupal_get_query_parameters();
       if (isset($params['field_isearch_expertise_areas_tid'])) {
@@ -337,6 +374,7 @@ function asu_isearch_preprocess_panels_pane(&$variables){
 
         if (isset($params['sort_by'])) {
           $form['sort_by']['#default_value'] = check_url($params['sort_by']);
+          $form['sort_by']['#value'] = check_url($params['sort_by']);
         }
 
         if (isset($params['sort_order'])) {
@@ -660,6 +698,38 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       '#default_value' => $config->display_expertise,
     );
 
+    $form['isearch_advanced']['display_building'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Display building?',
+      '#default_value' => $config->display_building,
+    );
+
+    $form['isearch_advanced']['display_room'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Display room?',
+      '#default_value' => $config->display_room,
+    );
+
+    $default_sort_by_options = array(
+      'field_isearch_affil_rank_weight_value' => 'Rank',
+      'field_isearch_lastname_value' => 'Last Name',
+      'field_isearch_firstname_value' => 'First Name',
+    );
+
+    $form['isearch_advanced']['default_sort_by'] = array(
+      '#type' => 'select',
+      '#options' => $default_sort_by_options,
+      '#title' => 'Default Sort Order',
+      '#default_value' => $config->default_sort_by,
+    );
+
+    $form['isearch_advanced']['filter_title'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Filter Title',
+      '#description' => t('Limit results by the affiliation title. Regular expression allowed.'),
+      '#default_value' => $config->filter_title,
+    );
+
     // Hide isearch config field
     $form['field_isearch_config']['#access'] = FALSE;
   }
@@ -706,6 +776,10 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     'display_name'          => $values['display_name'],
     'display_contact'       => $values['display_contact'],
     'display_expertise'     => $values['display_expertise'],
+    'display_building'      => $values['display_building'],
+    'display_room'          => $values['display_room'],
+    'default_sort_by'       => $values['default_sort_by'],
+    'filter_title'          => $values['filter_title'],
   );
 
   $form_state['entity']->field_isearch_config[LANGUAGE_NONE][0]['value'] = json_encode($config);

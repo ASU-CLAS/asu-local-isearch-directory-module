@@ -13,7 +13,7 @@ function asu_isearch_views_pre_render(&$view) {
     }
   }
 
-  if ($view->name == 'isearch_directory') {
+  if (isset($view->display_handler->view->display['default']->display_options['css_class']) && $view->display_handler->view->display['default']->display_options['css_class'] == 'isearch-directory-list') {
     $display_options = array(
       'display_header' => $view->view_config->display_header,
       'display_photo' => $view->view_config->display_photo,
@@ -99,13 +99,19 @@ function asu_isearch_get_views() {
   foreach ($loaded_views as $view_name => $view) {
     // loop through display
     foreach ($view->display as $display_name => $display) {
-
       if ($display_name == 'default') {
         continue;
       }
 
+      // limit displays to those which have the isearch-directory-list class assigned
+      $display_options = (isset($view->display['default'])) ? $view->display['default']->display_options : array();
+      $display_options = array_merge($display_options, $display->display_options);
+      if (!preg_match('/\bisearch-directory-list/', $display_options['css_class'])) {
+        continue;
+      }
+
       $id = $view_name . ':' . $display_name;
-      $views[$id] = strip_tags(format_string(':view (:display)', array(':view' => $view->human_name, ':display' => $display_name)));
+      $views[$id] = strip_tags(format_string(':view: :display (:display_id)', array(':view' => $view->human_name, ':display' => $display->display_title, ':display_id' => $display_name)));
     }
   }
 

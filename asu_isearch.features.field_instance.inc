@@ -241,6 +241,46 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_local_weight'
+  $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_local_weight'] = array(
+    'bundle' => 'field_isearch_affiliations',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_integer',
+        'weight' => 14,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_isearch_affil_local_weight',
+    'label' => 'Rank Local Weight',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 11,
+    ),
+  );
+
   // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_mailcode'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_mailcode'] = array(
     'bundle' => 'field_isearch_affiliations',
@@ -441,7 +481,7 @@ function asu_isearch_field_default_field_instances() {
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 11,
+      'weight' => 12,
     ),
   );
 
@@ -4369,6 +4409,7 @@ function asu_isearch_field_default_field_instances() {
   t('Profile Tabs');
   t('Publications');
   t('Rank');
+  t('Rank Local Weight');
   t('Rank Tenure');
   t('Rank Weight');
   t('Research Activity');

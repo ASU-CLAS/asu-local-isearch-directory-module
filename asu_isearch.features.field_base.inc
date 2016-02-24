@@ -155,6 +155,22 @@ function asu_isearch_field_default_field_bases() {
     'type' => 'text',
   );
 
+  // Exported field_base: 'field_isearch_affil_local_weight'
+  $field_bases['field_isearch_affil_local_weight'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_isearch_affil_local_weight',
+    'foreign keys' => array(),
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'number',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'number_integer',
+  );
+
   // Exported field_base: 'field_isearch_affil_mailcode'
   $field_bases['field_isearch_affil_mailcode'] = array(
     'active' => 1,

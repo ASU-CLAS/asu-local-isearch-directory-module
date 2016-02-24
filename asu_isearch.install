@@ -23,6 +23,24 @@ function asu_isearch_install() {
     ->execute();
 }
 
+/**
+ * Implements hook_update_N()
+ */
+function asu_isearch_update_7135(&$sandbox) {
+  $query = new EntityFieldQuery();
+  $result = $query->entityCondition('entity_type', 'field_collection_item')
+    ->entityCondition('bundle', 'field_isearch_affiliations')
+    ->fieldCondition('field_isearch_affil_rank_weight', 'value', NULL, 'IS NOT NULL')
+    ->execute();
+
+  foreach ($result['field_collection_item'] as $item) {
+    $entity = current(entity_load('field_collection_item', array($item->item_id)));
+    $entity->field_isearch_affil_local_weight = $entity->field_isearch_affil_rank_weight;
+
+    entity_save('field_collection_item', $entity);
+    unset($entity);
+  }
+}
 
 /**
  * Implements hook_enable().

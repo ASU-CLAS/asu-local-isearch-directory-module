@@ -19,7 +19,7 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
       'field_isearch_local_tags',
       'field_isearch_local_photo_url',
       'field_isearch_affiliations',
-      'field_isearch_affil_rank_weight',
+      'field_isearch_affil_local_weight',
       'field_isearch_local_primary_aff',
     );
 
@@ -50,6 +50,7 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
             if (asu_isearch_devmode() === FALSE) {
               $form[$field_collection][LANGUAGE_NONE][$item_key]['remove_button']['#disabled'] = TRUE;
               $form[$field_collection][LANGUAGE_NONE][$item_key]['field_isearch_affil_rank_tenure']['#access'] = FALSE;
+              $form[$field_collection][LANGUAGE_NONE][$item_key]['field_isearch_affil_rank_weight']['#access'] = FALSE;
             }
 
             if (preg_match('/^field_isearch_/', $field_key) && !in_array($field_key, $field_exception_manifest)) {
@@ -159,7 +160,7 @@ function asu_isearch_directory_list_form_alter(&$form, &$form_state, $form_id) {
   $form['sort_order']['#type'] = 'hidden';
 
   // tag and hide fields so we can manipulate them with attached javascript
-  $hidden_fields = array('omni_displayname', 'omni_firstname', 'omni_lastname', 'omni_expertise');
+  $hidden_fields = array('omni_displayname', 'omni_firstname', 'omni_lastname', 'omni_shortbio', 'omni_expertise');
   foreach ($hidden_fields as $fieldname) {
     $form[$fieldname]['#type'] = 'hidden';
     $form[$fieldname]['#attributes']['class'] = array('omni-search-field');
