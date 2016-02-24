@@ -955,6 +955,22 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['fields']['field_isearch_email']['label'] = '';
   $handler->display->display_options['fields']['field_isearch_email']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_isearch_email']['element_label_colon'] = FALSE;
+  /* Field: Content: Campus Building */
+  $handler->display->display_options['fields']['field_isearch_campus_building']['id'] = 'field_isearch_campus_building';
+  $handler->display->display_options['fields']['field_isearch_campus_building']['table'] = 'field_data_field_isearch_campus_building';
+  $handler->display->display_options['fields']['field_isearch_campus_building']['field'] = 'field_isearch_campus_building';
+  $handler->display->display_options['fields']['field_isearch_campus_building']['label'] = '';
+  $handler->display->display_options['fields']['field_isearch_campus_building']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_isearch_campus_building']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_isearch_campus_building']['alter']['text'] = '[field_isearch_campus_building] ';
+  $handler->display->display_options['fields']['field_isearch_campus_building']['element_label_colon'] = FALSE;
+  /* Field: Content: Campus Room */
+  $handler->display->display_options['fields']['field_isearch_campus_room']['id'] = 'field_isearch_campus_room';
+  $handler->display->display_options['fields']['field_isearch_campus_room']['table'] = 'field_data_field_isearch_campus_room';
+  $handler->display->display_options['fields']['field_isearch_campus_room']['field'] = 'field_isearch_campus_room';
+  $handler->display->display_options['fields']['field_isearch_campus_room']['label'] = '';
+  $handler->display->display_options['fields']['field_isearch_campus_room']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_isearch_campus_room']['element_label_colon'] = FALSE;
   /* Field: Contact Info */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
@@ -963,7 +979,7 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['fields']['nothing']['label'] = '';
   $handler->display->display_options['fields']['nothing']['alter']['text'] = '<div class="email">[field_isearch_email]</div>
 <div class="phone">[field_isearch_phone]</div>
-<div class="location"></div>
+<div class="location"><span class="building">[field_isearch_campus_building]</span><span class="room">[field_isearch_campus_room]</span></div>
 ';
   $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['nothing']['element_wrapper_type'] = 'div';
@@ -1078,6 +1094,9 @@ function asu_isearch_views_default_views() {
     2 => '2',
     1 => 0,
     3 => 0,
+    8 => 0,
+    6 => 0,
+    7 => 0,
     4 => 0,
     5 => 0,
   );
@@ -1101,6 +1120,9 @@ function asu_isearch_views_default_views() {
     2 => '2',
     1 => 0,
     3 => 0,
+    8 => 0,
+    6 => 0,
+    7 => 0,
     4 => 0,
     5 => 0,
   );
@@ -1124,6 +1146,9 @@ function asu_isearch_views_default_views() {
     2 => '2',
     1 => 0,
     3 => 0,
+    8 => 0,
+    6 => 0,
+    7 => 0,
     4 => 0,
     5 => 0,
   );
@@ -1132,6 +1157,33 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['filters']['field_isearch_lastname_value']['expose']['autocomplete_raw_suggestion'] = 1;
   $handler->display->display_options['filters']['field_isearch_lastname_value']['expose']['autocomplete_raw_dropdown'] = 1;
   $handler->display->display_options['filters']['field_isearch_lastname_value']['expose']['autocomplete_dependent'] = 0;
+  /* Filter criterion: Content: Short Bio (field_isearch_short_bio) */
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['id'] = 'field_isearch_short_bio_value';
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['table'] = 'field_data_field_isearch_short_bio';
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['field'] = 'field_isearch_short_bio_value';
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['operator'] = 'contains';
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['group'] = 2;
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['expose']['operator_id'] = 'field_isearch_short_bio_value_op';
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['expose']['label'] = 'Short Bio';
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['expose']['operator'] = 'field_isearch_short_bio_value_op';
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['expose']['identifier'] = 'omni_shortbio';
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    8 => 0,
+    6 => 0,
+    7 => 0,
+    4 => 0,
+    5 => 0,
+  );
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['expose']['autocomplete_items'] = '10';
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['expose']['autocomplete_min_chars'] = '0';
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['expose']['autocomplete_field'] = 'field_isearch_short_bio';
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['expose']['autocomplete_raw_suggestion'] = 1;
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['expose']['autocomplete_raw_dropdown'] = 1;
+  $handler->display->display_options['filters']['field_isearch_short_bio_value']['expose']['autocomplete_dependent'] = 0;
   /* Filter criterion: Taxonomy term: Name */
   $handler->display->display_options['filters']['name']['id'] = 'name';
   $handler->display->display_options['filters']['name']['table'] = 'taxonomy_term_data';
@@ -1156,6 +1208,13 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['filters']['name']['expose']['autocomplete_raw_suggestion'] = 1;
   $handler->display->display_options['filters']['name']['expose']['autocomplete_raw_dropdown'] = 1;
   $handler->display->display_options['filters']['name']['expose']['autocomplete_dependent'] = 0;
+  /* Filter criterion: Field collection item: Title (field_isearch_affil_title) */
+  $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['id'] = 'field_isearch_affil_title_value_1';
+  $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['table'] = 'field_data_field_isearch_affil_title';
+  $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['field'] = 'field_isearch_affil_title_value';
+  $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['relationship'] = 'field_isearch_affiliations_value';
+  $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['operator'] = 'regular_expression';
+  $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['group'] = 1;
   $handler->display->display_options['allow']['use_pager'] = 'use_pager';
   $handler->display->display_options['allow']['items_per_page'] = 'items_per_page';
   $handler->display->display_options['allow']['offset'] = 'offset';

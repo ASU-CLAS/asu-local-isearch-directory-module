@@ -12,7 +12,7 @@ function asu_isearch_cron() {
   // Cache dept tree and employee types data
   _asu_isearch_cache_dept_data();
 
-  $last_import = variable_get('isearch_last_import', null);
+  // Begin profile migrations
   _asu_isearch_begin_migrate();
 }
 

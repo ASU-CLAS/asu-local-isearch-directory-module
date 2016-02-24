@@ -103,10 +103,27 @@ function _asu_isearch_begin_migrate($force_update = FALSE) {
   $migration = _asu_isearch_get_migration();
 
   if ($migration->getStatus() != MigrationBase::STATUS_IDLE) {
-    $message = 'An import is currently running. Please wait a few minutes for it to finish before importing again.';
 
-    drupal_set_message($message, 'warning');
-    return FALSE;
+    $last_import = variable_get('isearch_last_import', null);
+    if (!is_null($last_import)) {
+      $today = new DateTime();
+      $last_import = new DateTime('@'.$last_import);
+
+      // calculate the difference
+      $import_diff = $last_import->diff($today);
+
+      // if it has been more than 2 hours, reset migration
+      // to allow import
+      if ($import_diff->h > 1) {
+        $migration->resetStatus();
+      } else {
+        // too soon, warn the user to wait a few minutes before trying again
+        $message = 'An import is currently running. Please wait a few minutes for it to finish before importing again.';
+
+        drupal_set_message($message, 'warning');
+        return FALSE;
+      }
+    }
   }
 
   // feed endpoint

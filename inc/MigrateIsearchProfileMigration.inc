@@ -164,7 +164,7 @@ class MigrateIsearchProfileMigration extends Migration {
   public function setMigrateSource($urls) {
     $this->source = new MigrateSourceJSON($urls, 'eid', $this->getSourceFields(), array('reader_class' => 'IsearchProfileJSONReader'));
   }
-  
+
   public function processImport(array $options = array()) {
     $this->forceUpdate = (isset($options['force']) && $options['force']);
     parent::processImport($options);
@@ -253,6 +253,9 @@ class MigrateIsearchProfileMigration extends Migration {
       ->execute();
 
     if ($this->forceUpdate === FALSE && isset($result['node'])) {
+      // Fetch and store profile photo
+      $entity = node_load(current($result['node'])->nid);
+      $this->fetchProfilePhoto($entity, $row);
       return FALSE;
     }
 
@@ -471,7 +474,6 @@ class MigrateIsearchProfileMigration extends Migration {
 
         if (!isset($row->affiliations_info[$affiliation_key])) {
           entity_delete('field_collection_item', $affiliation->item_id);
-//           unset($entity->field_isearch_affiliations[LANGUAGE_NONE][$index]);
         }
         else {
           $update_affiliations[$affiliation_key] = $affiliation;
@@ -491,9 +493,19 @@ class MigrateIsearchProfileMigration extends Migration {
         $affiliation->setHostEntity('node', $entity);
       }
 
+      // store the affiliation title
+      $affiliation_title = trim($item->title);
+
+      // if this is a tenure rank affiliation, and the affiliation title
+      // was left blank, set it to the rank title
+      if ($item->isRankTenure && $affiliation_title == '') {
+        $rank = taxonomy_term_load($row->existing_ranks[$item->ranksTid]);
+        $affiliation_title = $rank->name;
+      }
+
       $affiliation->field_isearch_affil_dept_id[LANGUAGE_NONE][0]['value']     = $item->deptId;
       $affiliation->field_isearch_affil_dept_name[LANGUAGE_NONE][0]['value']   = $item->deptName;
-      $affiliation->field_isearch_affil_title[LANGUAGE_NONE][0]['value']       = $item->title;
+      $affiliation->field_isearch_affil_title[LANGUAGE_NONE][0]['value']       = $affiliation_title;
       $affiliation->field_isearch_affil_campus[LANGUAGE_NONE][0]['value']      = $item->campus;
       $affiliation->field_isearch_affil_empl_type[LANGUAGE_NONE][0]['value']   = $item->employeeType;
       $affiliation->field_isearch_affil_empl_key[LANGUAGE_NONE][0]['value']    = $item->employeeTypeKey;
