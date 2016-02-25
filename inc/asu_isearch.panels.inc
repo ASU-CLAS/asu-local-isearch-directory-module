@@ -183,7 +183,14 @@ function asu_isearch_preprocess_panels_pane(&$variables){
 
     // filter content by:
     // affiliation title
-    $view->filter['field_isearch_affil_title_value_1']->value = $view_config->filter_title;
+    if (isset($view->filter['field_isearch_affil_title_value_1'])) {
+      if (trim($view_config->filter_title) == '') {
+        unset($view->filter['field_isearch_affil_title_value_1']);
+      }
+      else {
+        $view->filter['field_isearch_affil_title_value_1']->value = $view_config->filter_title;
+      }
+    }
 
     // display managers - We will unset the value from the sort array if we don't want them at the top.
     if ($view_config->show_managers === 0) {
