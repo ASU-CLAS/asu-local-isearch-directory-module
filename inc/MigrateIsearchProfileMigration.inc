@@ -222,6 +222,10 @@ class MigrateIsearchProfileMigration extends Migration {
     return $source_fields;
   }
 
+  private function isDevMode() {
+    return variable_get('asu_isearch_devmode', FALSE);
+  }
+
   // This method gives us an opportunity to modify the raw source data
   // to create additional fields that will get mapped possibly
   public function prepareRow($row) {
@@ -256,6 +260,7 @@ class MigrateIsearchProfileMigration extends Migration {
       // Fetch and store profile photo
       $entity = node_load(current($result['node'])->nid);
       $this->fetchProfilePhoto($entity, $row);
+
       return FALSE;
     }
 
@@ -498,7 +503,7 @@ class MigrateIsearchProfileMigration extends Migration {
 
       // if this is a tenure rank affiliation, and the affiliation title
       // was left blank, set it to the rank title
-      if ($item->isRankTenure && $affiliation_title == '') {
+      if ($affiliation_title == '' && $item->ranksTid) {
         $rank = taxonomy_term_load($row->existing_ranks[$item->ranksTid]);
         $affiliation_title = $rank->name;
       }
@@ -513,7 +518,10 @@ class MigrateIsearchProfileMigration extends Migration {
       $affiliation->field_isearch_affil_manager[LANGUAGE_NONE][0]['value']     = ($item->isManager) ? 1 : 0;
       $affiliation->field_isearch_affil_primary[LANGUAGE_NONE][0]['value']     = ($item->isPrimary) ? 1 : 0;
       $affiliation->field_isearch_affil_rank_tenure[LANGUAGE_NONE][0]['value'] = ($item->isRankTenure) ? 1 : 0;
-      $affiliation->field_isearch_affil_rank[LANGUAGE_NONE][0]['tid']          = $row->existing_ranks[$item->ranksTid];
+
+      if ($item->ranksTid && isset($row->existing_ranks[$item->ranksTid])) {
+        $affiliation->field_isearch_affil_rank[LANGUAGE_NONE][0]['tid']          = $row->existing_ranks[$item->ranksTid];
+      }
 
       $affiliation->save();
 
@@ -539,6 +547,11 @@ class IsearchProfileJSONReader extends MigrateJSONReader {
   public function current() {
     $row = parent::current();
     MigrateIsearchProfileMigration::$currentFeedUrl = $this->url;
+
+    if ($row->eid == 'debugging') {
+      $row->rand = mktime();
+    }
+
     return $row;
   }
 }
