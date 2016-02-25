@@ -6,7 +6,6 @@ version = 7.x-1.35-beta4
 project = asu_isearch
 dependencies[] = ctools
 dependencies[] = defaultconfig
-dependencies[] = diff
 dependencies[] = email
 dependencies[] = entity
 dependencies[] = entity_view_mode
