@@ -36,7 +36,12 @@ function asu_isearch_cron_queue_info() {
 function asu_isearch_fetch_profile_photo($data) {
   $photo_url = $data['photo_url'];
   $destination = $data['destination'];
+
   $entity = current(entity_load('node', array($data['entity'])));
+
+  if (!$entity) {
+    return;
+  }
 
   // ensure the file is truly accessible
   $response = drupal_http_request($photo_url);
