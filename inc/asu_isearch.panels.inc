@@ -197,12 +197,18 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       unset($view->sort['field_isearch_affil_manager_value']);
     }
 
+    // ensure tenure sort order is always descending
+    if (isset($view->sort['field_isearch_affil_rank_tenure_value'])) {
+      $view->sort['field_isearch_affil_rank_tenure_value']->options['order'] = 'DESC';
+    }
+
     switch ($view_config->default_sort_by) {
       case 'field_isearch_firstname_value':
         unset($view->sort['field_isearch_lastname_value']);
 
       case 'field_isearch_lastname_value':
         unset($view->sort['field_isearch_affil_rank_weight_value']);
+        unset($view->sort['field_isearch_affil_rank_tenure_value']);
         break;
 
       case 'field_isearch_affil_rank_weight_value':
