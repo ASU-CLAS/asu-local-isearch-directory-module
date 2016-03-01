@@ -18,9 +18,9 @@ function asu_isearch_entity_presave($entity, $type) {
 
     $affiliation = entity_metadata_wrapper($type, $entity);
 
-    $affiliation_rank_weight = FALSE;
+    $affiliation_rank_weight = 1000;
 
-    $is_faculty_ranked = (!empty($entity->field_isearch_affil_rank[LANGUAGE_NONE]));
+    $is_faculty_ranked = (!empty($entity->field_isearch_affil_rank[LANGUAGE_NONE]) && !is_null($entity->field_isearch_affil_rank[LANGUAGE_NONE][0]['tid']));
     if ($is_faculty_ranked) {
       $affiliation_rank_weight = $affiliation->field_isearch_affil_rank->field_isearch_rank_weight->value();
     }
@@ -31,11 +31,6 @@ function asu_isearch_entity_presave($entity, $type) {
     }
 
     // set the rank weight
-    if ($affiliation_rank_weight === FALSE) {
-      $entity->field_isearch_affil_rank_weight[LANGUAGE_NONE] = array();
-    }
-    else {
-      $entity->field_isearch_affil_rank_weight[LANGUAGE_NONE][0]['value'] = $affiliation_rank_weight;
-    }
+    $entity->field_isearch_affil_rank_weight[LANGUAGE_NONE][0]['value'] = $affiliation_rank_weight;
   }
 }
