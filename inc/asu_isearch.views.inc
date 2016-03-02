@@ -13,7 +13,7 @@ function asu_isearch_views_pre_render(&$view) {
     }
   }
 
-  if (isset($view->display_handler->view->display['default']->display_options['css_class']) && $view->display_handler->view->display['default']->display_options['css_class'] == 'isearch-directory-list') {
+  if (asu_isearch_is_isearch_view($view) && isset($view->view_config)) {
     $display_options = array(
       'display_header' => $view->view_config->display_header,
       'display_photo' => $view->view_config->display_photo,
@@ -123,7 +123,7 @@ function asu_isearch_get_views() {
  * Implements hook_views_query_alter()
  */
 function asu_isearch_views_query_alter(&$view, &$query) {
-  if ($view->name == 'isearch_directory') {
+  if (asu_isearch_is_isearch_view($view) && isset($view->view_config)) {
     if ($view->view_config->employee_type_exclude == 1) {
       $dept_id_field = 'field_collection_item_field_data_field_isearch_affiliations__field_data_field_isearch_affil_empl_key.field_isearch_affil_empl_key_value';
       $found_employee_type_filter = FALSE;
