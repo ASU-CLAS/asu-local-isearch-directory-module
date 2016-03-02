@@ -204,15 +204,27 @@ function asu_isearch_preprocess_panels_pane(&$variables){
 
     switch ($view_config->default_sort_by) {
       case 'field_isearch_firstname_value':
-        unset($view->sort['field_isearch_lastname_value']);
+        if (isset($view->sort['field_isearch_lastname_value'])) {
+          unset($view->sort['field_isearch_lastname_value']);
+        }
 
       case 'field_isearch_lastname_value':
-        unset($view->sort['field_isearch_affil_rank_weight_value']);
-        unset($view->sort['field_isearch_affil_rank_tenure_value']);
+        if (isset($view->sort['field_isearch_affil_rank_weight_value'])) {
+          unset($view->sort['field_isearch_affil_rank_weight_value']);
+        }
+        if (isset($view->sort['field_isearch_affil_rank_tenure_value'])) {
+          unset($view->sort['field_isearch_affil_rank_tenure_value']);
+        }
         break;
 
       case 'field_isearch_affil_rank_weight_value':
       default:
+        if (isset($view->sort['field_isearch_affil_rank_weight_value'])) {
+          $view->sort['field_isearch_affil_rank_weight_value']->options['order'] = 'ASC';
+        }
+        if (isset($view->sort['field_isearch_affil_rank_tenure_value'])) {
+          unset($view->sort['field_isearch_affil_rank_tenure_value']);
+        }
         break;
     }
 
@@ -263,7 +275,7 @@ function asu_isearch_preprocess_panels_pane(&$variables){
     }
 
     // set other display options
-    if ($view->name == 'isearch_directory') {
+    if (asu_isearch_is_isearch_view($view)) {
       $display_header    = TRUE;
       $display_photo     = TRUE;
       $display_name      = TRUE;
@@ -345,6 +357,11 @@ function asu_isearch_preprocess_panels_pane(&$variables){
     }
 
     $view->view_config = $view_config;
+    $view->pre_execute();
+
+    $content['isearch_view'] = array(
+      '#markup' => $view->render($display_id),
+    );
 
     if (!$view_config->show_filter_titles
       && !$view_config->show_filter_expertise
@@ -367,6 +384,12 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       );
 
       $form = drupal_build_form('views_exposed_form', $form_state);
+
+      // update search filters
+      $view->set_items_per_page(0);
+      $view->set_offset(0);
+
+      // _asu_isearch_update_view_form_filters($view, $form);
 
       // change some values to correctly display the form
       $form['#action'] = '/' . drupal_get_path_alias(current_path());
@@ -399,16 +422,22 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       $content['isearch_view_exposed_form'] = $form;
     }
 
-    $view->pre_execute();
-    $content['isearch_view'] = array(
-      '#markup' => $view->render($display_id),
-    );
-
     // hide configuration
     unset($content['field_isearch_config']);
   }
 }
 
+
+function _asu_isearch_update_view_form_filters($view, &$form) {
+  $filter_fields = array();
+  $filter_field_labels = array('field_isearch_affil_title', 'field_isearch_expertise_areas');
+
+  foreach ($filter_field_labels as $field_name) {
+    $filter_fields[$field_name] = $view->field[$field_name];
+  }
+
+  $view->field = $filter_fields;
+}
 
 
 /**

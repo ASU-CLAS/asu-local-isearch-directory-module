@@ -72,3 +72,15 @@ function asu_isearch_get_default_view_config() {
     'show_filter_sort'      => TRUE,
   );
 }
+
+
+/**
+ * Helper function to determine if the passed view is an isearch configured view
+ *
+ * This will help clarify code and add checks to keep undefines from happening
+ */
+function asu_isearch_is_isearch_view($view) {
+  return (isset($view->display_handler->view->display['default']->display_options['css_class']) && $view->display_handler->view->display['default']->display_options['css_class'] == 'isearch-directory-list');
+}
+
+
