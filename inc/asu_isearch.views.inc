@@ -124,6 +124,35 @@ function asu_isearch_get_views() {
  */
 function asu_isearch_views_query_alter(&$view, &$query) {
   if (asu_isearch_is_isearch_view($view) && isset($view->view_config)) {
+
+
+    // figure out and adjust view sorting here
+    // ensure tenure sort order is always descending
+    // if (isset($view->sort['field_isearch_affil_rank_tenure_value'])) {
+    //   $view->sort['field_isearch_affil_rank_tenure_value']->options['order'] = 'DESC';
+    // }
+
+    // if (isset($view->sort['field_isearch_lastname_value'])) {
+    //   $view->sort['field_isearch_lastname_value']->options['order'] = 'ASC';
+    // }
+
+    // if (isset($view->sort['field_isearch_firstname_value'])) {
+    //   $view->sort['field_isearch_firstname_value']->options['order'] = 'ASC';
+    // }
+
+    // if (isset($view->sort['field_isearch_affil_rank_weight_value'])) {
+    //   $view->sort['field_isearch_affil_rank_weight_value']->options['order'] = 'ASC';
+    // }
+
+    $query->orderby = array();
+
+    foreach ($view->sort as $field => $sort) {
+      $query->orderby[] = array(
+        'field' => $sort->field,
+        'direction' => $sort->options['order'],
+      );
+    }
+
     if ($view->view_config->employee_type_exclude == 1) {
       $dept_id_field = 'field_collection_item_field_data_field_isearch_affiliations__field_data_field_isearch_affil_empl_key.field_isearch_affil_empl_key_value';
       $found_employee_type_filter = FALSE;

@@ -488,7 +488,11 @@ function asu_isearch_field_default_field_instances() {
   // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_rank_weight'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_rank_weight'] = array(
     'bundle' => 'field_isearch_affiliations',
-    'default_value' => NULL,
+    'default_value' => array(
+      0 => array(
+        'value' => 1000,
+      ),
+    ),
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -2433,7 +2437,9 @@ function asu_isearch_field_default_field_instances() {
     'widget' => array(
       'active' => 1,
       'module' => 'options',
-      'settings' => array(),
+      'settings' => array(
+        'apply_chosen' => '',
+      ),
       'type' => 'options_select',
       'weight' => 17,
     ),
@@ -2787,7 +2793,9 @@ function asu_isearch_field_default_field_instances() {
     'widget' => array(
       'active' => 1,
       'module' => 'options',
-      'settings' => array(),
+      'settings' => array(
+        'apply_chosen' => '',
+      ),
       'type' => 'options_select',
       'weight' => 16,
     ),
