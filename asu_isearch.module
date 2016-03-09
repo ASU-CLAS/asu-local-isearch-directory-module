@@ -16,6 +16,7 @@ include_once 'inc/asu_isearch.node.inc';
 include_once 'inc/asu_isearch.panels.inc';
 include_once 'inc/asu_isearch.views.inc';
 include_once 'inc/asu_isearch.migrate.inc';
+include_once 'inc/IsearchProfileDirectory.inc';
 
 
 
