@@ -102,13 +102,11 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
   }
 
   if ($form_id == 'views_exposed_form') {
-    $view_display = $form_state['view']->current_display;
-    if (in_array($view_display, array('isearch_directory_list', 'isearch_directory_grid'))) {
+    if (asu_isearch_is_isearch_view($form_state['view'])) {
       asu_isearch_directory_list_form_alter($form, $form_state, $form_id);
     }
   }
 }
-
 
 
 function asu_isearch_directory_list_form_alter(&$form, &$form_state, $form_id) {
@@ -150,10 +148,11 @@ function asu_isearch_directory_list_form_alter(&$form, &$form_state, $form_id) {
 
   // Reset exposed form theme so we can set weights on fields
   $form['#theme'] = '';
-
   $form['sort_by']['#title'] = '';
-  foreach ($form['sort_by']['#options'] as $key => $value) {
-    $form['sort_by']['#options'][$key] = "Sort by {$value}";
+  if (isset($form['sort_by']['#options'])) {
+    foreach ($form['sort_by']['#options'] as $key => $value) {
+      $form['sort_by']['#options'][$key] = "Sort by {$value}";
+    }
   }
 
   // Hide sort order field

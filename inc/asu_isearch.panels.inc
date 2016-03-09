@@ -146,6 +146,8 @@ function asu_isearch_preprocess_panels_pane(&$variables){
 
   if (isset($variables['content']['#bundle']) && $variables['content']['#bundle'] === 'isearch_directory') {
 
+    $directory = new IsearchProfileDirectory();
+
     // shortcut to content render array
     $content =& $variables['content'];
 
@@ -338,7 +340,10 @@ function asu_isearch_preprocess_panels_pane(&$variables){
     }
 
     // set the contextual filters arguments
-    $view->set_arguments(array($employee_types, $departments, $tenure_display, $expertise_areas, $local_tags));
+    $contextual_filters = array($employee_types, $departments, $tenure_display, $expertise_areas, $local_tags);
+    $view->set_arguments($contextual_filters);
+
+    $directory->setContextualFilters($contextual_filters);
 
     // pagination options
     $view->set_items_per_page($view_config->pager_items_per_page);
@@ -389,7 +394,9 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       $view->set_items_per_page(0);
       $view->set_offset(0);
 
-      // _asu_isearch_update_view_form_filters($view, $form);
+      if ($view_config->show_filter_titles) {
+        _asu_isearch_update_view_form_filters($view, $form, $directory);
+      }
 
       // change some values to correctly display the form
       $form['#action'] = '/' . drupal_get_path_alias(current_path());
@@ -428,15 +435,12 @@ function asu_isearch_preprocess_panels_pane(&$variables){
 }
 
 
-function _asu_isearch_update_view_form_filters($view, &$form) {
-  $filter_fields = array();
-  $filter_field_labels = array('field_isearch_affil_title', 'field_isearch_expertise_areas');
-
-  foreach ($filter_field_labels as $field_name) {
-    $filter_fields[$field_name] = $view->field[$field_name];
+function _asu_isearch_update_view_form_filters($view, &$form, $directory) {
+  if (isset($form['field_isearch_affil_title_value']) && $form['field_isearch_affil_title_value']['#type'] == 'select') {
+    $default = array('' => $form['field_isearch_affil_title_value']['#options']['']);
+    $title_options = array_merge($default, $directory->getTitleOptions());
+    $form['field_isearch_affil_title_value']['#options'] = $title_options;
   }
-
-  $view->field = $filter_fields;
 }
 
 
