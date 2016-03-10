@@ -28,21 +28,21 @@ class IsearchProfileDirectory {
   }
 
   public function getTitleOptions() {
+    $options = array();
+
     $view = views_get_view('isearch_directory');
     $display_id = 'isearch_directory_titles';
 
-    $view->set_display($display_id);
-    $view->init_handlers();
+    if (isset($view->display[$display_id])) {
+      $view->set_display($display_id);
+      $view->init_handlers();
+      $view->set_arguments($this->contextualFilters);
+      $view->execute();
 
-    $view->set_arguments($this->contextualFilters);
-
-    // pagination options
-    $view->execute();
-
-    $options = array();
-    foreach ($view->result as $item) {
-      $title = $item->field_field_isearch_affil_title[0]['raw']['value'];
-      $options[$title] = $title;
+      foreach ($view->result as $item) {
+        $title = $item->field_field_isearch_affil_title[0]['raw']['value'];
+        $options[$title] = $title;
+      }
     }
 
     return $options;
