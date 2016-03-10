@@ -540,72 +540,9 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['pager']['options']['id'] = '1';
   $handler->display->display_options['pager']['options']['quantity'] = '6';
-  $handler->display->display_options['style_plugin'] = 'table';
-  $handler->display->display_options['style_options']['columns'] = array(
-    'path' => 'path',
-    'field_isearch_photo_url' => 'field_isearch_photo_url',
-    'field_isearch_short_bio' => 'field_isearch_short_bio',
-    'title' => 'title',
-    'field_isearch_phone' => 'field_isearch_phone',
-    'field_isearch_campus_building' => 'field_isearch_campus_building',
-    'field_isearch_email' => 'field_isearch_email',
-    'field_isearch_expertise_areas' => 'field_isearch_expertise_areas',
-  );
-  $handler->display->display_options['style_options']['default'] = '-1';
-  $handler->display->display_options['style_options']['info'] = array(
-    'path' => array(
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_isearch_photo_url' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_isearch_short_bio' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'title' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_isearch_phone' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_isearch_campus_building' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_isearch_email' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_isearch_expertise_areas' => array(
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-  );
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['style_options']['row_class'] = 'row';
+  $handler->display->display_options['row_plugin'] = 'fields';
   /* Header: Global: Unfiltered text */
   $handler->display->display_options['header']['area_text_custom']['id'] = 'area_text_custom';
   $handler->display->display_options['header']['area_text_custom']['table'] = 'views';
@@ -657,216 +594,6 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['relationships']['field_isearch_affil_rank_tid']['field'] = 'field_isearch_affil_rank_tid';
   $handler->display->display_options['relationships']['field_isearch_affil_rank_tid']['relationship'] = 'field_isearch_affiliations_value';
   $handler->display->display_options['relationships']['field_isearch_affil_rank_tid']['label'] = 'Affiliation Rank';
-  /* Field: Content: Path */
-  $handler->display->display_options['fields']['path']['id'] = 'path';
-  $handler->display->display_options['fields']['path']['table'] = 'node';
-  $handler->display->display_options['fields']['path']['field'] = 'path';
-  $handler->display->display_options['fields']['path']['label'] = '';
-  $handler->display->display_options['fields']['path']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['path']['element_label_colon'] = FALSE;
-  /* Field: Content: Profile Picture */
-  $handler->display->display_options['fields']['field_isearch_photo_url']['id'] = 'field_isearch_photo_url';
-  $handler->display->display_options['fields']['field_isearch_photo_url']['table'] = 'field_data_field_isearch_photo_url';
-  $handler->display->display_options['fields']['field_isearch_photo_url']['field'] = 'field_isearch_photo_url';
-  $handler->display->display_options['fields']['field_isearch_photo_url']['label'] = '';
-  $handler->display->display_options['fields']['field_isearch_photo_url']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_isearch_photo_url']['element_wrapper_type'] = 'div';
-  $handler->display->display_options['fields']['field_isearch_photo_url']['element_wrapper_class'] = 'col-md-2';
-  $handler->display->display_options['fields']['field_isearch_photo_url']['click_sort_column'] = 'fid';
-  $handler->display->display_options['fields']['field_isearch_photo_url']['settings'] = array(
-    'image_style' => 'asu_isearch_profile_list',
-    'image_link' => 'content',
-  );
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['label'] = 'Name';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  $handler->display->display_options['fields']['title']['element_wrapper_type'] = 'div';
-  $handler->display->display_options['fields']['title']['element_wrapper_class'] = 'col-md-4';
-  /* Field: Content: Phone */
-  $handler->display->display_options['fields']['field_isearch_phone']['id'] = 'field_isearch_phone';
-  $handler->display->display_options['fields']['field_isearch_phone']['table'] = 'field_data_field_isearch_phone';
-  $handler->display->display_options['fields']['field_isearch_phone']['field'] = 'field_isearch_phone';
-  $handler->display->display_options['fields']['field_isearch_phone']['label'] = '';
-  $handler->display->display_options['fields']['field_isearch_phone']['element_label_colon'] = FALSE;
-  /* Field: Content: Email */
-  $handler->display->display_options['fields']['field_isearch_email']['id'] = 'field_isearch_email';
-  $handler->display->display_options['fields']['field_isearch_email']['table'] = 'field_data_field_isearch_email';
-  $handler->display->display_options['fields']['field_isearch_email']['field'] = 'field_isearch_email';
-  $handler->display->display_options['fields']['field_isearch_email']['label'] = '';
-  $handler->display->display_options['fields']['field_isearch_email']['element_label_colon'] = FALSE;
-  /* Field: Content: Expertise Areas */
-  $handler->display->display_options['fields']['field_isearch_expertise_areas']['id'] = 'field_isearch_expertise_areas';
-  $handler->display->display_options['fields']['field_isearch_expertise_areas']['table'] = 'field_data_field_isearch_expertise_areas';
-  $handler->display->display_options['fields']['field_isearch_expertise_areas']['field'] = 'field_isearch_expertise_areas';
-  $handler->display->display_options['fields']['field_isearch_expertise_areas']['label'] = '';
-  $handler->display->display_options['fields']['field_isearch_expertise_areas']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_isearch_expertise_areas']['element_wrapper_type'] = 'div';
-  $handler->display->display_options['fields']['field_isearch_expertise_areas']['element_wrapper_class'] = 'col-md-3';
-  $handler->display->display_options['fields']['field_isearch_expertise_areas']['delta_offset'] = '0';
-  /* Sort criterion: Field collection item: Rank Tenure (field_isearch_affil_rank_tenure) */
-  $handler->display->display_options['sorts']['field_isearch_affil_rank_tenure_value']['id'] = 'field_isearch_affil_rank_tenure_value';
-  $handler->display->display_options['sorts']['field_isearch_affil_rank_tenure_value']['table'] = 'field_data_field_isearch_affil_rank_tenure';
-  $handler->display->display_options['sorts']['field_isearch_affil_rank_tenure_value']['field'] = 'field_isearch_affil_rank_tenure_value';
-  $handler->display->display_options['sorts']['field_isearch_affil_rank_tenure_value']['relationship'] = 'field_isearch_affiliations_value';
-  /* Sort criterion: Manager */
-  $handler->display->display_options['sorts']['field_isearch_affil_manager_value']['id'] = 'field_isearch_affil_manager_value';
-  $handler->display->display_options['sorts']['field_isearch_affil_manager_value']['table'] = 'field_data_field_isearch_affil_manager';
-  $handler->display->display_options['sorts']['field_isearch_affil_manager_value']['field'] = 'field_isearch_affil_manager_value';
-  $handler->display->display_options['sorts']['field_isearch_affil_manager_value']['relationship'] = 'field_isearch_affiliations_value';
-  $handler->display->display_options['sorts']['field_isearch_affil_manager_value']['ui_name'] = 'Manager';
-  $handler->display->display_options['sorts']['field_isearch_affil_manager_value']['order'] = 'DESC';
-  /* Sort criterion: Field collection item: Rank Weight (field_isearch_affil_rank_weight) */
-  $handler->display->display_options['sorts']['field_isearch_affil_rank_weight_value']['id'] = 'field_isearch_affil_rank_weight_value';
-  $handler->display->display_options['sorts']['field_isearch_affil_rank_weight_value']['table'] = 'field_data_field_isearch_affil_rank_weight';
-  $handler->display->display_options['sorts']['field_isearch_affil_rank_weight_value']['field'] = 'field_isearch_affil_rank_weight_value';
-  $handler->display->display_options['sorts']['field_isearch_affil_rank_weight_value']['relationship'] = 'field_isearch_affiliations_value';
-  $handler->display->display_options['sorts']['field_isearch_affil_rank_weight_value']['exposed'] = TRUE;
-  $handler->display->display_options['sorts']['field_isearch_affil_rank_weight_value']['expose']['label'] = 'Rank';
-  /* Sort criterion: Content: Last Name (field_isearch_lastname) */
-  $handler->display->display_options['sorts']['field_isearch_lastname_value']['id'] = 'field_isearch_lastname_value';
-  $handler->display->display_options['sorts']['field_isearch_lastname_value']['table'] = 'field_data_field_isearch_lastname';
-  $handler->display->display_options['sorts']['field_isearch_lastname_value']['field'] = 'field_isearch_lastname_value';
-  $handler->display->display_options['sorts']['field_isearch_lastname_value']['exposed'] = TRUE;
-  $handler->display->display_options['sorts']['field_isearch_lastname_value']['expose']['label'] = 'Last Name';
-  /* Sort criterion: Content: First Name (field_isearch_firstname) */
-  $handler->display->display_options['sorts']['field_isearch_firstname_value']['id'] = 'field_isearch_firstname_value';
-  $handler->display->display_options['sorts']['field_isearch_firstname_value']['table'] = 'field_data_field_isearch_firstname';
-  $handler->display->display_options['sorts']['field_isearch_firstname_value']['field'] = 'field_isearch_firstname_value';
-  $handler->display->display_options['sorts']['field_isearch_firstname_value']['exposed'] = TRUE;
-  $handler->display->display_options['sorts']['field_isearch_firstname_value']['expose']['label'] = 'First Name';
-  /* Contextual filter: Employee Type */
-  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['id'] = 'field_isearch_affil_empl_key_value';
-  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['table'] = 'field_data_field_isearch_affil_empl_key';
-  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['field'] = 'field_isearch_affil_empl_key_value';
-  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['relationship'] = 'field_isearch_affiliations_value';
-  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['ui_name'] = 'Employee Type';
-  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['limit'] = '0';
-  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['break_phrase'] = TRUE;
-  /* Contextual filter: Department ID */
-  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['id'] = 'field_isearch_affil_dept_id_value_1';
-  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['table'] = 'field_data_field_isearch_affil_dept_id';
-  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['field'] = 'field_isearch_affil_dept_id_value';
-  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['relationship'] = 'field_isearch_affiliations_value';
-  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['ui_name'] = 'Department ID';
-  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['limit'] = '0';
-  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['break_phrase'] = TRUE;
-  /* Contextual filter: Field collection item: Rank Tenure (field_isearch_affil_rank_tenure) */
-  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['id'] = 'field_isearch_affil_rank_tenure_value';
-  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['table'] = 'field_data_field_isearch_affil_rank_tenure';
-  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['field'] = 'field_isearch_affil_rank_tenure_value';
-  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['relationship'] = 'field_isearch_affiliations_value';
-  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['summary_options']['items_per_page'] = '25';
-  /* Contextual filter: Content: Has taxonomy term ID */
-  $handler->display->display_options['arguments']['tid']['id'] = 'tid';
-  $handler->display->display_options['arguments']['tid']['table'] = 'taxonomy_index';
-  $handler->display->display_options['arguments']['tid']['field'] = 'tid';
-  $handler->display->display_options['arguments']['tid']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['tid']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['tid']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['tid']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['tid']['specify_validation'] = TRUE;
-  $handler->display->display_options['arguments']['tid']['validate']['type'] = 'taxonomy_term';
-  $handler->display->display_options['arguments']['tid']['validate_options']['vocabularies'] = array(
-    'isearch_expertise' => 'isearch_expertise',
-  );
-  $handler->display->display_options['arguments']['tid']['validate_options']['type'] = 'tids';
-  $handler->display->display_options['arguments']['tid']['break_phrase'] = TRUE;
-  $handler->display->display_options['arguments']['tid']['reduce_duplicates'] = TRUE;
-  /* Contextual filter: Content: Has taxonomy term ID */
-  $handler->display->display_options['arguments']['tid_1']['id'] = 'tid_1';
-  $handler->display->display_options['arguments']['tid_1']['table'] = 'taxonomy_index';
-  $handler->display->display_options['arguments']['tid_1']['field'] = 'tid';
-  $handler->display->display_options['arguments']['tid_1']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['tid_1']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['tid_1']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['tid_1']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['tid_1']['specify_validation'] = TRUE;
-  $handler->display->display_options['arguments']['tid_1']['validate']['type'] = 'taxonomy_term';
-  $handler->display->display_options['arguments']['tid_1']['validate_options']['vocabularies'] = array(
-    'isearch_local_tags' => 'isearch_local_tags',
-  );
-  $handler->display->display_options['arguments']['tid_1']['validate_options']['type'] = 'tids';
-  $handler->display->display_options['arguments']['tid_1']['break_phrase'] = TRUE;
-  $handler->display->display_options['arguments']['tid_1']['reduce_duplicates'] = TRUE;
-  /* Filter criterion: Content: Published */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'node';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = 1;
-  $handler->display->display_options['filters']['status']['group'] = 1;
-  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'asu_isearch_profile' => 'asu_isearch_profile',
-  );
-  $handler->display->display_options['filters']['type']['group'] = 1;
-  /* Filter criterion: Search: Search Terms */
-  $handler->display->display_options['filters']['keys']['id'] = 'keys';
-  $handler->display->display_options['filters']['keys']['table'] = 'search_index';
-  $handler->display->display_options['filters']['keys']['field'] = 'keys';
-  $handler->display->display_options['filters']['keys']['group'] = 1;
-  $handler->display->display_options['filters']['keys']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['keys']['expose']['operator_id'] = 'keys_op';
-  $handler->display->display_options['filters']['keys']['expose']['label'] = 'Search';
-  $handler->display->display_options['filters']['keys']['expose']['operator'] = 'keys_op';
-  $handler->display->display_options['filters']['keys']['expose']['identifier'] = 'keys';
-  $handler->display->display_options['filters']['keys']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    3 => 0,
-    4 => 0,
-    5 => 0,
-  );
-  /* Filter criterion: Content: Expertise Areas (field_isearch_expertise_areas) */
-  $handler->display->display_options['filters']['field_isearch_expertise_areas_tid']['id'] = 'field_isearch_expertise_areas_tid';
-  $handler->display->display_options['filters']['field_isearch_expertise_areas_tid']['table'] = 'field_data_field_isearch_expertise_areas';
-  $handler->display->display_options['filters']['field_isearch_expertise_areas_tid']['field'] = 'field_isearch_expertise_areas_tid';
-  $handler->display->display_options['filters']['field_isearch_expertise_areas_tid']['value'] = '';
-  $handler->display->display_options['filters']['field_isearch_expertise_areas_tid']['group'] = 1;
-  $handler->display->display_options['filters']['field_isearch_expertise_areas_tid']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['field_isearch_expertise_areas_tid']['expose']['operator_id'] = 'field_isearch_expertise_areas_tid_op';
-  $handler->display->display_options['filters']['field_isearch_expertise_areas_tid']['expose']['label'] = 'Expertise Area';
-  $handler->display->display_options['filters']['field_isearch_expertise_areas_tid']['expose']['operator'] = 'field_isearch_expertise_areas_tid_op';
-  $handler->display->display_options['filters']['field_isearch_expertise_areas_tid']['expose']['identifier'] = 'field_isearch_expertise_areas_tid';
-  $handler->display->display_options['filters']['field_isearch_expertise_areas_tid']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    3 => 0,
-    4 => 0,
-    5 => 0,
-  );
-  $handler->display->display_options['filters']['field_isearch_expertise_areas_tid']['type'] = 'select';
-  $handler->display->display_options['filters']['field_isearch_expertise_areas_tid']['vocabulary'] = 'isearch_expertise';
-
-  /* Display: Directory - List */
-  $handler = $view->new_display('panel_pane', 'Directory - List', 'isearch_directory_list');
-  $handler->display->display_options['display_description'] = 'Displays a directory in list format';
-  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
-  $handler->display->display_options['style_plugin'] = 'default';
-  $handler->display->display_options['style_options']['row_class'] = 'row';
-  $handler->display->display_options['defaults']['style_options'] = FALSE;
-  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
-  $handler->display->display_options['row_plugin'] = 'fields';
-  $handler->display->display_options['defaults']['row_options'] = FALSE;
-  $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: Content: Path */
   $handler->display->display_options['fields']['path']['id'] = 'path';
   $handler->display->display_options['fields']['path']['table'] = 'node';
@@ -993,12 +720,106 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['fields']['field_isearch_expertise_areas']['element_wrapper_type'] = 'div';
   $handler->display->display_options['fields']['field_isearch_expertise_areas']['element_wrapper_class'] = 'user-expertise';
   $handler->display->display_options['fields']['field_isearch_expertise_areas']['delta_offset'] = '0';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  /* Sort criterion: Field collection item: Rank Tenure (field_isearch_affil_rank_tenure) */
+  $handler->display->display_options['sorts']['field_isearch_affil_rank_tenure_value']['id'] = 'field_isearch_affil_rank_tenure_value';
+  $handler->display->display_options['sorts']['field_isearch_affil_rank_tenure_value']['table'] = 'field_data_field_isearch_affil_rank_tenure';
+  $handler->display->display_options['sorts']['field_isearch_affil_rank_tenure_value']['field'] = 'field_isearch_affil_rank_tenure_value';
+  $handler->display->display_options['sorts']['field_isearch_affil_rank_tenure_value']['relationship'] = 'field_isearch_affiliations_value';
+  /* Sort criterion: Manager */
+  $handler->display->display_options['sorts']['field_isearch_affil_manager_value']['id'] = 'field_isearch_affil_manager_value';
+  $handler->display->display_options['sorts']['field_isearch_affil_manager_value']['table'] = 'field_data_field_isearch_affil_manager';
+  $handler->display->display_options['sorts']['field_isearch_affil_manager_value']['field'] = 'field_isearch_affil_manager_value';
+  $handler->display->display_options['sorts']['field_isearch_affil_manager_value']['relationship'] = 'field_isearch_affiliations_value';
+  $handler->display->display_options['sorts']['field_isearch_affil_manager_value']['ui_name'] = 'Manager';
+  $handler->display->display_options['sorts']['field_isearch_affil_manager_value']['order'] = 'DESC';
+  /* Sort criterion: Field collection item: Rank Weight (field_isearch_affil_rank_weight) */
+  $handler->display->display_options['sorts']['field_isearch_affil_rank_weight_value']['id'] = 'field_isearch_affil_rank_weight_value';
+  $handler->display->display_options['sorts']['field_isearch_affil_rank_weight_value']['table'] = 'field_data_field_isearch_affil_rank_weight';
+  $handler->display->display_options['sorts']['field_isearch_affil_rank_weight_value']['field'] = 'field_isearch_affil_rank_weight_value';
+  $handler->display->display_options['sorts']['field_isearch_affil_rank_weight_value']['relationship'] = 'field_isearch_affiliations_value';
+  $handler->display->display_options['sorts']['field_isearch_affil_rank_weight_value']['exposed'] = TRUE;
+  $handler->display->display_options['sorts']['field_isearch_affil_rank_weight_value']['expose']['label'] = 'Rank';
+  /* Sort criterion: Content: Last Name (field_isearch_lastname) */
+  $handler->display->display_options['sorts']['field_isearch_lastname_value']['id'] = 'field_isearch_lastname_value';
+  $handler->display->display_options['sorts']['field_isearch_lastname_value']['table'] = 'field_data_field_isearch_lastname';
+  $handler->display->display_options['sorts']['field_isearch_lastname_value']['field'] = 'field_isearch_lastname_value';
+  $handler->display->display_options['sorts']['field_isearch_lastname_value']['exposed'] = TRUE;
+  $handler->display->display_options['sorts']['field_isearch_lastname_value']['expose']['label'] = 'Last Name';
+  /* Sort criterion: Content: First Name (field_isearch_firstname) */
+  $handler->display->display_options['sorts']['field_isearch_firstname_value']['id'] = 'field_isearch_firstname_value';
+  $handler->display->display_options['sorts']['field_isearch_firstname_value']['table'] = 'field_data_field_isearch_firstname';
+  $handler->display->display_options['sorts']['field_isearch_firstname_value']['field'] = 'field_isearch_firstname_value';
+  $handler->display->display_options['sorts']['field_isearch_firstname_value']['exposed'] = TRUE;
+  $handler->display->display_options['sorts']['field_isearch_firstname_value']['expose']['label'] = 'First Name';
+  /* Contextual filter: Employee Type */
+  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['id'] = 'field_isearch_affil_empl_key_value';
+  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['table'] = 'field_data_field_isearch_affil_empl_key';
+  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['field'] = 'field_isearch_affil_empl_key_value';
+  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['relationship'] = 'field_isearch_affiliations_value';
+  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['ui_name'] = 'Employee Type';
+  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['limit'] = '0';
+  $handler->display->display_options['arguments']['field_isearch_affil_empl_key_value']['break_phrase'] = TRUE;
+  /* Contextual filter: Department ID */
+  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['id'] = 'field_isearch_affil_dept_id_value_1';
+  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['table'] = 'field_data_field_isearch_affil_dept_id';
+  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['field'] = 'field_isearch_affil_dept_id_value';
+  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['relationship'] = 'field_isearch_affiliations_value';
+  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['ui_name'] = 'Department ID';
+  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['limit'] = '0';
+  $handler->display->display_options['arguments']['field_isearch_affil_dept_id_value_1']['break_phrase'] = TRUE;
+  /* Contextual filter: Field collection item: Rank Tenure (field_isearch_affil_rank_tenure) */
+  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['id'] = 'field_isearch_affil_rank_tenure_value';
+  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['table'] = 'field_data_field_isearch_affil_rank_tenure';
+  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['field'] = 'field_isearch_affil_rank_tenure_value';
+  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['relationship'] = 'field_isearch_affiliations_value';
+  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_isearch_affil_rank_tenure_value']['summary_options']['items_per_page'] = '25';
+  /* Contextual filter: Content: Has taxonomy term ID */
+  $handler->display->display_options['arguments']['tid']['id'] = 'tid';
+  $handler->display->display_options['arguments']['tid']['table'] = 'taxonomy_index';
+  $handler->display->display_options['arguments']['tid']['field'] = 'tid';
+  $handler->display->display_options['arguments']['tid']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['tid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['tid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['tid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['tid']['specify_validation'] = TRUE;
+  $handler->display->display_options['arguments']['tid']['validate']['type'] = 'taxonomy_term';
+  $handler->display->display_options['arguments']['tid']['validate_options']['vocabularies'] = array(
+    'isearch_expertise' => 'isearch_expertise',
+  );
+  $handler->display->display_options['arguments']['tid']['validate_options']['type'] = 'tids';
+  $handler->display->display_options['arguments']['tid']['break_phrase'] = TRUE;
+  $handler->display->display_options['arguments']['tid']['reduce_duplicates'] = TRUE;
+  /* Contextual filter: Content: Has taxonomy term ID */
+  $handler->display->display_options['arguments']['tid_1']['id'] = 'tid_1';
+  $handler->display->display_options['arguments']['tid_1']['table'] = 'taxonomy_index';
+  $handler->display->display_options['arguments']['tid_1']['field'] = 'tid';
+  $handler->display->display_options['arguments']['tid_1']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['tid_1']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['tid_1']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['tid_1']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['tid_1']['specify_validation'] = TRUE;
+  $handler->display->display_options['arguments']['tid_1']['validate']['type'] = 'taxonomy_term';
+  $handler->display->display_options['arguments']['tid_1']['validate_options']['vocabularies'] = array(
+    'isearch_local_tags' => 'isearch_local_tags',
+  );
+  $handler->display->display_options['arguments']['tid_1']['validate_options']['type'] = 'tids';
+  $handler->display->display_options['arguments']['tid_1']['break_phrase'] = TRUE;
+  $handler->display->display_options['arguments']['tid_1']['reduce_duplicates'] = TRUE;
   $handler->display->display_options['filter_groups']['groups'] = array(
     1 => 'AND',
     2 => 'OR',
   );
-  $handler->display->display_options['defaults']['filters'] = FALSE;
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
@@ -1038,7 +859,6 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['filters']['field_isearch_affil_title_value']['table'] = 'field_data_field_isearch_affil_title';
   $handler->display->display_options['filters']['field_isearch_affil_title_value']['field'] = 'field_isearch_affil_title_value';
   $handler->display->display_options['filters']['field_isearch_affil_title_value']['relationship'] = 'field_isearch_affiliations_value';
-  $handler->display->display_options['filters']['field_isearch_affil_title_value']['operator'] = 'contains';
   $handler->display->display_options['filters']['field_isearch_affil_title_value']['group'] = 1;
   $handler->display->display_options['filters']['field_isearch_affil_title_value']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_isearch_affil_title_value']['expose']['operator_id'] = 'field_isearch_affil_title_value_op';
@@ -1050,6 +870,9 @@ function asu_isearch_views_default_views() {
     2 => '2',
     1 => 0,
     3 => 0,
+    8 => 0,
+    6 => 0,
+    7 => 0,
     4 => 0,
     5 => 0,
   );
@@ -1215,6 +1038,56 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['relationship'] = 'field_isearch_affiliations_value';
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['operator'] = 'regular_expression';
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['group'] = 1;
+
+  /* Display: Directory - List */
+  $handler = $view->new_display('panel_pane', 'Directory - List', 'isearch_directory_list');
+  $handler->display->display_options['display_description'] = 'Displays a directory in list format';
+  $handler->display->display_options['allow']['use_pager'] = 'use_pager';
+  $handler->display->display_options['allow']['items_per_page'] = 'items_per_page';
+  $handler->display->display_options['allow']['offset'] = 'offset';
+  $handler->display->display_options['allow']['link_to_view'] = 0;
+  $handler->display->display_options['allow']['more_link'] = 0;
+  $handler->display->display_options['allow']['path_override'] = 0;
+  $handler->display->display_options['allow']['title_override'] = 'title_override';
+  $handler->display->display_options['allow']['exposed_form'] = 'exposed_form';
+  $handler->display->display_options['allow']['fields_override'] = 0;
+
+  /* Display: Directory - Titles */
+  $handler = $view->new_display('panel_pane', 'Directory - Titles', 'isearch_directory_titles');
+  $handler->display->display_options['display_description'] = 'Used to populate titles filter';
+  $handler->display->display_options['defaults']['query'] = FALSE;
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['distinct'] = TRUE;
+  $handler->display->display_options['defaults']['pager'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['style_options']['row_class'] = 'row';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['header'] = FALSE;
+  $handler->display->display_options['defaults']['empty'] = FALSE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Field collection item: Title */
+  $handler->display->display_options['fields']['field_isearch_affil_title']['id'] = 'field_isearch_affil_title';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['table'] = 'field_data_field_isearch_affil_title';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['field'] = 'field_isearch_affil_title';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['relationship'] = 'field_isearch_affiliations_value';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['label'] = '';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['element_type'] = '0';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['element_label_type'] = '0';
+  $handler->display->display_options['fields']['field_isearch_affil_title']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_isearch_affil_title']['element_default_classes'] = FALSE;
+  $handler->display->display_options['fields']['field_isearch_affil_title']['type'] = 'text_plain';
+  $handler->display->display_options['defaults']['sorts'] = FALSE;
+  /* Sort criterion: Field collection item: Title (field_isearch_affil_title) */
+  $handler->display->display_options['sorts']['field_isearch_affil_title_value']['id'] = 'field_isearch_affil_title_value';
+  $handler->display->display_options['sorts']['field_isearch_affil_title_value']['table'] = 'field_data_field_isearch_affil_title';
+  $handler->display->display_options['sorts']['field_isearch_affil_title_value']['field'] = 'field_isearch_affil_title_value';
+  $handler->display->display_options['sorts']['field_isearch_affil_title_value']['relationship'] = 'field_isearch_affiliations_value';
   $handler->display->display_options['allow']['use_pager'] = 'use_pager';
   $handler->display->display_options['allow']['items_per_page'] = 'items_per_page';
   $handler->display->display_options['allow']['offset'] = 'offset';
