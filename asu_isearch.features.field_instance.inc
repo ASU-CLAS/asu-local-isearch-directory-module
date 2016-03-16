@@ -962,7 +962,7 @@ function asu_isearch_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 18,
+      'weight' => 20,
     ),
   );
 
@@ -1216,7 +1216,7 @@ function asu_isearch_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 14,
+      'weight' => 15,
     ),
   );
 
@@ -1282,7 +1282,7 @@ function asu_isearch_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 15,
+      'weight' => 16,
     ),
   );
 
@@ -2301,6 +2301,61 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_link_building_code'
+  $field_instances['node-asu_isearch_profile-field_isearch_link_building_code'] = array(
+    'bundle' => 'asu_isearch_profile',
+    'default_value' => array(
+      0 => array(
+        'value' => 1,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'If a building code is detected, enabling this option will link the building code to the ASU interactive campus map.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 54,
+      ),
+      'featured' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'isearch_profile_list' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_isearch_link_building_code',
+    'label' => 'Link Building Code',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 17,
+    ),
+  );
+
   // Exported field_instance: 'node-asu_isearch_profile-field_isearch_local_photo_url'
   $field_instances['node-asu_isearch_profile-field_isearch_local_photo_url'] = array(
     'bundle' => 'asu_isearch_profile',
@@ -2388,7 +2443,7 @@ function asu_isearch_field_default_field_instances() {
         'manualcrop_thumblist' => 0,
       ),
       'type' => 'media_generic',
-      'weight' => 19,
+      'weight' => 21,
     ),
   );
 
@@ -2441,7 +2496,7 @@ function asu_isearch_field_default_field_instances() {
         'apply_chosen' => '',
       ),
       'type' => 'options_select',
-      'weight' => 17,
+      'weight' => 19,
     ),
   );
 
@@ -2608,7 +2663,7 @@ function asu_isearch_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 22,
+      'weight' => 24,
     ),
   );
 
@@ -2670,7 +2725,7 @@ function asu_isearch_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 21,
+      'weight' => 23,
     ),
   );
 
@@ -2744,7 +2799,7 @@ function asu_isearch_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 20,
+      'weight' => 22,
     ),
   );
 
@@ -2797,7 +2852,66 @@ function asu_isearch_field_default_field_instances() {
         'apply_chosen' => '',
       ),
       'type' => 'options_select',
-      'weight' => 16,
+      'weight' => 18,
+    ),
+  );
+
+  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_primary_campus'
+  $field_instances['node-asu_isearch_profile-field_isearch_primary_campus'] = array(
+    'bundle' => 'asu_isearch_profile',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 55,
+      ),
+      'featured' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'isearch_profile_list' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_isearch_primary_campus',
+    'label' => 'Primary Campus',
+    'required' => 0,
+    'settings' => array(
+      'linkit' => array(
+        'button_text' => 'Search',
+        'enable' => 0,
+        'profile' => '',
+      ),
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'maxlength_js' => 0,
+        'maxlength_js_label' => 'Content limited to @limit characters, remaining: <strong>@remaining</strong>',
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 14,
     ),
   );
 
@@ -4397,8 +4511,10 @@ function asu_isearch_field_default_field_instances() {
   t('Google+ Link');
   t('Graduate Faculties / Mentoring History');
   t('Honors/Awards');
+  t('If a building code is detected, enabling this option will link the building code to the ASU interactive campus map.');
   t('Images');
   t('Last Name');
+  t('Link Building Code');
   t('LinkedIn URL');
   t('Local Profile Picture');
   t('Local Tags');
@@ -4412,6 +4528,7 @@ function asu_isearch_field_default_field_instances() {
   t('Photo Preference');
   t('Presentations');
   t('Primary Affiliation');
+  t('Primary Campus');
   t('Professional Associations');
   t('Profile Picture');
   t('Profile Tabs');

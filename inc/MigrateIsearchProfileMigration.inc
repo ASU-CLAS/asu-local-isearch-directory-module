@@ -121,6 +121,7 @@ class MigrateIsearchProfileMigration extends Migration {
     $this->addFieldMapping('field_isearch_fax'                       , 'fax');
     $this->addFieldMapping('field_isearch_campus_building'           , 'building');
     $this->addFieldMapping('field_isearch_campus_room'               , 'room');
+    $this->addFieldMapping('field_isearch_primary_campus'            , 'primaryJobCampus');
     $this->addFieldMapping('field_isearch_photo_preference'          , 'photoPreference');
     $this->addFieldMapping('field_isearch_photo_permission'          , 'photoPermission');
     $this->addFieldMapping('field_isearch_social_twitter'            , 'twitterLink');
@@ -183,6 +184,7 @@ class MigrateIsearchProfileMigration extends Migration {
     	'fax' => 'fax',
     	'building' => 'building',
     	'room' => 'room',
+    	'primaryJobCampus' => 'primaryJobCampus',
     	'shortBio' => 'shortBio',
     	'bio' => 'Biography',
     	'education' => 'education',

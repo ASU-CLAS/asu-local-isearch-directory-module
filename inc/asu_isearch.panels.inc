@@ -16,6 +16,13 @@ function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts
     )));
   }
 
+  if ($pane->subtype == 'node:field_isearch_tch_website') {
+    $website = $content->content['#items'][0]['value'];
+    $content->content[0]['#markup'] = l($website, $website, array('attributes' => array(
+      'target' => '_blank',
+    )));
+  }
+
   // Get permission to display profile image
   if ($pane->subtype == 'node:field_isearch_photo_url') {
   	// check and see if we have uploaded a local image
@@ -73,7 +80,36 @@ function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts
   // Add pin icon to location
   if ($pane->subtype == 'node:field_isearch_campus_building') {
     $building = $content->content['#items'][0]['value'];
-    $content->content[0]['#markup'] = '<i class="fa fa-map-marker"></i> ' . $building;
+
+    $global_link_buildings = variable_get('isearch_link_buildings', FALSE);
+    $profile_link_buildings = FALSE;
+
+    if (!empty($content->content['#object']->field_isearch_link_building_code)) {
+      $profile_link_buildings = (bool) $content->content['#object']->field_isearch_link_building_code[LANGUAGE_NONE][0]['value'];
+    }
+
+    $building_code = asu_isearch_fetch_asu_building_code($content->content['#items'][0]['value']);
+
+    // test for a 2-5 alphanumeric code
+    if ($global_link_buildings && $profile_link_buildings && $building_code) {
+
+      // look for campus - this may not be required?
+      $campus = '';
+      if (!empty($content->content['#object']->field_isearch_primary_campus)) {
+        $campus = '&campus=' . check_plain($content->content['#object']->field_isearch_primary_campus[LANGUAGE_NONE][0]['value']);
+      }
+
+      $content->content[0]['#markup'] = l('<i class="fa fa-map-marker"></i> ' . $building_code, 'http://www.asu.edu/map/interactive/?building=' . $building_code . $campus,
+        array(
+          'attributes' => array(
+            'target' => '_blank',
+          ),
+          'html' => TRUE,
+        ));
+    }
+    else {
+      $content->content[0]['#markup'] = '<i class="fa fa-map-marker"></i> ' . $building;
+    }
   }
 
 
@@ -475,6 +511,8 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       '#suffix' => '</div>',
     );
 
+    $form['#attached']['css'][] = drupal_get_path('module', 'asu_isearch') . '/css/asu_isearch.panelizer.css';
+
     $config = asu_isearch_get_default_view_config();
 
     // we are setting this up for the first time...
@@ -776,6 +814,12 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       '#default_value' => $config->filter_title,
     );
 
+    $form['isearch_advanced']['link_building_codes'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Link building codes?',
+      '#default_value' => $config->link_building_codes,
+    );
+
     // Hide isearch config field
     $form['field_isearch_config']['#access'] = FALSE;
   }
@@ -826,6 +870,7 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     'display_room'          => $values['display_room'],
     'default_sort_by'       => $values['default_sort_by'],
     'filter_title'          => $values['filter_title'],
+    'link_building_codes'   => $values['link_building_codes'],
   );
 
   $form_state['entity']->field_isearch_config[LANGUAGE_NONE][0]['value'] = json_encode($config);

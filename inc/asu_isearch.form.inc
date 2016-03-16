@@ -13,16 +13,18 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
       '#disabled' => TRUE,
     );
 
-    // these profile fields should not be editable at this time but...
-    // provide a list of exceptional fields
+
+    // provide a list of fields we allow users to edit
     $field_exception_manifest = array(
       'field_isearch_local_tags',
       'field_isearch_local_photo_url',
       'field_isearch_affiliations',
       'field_isearch_affil_local_weight',
       'field_isearch_local_primary_aff',
+      'field_isearch_link_building_code',
     );
 
+    // Hide the rest of the fields
     // handle top level fields
     foreach ($form as $form_field => $value) {
       if (preg_match('/^field_isearch_/', $form_field) && !in_array($form_field, $field_exception_manifest)) {
