@@ -62,6 +62,13 @@ function asu_isearch_admin_settings_form() {
     '#attributes' => array('id' => 'isearch_admin_feed_dept'),
   );
 
+  $form['isearch_link_buildings'] = array(
+    '#type' => 'checkbox',
+    '#title' => 'Detect and link building codes?',
+    '#default_value' => variable_get('isearch_link_buildings', TRUE),
+    '#description' => t('Check this option to link building codes on profiles and directory listings to the ASU Campus map'),
+  );
+
   $form['isearch_dept_tree'] = array(
     '#attached' => array(
       'css' => array(

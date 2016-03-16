@@ -35,10 +35,30 @@ function asu_isearch_views_pre_render(&$view) {
       }
     }
 
+    // prepare various variables for condition checks
+    $view_link_building = (bool) $view->view_config->link_building_codes;
+    $global_link_buildings = variable_get('isearch_link_buildings', TRUE);
 
     foreach ($view->result as $key => $result) {
       $entity = $result->_field_data['nid']['entity'];
       $wrapper = entity_metadata_wrapper('node', $entity);
+
+      // building code link
+      if ($view_link_building && $global_link_buildings) {
+        // TODO: Logic for linking building in view listing
+        if ($building_code = (asu_isearch_fetch_asu_building_code($view->result[$key]->field_field_isearch_campus_building[0]['raw']['value']))) {
+          $building_label = $view->result[$key]->field_field_isearch_campus_building[0]['raw']['value'];
+          $building_map_link = l($building_label, 'http://www.asu.edu/map/interactive/?building=' . $building_code,
+            array(
+              'attributes' => array(
+                'target' => '_blank',
+              ),
+            ));
+
+          $view->result[$key]->field_field_isearch_campus_building[0]['rendered']['#markup'] = $building_map_link;
+        }
+
+      }
 
       // display correct photo if any
       $photo_permission = strtolower($wrapper->field_isearch_photo_permission->value());

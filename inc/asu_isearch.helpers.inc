@@ -70,6 +70,7 @@ function asu_isearch_get_default_view_config() {
     'show_filter_omni'      => TRUE,
     'show_filter_expertise' => TRUE,
     'show_filter_sort'      => TRUE,
+    'link_building_codes'   => variable_get('isearch_link_buildings', FALSE),
   );
 }
 
@@ -83,4 +84,22 @@ function asu_isearch_is_isearch_view($view) {
   return (isset($view->display_handler->view->display['default']->display_options['css_class']) && $view->display_handler->view->display['default']->display_options['css_class'] == 'isearch-directory-list');
 }
 
+
+/**
+ * Helper function to check for valid building codes
+ */
+function asu_isearch_fetch_asu_building_code($code) {
+  $building_code = check_plain(trim($code));
+
+  if (in_array(strtoupper($building_code), array('FULTON CENTER', 'FULTON'))) {
+    $building_code = 'FULTN';
+  }
+
+  if ($has_building_code = preg_match('/^[0-9A-Z]{2,5}$/', strtoupper($building_code))) {
+
+    return $building_code;
+  }
+
+  return FALSE;
+}
 
