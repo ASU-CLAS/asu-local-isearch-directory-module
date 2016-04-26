@@ -962,7 +962,7 @@ function asu_isearch_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 20,
+      'weight' => 21,
     ),
   );
 
@@ -1149,7 +1149,7 @@ function asu_isearch_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 12,
+      'weight' => 16,
     ),
   );
 
@@ -1216,7 +1216,7 @@ function asu_isearch_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 15,
+      'weight' => 16,
     ),
   );
 
@@ -1282,7 +1282,7 @@ function asu_isearch_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 16,
+      'weight' => 17,
     ),
   );
 
@@ -1349,7 +1349,7 @@ function asu_isearch_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 15,
+      'weight' => 18,
     ),
   );
 
@@ -1551,7 +1551,7 @@ function asu_isearch_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 14,
+      'weight' => 17,
     ),
   );
 
@@ -2352,7 +2352,75 @@ function asu_isearch_field_default_field_instances() {
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 17,
+      'weight' => 18,
+    ),
+  );
+
+  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_local_office_hours'
+  $field_instances['node-asu_isearch_profile-field_isearch_local_office_hours'] = array(
+    'bundle' => 'asu_isearch_profile',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'office_hours',
+        'settings' => array(
+          'closedformat' => 'Closed',
+          'compress' => FALSE,
+          'current_status' => array(
+            'closed_text' => 'Currently closed',
+            'open_text' => 'Currently open!',
+            'position' => 'hide',
+          ),
+          'date_first_day' => 0,
+          'daysformat' => 'long',
+          'grouped' => FALSE,
+          'hoursformat' => 0,
+          'separator_day_hours' => ': ',
+          'separator_days' => '<br />',
+          'separator_grouped_days' => ' - ',
+          'separator_hours_hours' => '-',
+          'separator_more_hours' => ', ',
+          'showclosed' => 'all',
+          'timezone_field' => '',
+        ),
+        'type' => 'office_hours',
+        'weight' => 56,
+      ),
+      'featured' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'isearch_profile_list' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_isearch_local_office_hours',
+    'label' => 'Office Hours',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'office_hours',
+      'settings' => array(),
+      'type' => 'office_hours',
+      'weight' => 14,
     ),
   );
 
@@ -2443,7 +2511,7 @@ function asu_isearch_field_default_field_instances() {
         'manualcrop_thumblist' => 0,
       ),
       'type' => 'media_generic',
-      'weight' => 21,
+      'weight' => 22,
     ),
   );
 
@@ -2496,7 +2564,7 @@ function asu_isearch_field_default_field_instances() {
         'apply_chosen' => '',
       ),
       'type' => 'options_select',
-      'weight' => 19,
+      'weight' => 20,
     ),
   );
 
@@ -2663,7 +2731,7 @@ function asu_isearch_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 24,
+      'weight' => 25,
     ),
   );
 
@@ -2725,7 +2793,7 @@ function asu_isearch_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 23,
+      'weight' => 24,
     ),
   );
 
@@ -2799,7 +2867,7 @@ function asu_isearch_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 22,
+      'weight' => 23,
     ),
   );
 
@@ -2852,7 +2920,7 @@ function asu_isearch_field_default_field_instances() {
         'apply_chosen' => '',
       ),
       'type' => 'options_select',
-      'weight' => 18,
+      'weight' => 19,
     ),
   );
 
@@ -2911,7 +2979,7 @@ function asu_isearch_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 14,
+      'weight' => 15,
     ),
   );
 
@@ -3517,7 +3585,7 @@ function asu_isearch_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 11,
+      'weight' => 15,
     ),
   );
 
@@ -4521,6 +4589,7 @@ function asu_isearch_field_default_field_instances() {
   t('Mailcode');
   t('Manager');
   t('Migrate Hash');
+  t('Office Hours');
   t('Override Primary Affiliation');
   t('Personal Website');
   t('Phone');

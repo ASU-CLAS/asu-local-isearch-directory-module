@@ -70,6 +70,7 @@ function asu_isearch_get_default_view_config() {
     'show_filter_omni'      => TRUE,
     'show_filter_expertise' => TRUE,
     'show_filter_sort'      => TRUE,
+    'show_az_index'         => FALSE,
     'link_building_codes'   => variable_get('isearch_link_buildings', FALSE),
   );
 }
@@ -81,7 +82,7 @@ function asu_isearch_get_default_view_config() {
  * This will help clarify code and add checks to keep undefines from happening
  */
 function asu_isearch_is_isearch_view($view) {
-  return (isset($view->display_handler->view->display['default']->display_options['css_class']) && $view->display_handler->view->display['default']->display_options['css_class'] == 'isearch-directory-list');
+  return $view->current_display == 'isearch_a_z' || (isset($view->display_handler->view->display['default']->display_options['css_class']) && $view->display_handler->view->display['default']->display_options['css_class'] == 'isearch-directory-list');
 }
 
 
@@ -98,6 +99,122 @@ function asu_isearch_fetch_asu_building_code($code) {
   if ($has_building_code = preg_match('/^[0-9A-Z]{2,5}$/', strtoupper($building_code))) {
 
     return $building_code;
+  }
+
+  return FALSE;
+}
+
+
+/**
+ * Helper function to load react library locally if module isn't present
+ */
+function asu_isearch_load_js() {
+  if (!module_exists('react')) {
+    drupal_add_js(drupal_get_path('module', 'asu_isearch') . '/vendor/react/build/react.js');
+    drupal_add_js(drupal_get_path('module', 'asu_isearch') . '/vendor/react/build/react-dom.js');
+  }
+}
+
+/**
+ * Helper function for backwards compatibility when retrieving tenure display setting
+ */
+function asu_isearch_get_tenure_config($setting) {
+  if (!is_object($setting)) {
+    return $setting;
+  }
+
+  $tenure_display = 'Both';
+
+  $tenure_display_values = array();
+  foreach ($setting as $key => $value) {
+    if ($value == 1) {
+      $tenure_display_values[] = $key;
+    }
+  }
+
+  if (count($tenure_display_values) == 1) {
+    $tenure_display = $tenure_display_values[0];
+  }
+
+  return $tenure_display;
+}
+
+
+/**
+ * Backwards compatible method to get multi-depts configuration
+ */
+function asu_isearch_bc_get_dept_picker_config($data, $passing_string = FALSE) {
+  if ($passing_string) {
+    $data = json_decode($data);
+  }
+
+  if (!isset($data->items) || !is_array($data->items)) {
+    $items = $data;
+    $data = new stdclass();
+    $data->items = array($items);
+  }
+
+  if (!isset($data->options)) {
+    $data->options = array();
+    if (count($data->items)) {
+      $import_subdepts = (boolean) variable_get('isearch_import_subdepts', TRUE);
+      foreach ($data->items as $item) {
+        $data->options[$item->dept_id] = (object) array('subdepts' => $import_subdepts);
+      }
+    }
+  }
+
+  if ($passing_string) {
+    $data = json_encode($data);
+  }
+
+  return $data;
+}
+
+/**
+ * Retrieves an array of source urls
+ */
+function asu_isearch_get_migrate_source_urls($from_cache = FALSE) {
+  // determine which endpoint to use
+  if ($from_cache) {
+    $endpoint = ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT;
+  }
+  else {
+    $endpoint = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT;
+  }
+
+  $source_urls = array();
+
+  // Check and see if we have configured our migration
+  $migrate_config = variable_get('isearch_admin_feed_dept', null);
+
+  if (!is_null($migrate_config)) {
+    // @BC: new config data structure
+    $migrate_config = asu_isearch_bc_get_dept_picker_config($migrate_config, TRUE);
+    $migrate_config = json_decode($migrate_config);
+
+    foreach ($migrate_config->items as $migrate_item) {
+      $dept_id = $migrate_item->dept_id;
+      if ($migrate_config->options->$dept_id->subdepts) {
+        foreach ($migrate_item->tree_nids as $department_nid) {
+          $source_urls[] = $endpoint . $department_nid;
+        }
+      }
+      else {
+        $source_urls[] = $endpoint . $migrate_item->dept_nid;
+      }
+    }
+  }
+
+  return $source_urls;
+}
+
+
+function asu_isearch_check_addon($addon) {
+  switch ($addon) {
+    case 'office_hours':
+      return (module_exists('office_hours') && variable_get('asu_isearch_check_addon', FALSE));
+      break;
   }
 
   return FALSE;

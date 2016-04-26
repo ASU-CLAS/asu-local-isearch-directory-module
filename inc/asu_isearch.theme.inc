@@ -34,12 +34,6 @@ function asu_isearch_theme() {
       ),
       'file' => 'inc/asu_isearch.theme.inc',
     ),
-    // iSearch Config Form Field
-    'asu_isearch_dept_config' => array(
-      'variables' => array('items' => array(), 'settings' => array()),
-      'template' => 'theme/asu_isearch.dept_config',
-      'file' => 'inc/asu_isearch.theme.inc',
-    ),
   );
 }
 
@@ -78,8 +72,8 @@ function theme_asu_isearch_dept_tree(&$vars) {
     "top_level_nid" => ASU_ISEARCH_DIRECTORY_TOP_LEVEL_DEPT_NID
   );
 
-  //Pass our items and configs to the JS
-  //will need to pass extra configs if the tree is being used without the people display (standalone)
+  // Pass our items and configs to the JS
+  // will need to pass extra configs if the tree is being used without the people display (standalone)
   if ($standalone) {
     if (isset($vars['items'][0]['directory_items'])) {
       $nids = $vars['items'][0]['directory_items'];
@@ -107,49 +101,51 @@ function theme_asu_isearch_dept_tree(&$vars) {
 
   drupal_add_js(array('asu_isearch_dept_tree' => $settings), 'setting');
 
-  $html = '<div class="asu-directory-tree-hierarchy"><div id="treediv"></div></div>';
 
-  return $html;
+  $form = array();
+  $form['include_subdepts'] = array(
+    '#type' => 'checkbox',
+    '#title' => 'Include sub-departments?',
+    '#attributes' => array(
+      'id' => 'asu-isearch-dept-include-subdept',
+      'name' => 'include_subdepts',
+    ),
+    '#description' => t('This will include all sub-departments beneath the selected department.'),
+  );
+
+  $form['dialog_submit'] = array(
+    '#type' => 'button',
+    '#value' => 'Select',
+    '#attributes' => array(
+      'id' => 'asu-isearch-dept-picker-select',
+      'type' => 'button',
+    ),
+  );
+
+  $form['dialog_cancel'] = array(
+    '#type' => 'button',
+    '#value' => 'Cancel',
+    '#attributes' => array(
+      'id' => 'asu-isearch-dept-picker-cancel',
+      'type' => 'button',
+    ),
+  );
+
+  return '<div class="asu-directory-tree-hierarchy">
+    <div class="dialog-title">
+      Choose a department
+      <div class="close-dialog"><span class="fa fa-close"></span></div>
+    </div>
+    <div class="tree-wrapper">
+      <div id="treediv"></div>
+    </div>
+    <div class="actions">
+      ' . drupal_render($form) . '
+    </div>
+  </div>';
 
 }
 
-/**
- * Template preprocess handler for 'asu_isearch_form_field' template.
- */
-function template_process_asu_isearch_dept_config(&$vars) {
-
-  //this generates the employee type display, by first grabbing the types from the endpoint
-  //and then grouping them into 3 columns
-
-  $employee_types = asu_isearch_get_employee_types();
-  $employee_types = $employee_types['nodes'];
-
-  //add the "show all" option to the front of the array
-  $show_all = array('node' => array('name' => 'All'));
-  array_unshift($employee_types, $show_all);
-
-  //calculate how many types we'll put in each column
-  $num_per_col = count($employee_types) / 3 + 1;
-
-  $count = 1;
-  $col = 0;
-
-  $vars['settings']['employee_types_col_' . $col] = array();
-
-  foreach ($employee_types as $type) {
-
-    if (($count % $num_per_col == 0) && ($count < count($employee_types))) {
-      $col++;
-      $vars['settings']['employee_types_col_' . $col] = array();
-    }
-
-    array_push($vars['settings']['employee_types_col_' . $col], $type);
-
-    $count++;
-  }
-
-  drupal_add_js(drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch.dept_config.js');
-}
 
 /**
  * Implements hook_libraries_info

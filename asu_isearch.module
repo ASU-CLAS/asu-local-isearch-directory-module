@@ -18,8 +18,6 @@ include_once 'inc/asu_isearch.views.inc';
 include_once 'inc/asu_isearch.migrate.inc';
 include_once 'inc/IsearchProfileDirectory.inc';
 
-
-
 // Access Permission Constants
 define('ASU_ISEARCH_DIRECTORY_ADMIN_CONFIG_SETTINGS', 'Administer ASU Directory Configuration');
 define('ASU_ISEARCH_DIRECTORY_PAGE_ACCESS', 'access asu directory');
@@ -36,6 +34,7 @@ define('ASU_ISEARCH_DIRECTORY_SOLR_ENV', variable_get('asu_dir_solr_endpoint', '
 define('ASU_ISEARCH_DIRECTORY_TREE_ENDPOINT', variable_get('asu_dir_tree_endpoint', 'https://isearch.asu.edu/endpoints/dept_tree/json'));
 define('ASU_ISEARCH_EMPLOYEE_TYPES_ENDPOINT', variable_get('asu_dir_employee_types_endpoint', 'https://isearch.asu.edu/endpoints/employee-types'));
 define('ASU_ISEARCH_DIRECTORY_PHOTO_ENDPOINT', 'https://webapp4.asu.edu/photo-ws/directory_photo/');
+define('ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT', 'private://isearch/feeds/');
 
 // Feed URLs
 $asu_isearch_devmode = variable_get('asu_isearch_devmode', FALSE);

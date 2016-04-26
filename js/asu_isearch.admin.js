@@ -9,9 +9,7 @@
 (function ($) {
   Drupal.behaviors.asu_isearch_admin = {
     attach: function (context, settings) {
-      if (settings.hasOwnProperty('asu_isearch_admin')) {
-
-      }
+      initIsearchConfig();
     }
   }
 })(jQuery);

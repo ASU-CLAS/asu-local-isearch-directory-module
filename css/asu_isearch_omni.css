@@ -5,11 +5,20 @@
   margin-bottom: 15px; }
 .isearch-directory-filters .views-widget-filter-tid {
   display: none; }
-.isearch-directory-filters .chosen-container-single .chosen-single {
-  background: none;
-  border: none;
-  box-shadow: none;
-  color: #505050;
-  font-family: 'Open Sans', 'Lucida Grande', Tahoma, Verdana, sans-serif;
-  font-size: 16px;
-  padding-left: 0; }
+.isearch-directory-filters .chosen-container .chosen-drop {
+  min-width: 235px; }
+.isearch-directory-filters .chosen-container-single {
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #b0b0b0;
+  border-radius: 4px;
+  box-shadow: 1px 2px 9px rgba(213, 213, 213, 0.5) inset;
+  padding: 6px 12px; }
+  .isearch-directory-filters .chosen-container-single .chosen-single {
+    background: none;
+    border: none;
+    box-shadow: none;
+    color: #505050;
+    font-family: 'Open Sans', 'Lucida Grande', Tahoma, Verdana, sans-serif;
+    font-size: 16px;
+    padding-left: 0; }

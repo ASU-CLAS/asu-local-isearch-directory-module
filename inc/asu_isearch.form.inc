@@ -18,6 +18,7 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
     $field_exception_manifest = array(
       'field_isearch_local_tags',
       'field_isearch_local_photo_url',
+      'field_isearch_local_office_hours',
       'field_isearch_affiliations',
       'field_isearch_affil_local_weight',
       'field_isearch_local_primary_aff',

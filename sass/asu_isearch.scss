@@ -221,7 +221,6 @@ div.krumo-preview { color: #000; }
 
 // view list mode
 .isearch-directory-list {
-
   .view-header {
     margin: 10px 0;
 
@@ -267,6 +266,21 @@ div.krumo-preview { color: #000; }
 
   .item-list .pager {
     margin: 20px 0;
+  }
+
+  .form-item-field-isearch-affil-title-value select {
+    min-width: 200px;
+  }
+}
+
+.isearch-a-z-index {
+  text-align: center;
+  margin: 10px 0;
+  li {
+    display: inline;
+    a {
+      margin: 10px;
+    }
   }
 }
 
@@ -409,9 +423,6 @@ div.krumo-preview { color: #000; }
       }
     }
   }
-
-    // padding: 10px 8px;
-    // font-size: 14px;
 }
 
 @media (max-width: 930px) {
