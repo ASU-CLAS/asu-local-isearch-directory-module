@@ -150,7 +150,21 @@ function _asu_isearch_begin_migrate($force_update = FALSE) {
 
 
 function _asu_isearch_begin_batch($force_update = FALSE) {
-  $limit = variable_get('isearch_import_limit', 50);
+  $limit = variable_get('isearch_import_limit', null);
+
+  if (is_null($limit) || is_numeric($limit)) {
+
+    $value = 50;
+
+    if (is_numeric($limit)) {
+      $value = $limit;
+    }
+
+    $limit = array(
+      'value' => $value,
+      'unit' => 'items',
+    );
+  }
 
   $migration = _asu_isearch_get_migration();
   $migration->prepareUpdate();

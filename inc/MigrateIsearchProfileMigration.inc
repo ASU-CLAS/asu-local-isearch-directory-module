@@ -60,7 +60,7 @@ class MigrateIsearchProfileMigration extends Migration {
 
       foreach ($ranks_term_tree as $term) {
         $termKey = $term->field_isearch_rank_tid[LANGUAGE_NONE][0]['value'];
-        self::$titleRanksCache[$termKey] = $term->tid;
+        self::$titleRanksCache[$termKey] = $term;
       }
     }
 
@@ -71,7 +71,7 @@ class MigrateIsearchProfileMigration extends Migration {
 
       foreach ($expertise_term_tree as $term) {
         $termKey = $term->field_isearch_expertise_tid[LANGUAGE_NONE][0]['value'];
-        self::$expertiseAreasCache[$termKey] = $term->tid;
+        self::$expertiseAreasCache[$termKey] = $term;
       }
     }
 
@@ -79,27 +79,13 @@ class MigrateIsearchProfileMigration extends Migration {
     global $base_url;
     $source_urls = $base_url . url(drupal_get_path('module', 'asu_isearch')) . '/inc/asu_isearch.migrate.json';
 
-    // Check and see if we have configured our migration
-    $migrate_config = variable_get('isearch_admin_feed_dept', null);
-
-    if (!is_null($migrate_config)) {
-      $source_urls = array();
-
-      $migrate_config = json_decode($migrate_config);
-      $tree_nids = $migrate_config->tree_nids;
-
-      $import_subdepts = variable_get('isearch_import_subdepts', TRUE);
-      if ($import_subdepts) {
-        foreach ($tree_nids as $department_nid) {
-          $source_urls[] = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT . $department_nid;
-        }
-      }
-      else {
-        $source_urls[] = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT . $migrate_config->dept_nid;
-      }
+    $config_source_urls = asu_isearch_get_migrate_source_urls(TRUE);
+    if (count($config_source_urls)) {
+      $source_urls = $config_source_urls;
     }
 
-    $this->source = new MigrateSourceJSON($source_urls, 'eid', $this->getSourceFields(), array('reader_class' => 'IsearchProfileJSONReader'));
+    $this->setMigrateSource($source_urls);
+    // $this->source = new MigrateSourceJSON($source_urls, 'eid', $this->getSourceFields(), array('reader_class' => 'IsearchProfileJSONReader'));
     $this->destination = new MigrateDestinationNode('asu_isearch_profile');
 
     // Setup other variables we need
@@ -125,10 +111,10 @@ class MigrateIsearchProfileMigration extends Migration {
     $this->addFieldMapping('field_isearch_photo_preference'          , 'photoPreference');
     $this->addFieldMapping('field_isearch_photo_permission'          , 'photoPermission');
     $this->addFieldMapping('field_isearch_social_twitter'            , 'twitterLink');
-    $this->addFieldMapping('field_isearch_social_facebook'           , 'facebookLink');
-    $this->addFieldMapping('field_isearch_social_linkedin'           , 'linkedinLink');
-    $this->addFieldMapping('field_isearch_social_googleplus'         , 'googleplusLink');
-    $this->addFieldMapping('field_isearch_social_personalweb'        , 'personalWebsite');
+    $this->addFieldMapping('field_isearch_social_facebook'           , 'facebook');
+    $this->addFieldMapping('field_isearch_social_linkedin'           , 'linkedin');
+    $this->addFieldMapping('field_isearch_social_googleplus'         , 'googlePlus');
+    $this->addFieldMapping('field_isearch_social_personalweb'        , 'website');
     $this->addFieldMapping('field_isearch_short_bio'                 , 'shortBio');
     $this->addFieldMapping('field_isearch_bio'                       , 'bio');
     $this->addFieldMapping('field_isearch_education'                 , 'education');
@@ -176,7 +162,7 @@ class MigrateIsearchProfileMigration extends Migration {
     	'eid' => 'eid',
     	'displayName' => 'The profile display name',
     	'firstName' => 'First Name',
-    	'lastName' => 'Last Namt',
+    	'lastName' => 'Last Name',
     	'emailAddress' => 'Email address',
     	'asuriteId' => 'asuriteId',
     	'primaryTitle' => 'primaryTitle',
@@ -189,10 +175,11 @@ class MigrateIsearchProfileMigration extends Migration {
     	'bio' => 'Biography',
     	'education' => 'education',
     	'cvUrl' => 'cvUrl',
-      'twitterLink' => 'The profile twitter link',
-      'facebookLink' => 'The profile facebook link',
-      'linkedinLink' => 'The profile linkedin link',
-      'googleplusLink' => 'The profile googleplus link',
+      'website' => 'The personal website',
+      'twitter' => 'The profile twitter link',
+      'facebook' => 'The profile facebook link',
+      'linkedin' => 'The profile linkedin link',
+      'googlePlus' => 'The profile googleplus link',
       'photoPreference' => 'Photo preference',
       'photoPermission' => 'Photo permission',
       'researchInterests' => 'researchInterests',
@@ -262,7 +249,6 @@ class MigrateIsearchProfileMigration extends Migration {
       // Fetch and store profile photo
       $entity = node_load(current($result['node'])->nid);
       $this->fetchProfilePhoto($entity, $row);
-
       return FALSE;
     }
 
@@ -349,6 +335,9 @@ class MigrateIsearchProfileMigration extends Migration {
 
     // Setup title rank terms
     $this->setupTitleRanks($entity, $row);
+
+    dpm($row, '$row');
+    dpm($entity, '$entity');
   }
 
   // This will get called after the destination entity has been created,
@@ -397,7 +386,11 @@ class MigrateIsearchProfileMigration extends Migration {
       // this wasn't an existing expertise, but we already are aware of the term
       // add it to existing_expertise and continue
       if (isset(self::$expertiseAreasCache[$expertise_key])) {
-        $existing_expertise[$expertise_key] = self::$expertiseAreasCache[$expertise_key];
+        $existing_expertise[$expertise_key] = self::$expertiseAreasCache[$expertise_key]->tid;
+        if ($item->name != self::$expertiseAreasCache[$expertise_key]->name) {
+          self::$expertiseAreasCache[$expertise_key]->name = $item->name;
+          taxonomy_term_save(self::$expertiseAreasCache[$expertise_key]);
+        }
         continue;
       }
 
@@ -439,7 +432,13 @@ class MigrateIsearchProfileMigration extends Migration {
       // this wasn't an existing expertise, but we already are aware of the term
       // add it to existing_ranks and continue
       if (isset(self::$titleRanksCache[$rank_key])) {
-        $existing_ranks[$rank_key] = self::$titleRanksCache[$rank_key];
+        $existing_ranks[$rank_key] = self::$titleRanksCache[$rank_key]->tid;
+
+        // do we need to update the name of this existing term?
+        if ($item->name != self::$titleRanksCache[$rank_key]->name) {
+          self::$titleRanksCache[$rank_key]->name = $item->name;
+          taxonomy_term_save(self::$titleRanksCache[$rank_key]);
+        }
         continue;
       }
 

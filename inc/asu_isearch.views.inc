@@ -46,18 +46,19 @@ function asu_isearch_views_pre_render(&$view) {
       // building code link
       if ($view_link_building && $global_link_buildings) {
         // TODO: Logic for linking building in view listing
-        if ($building_code = (asu_isearch_fetch_asu_building_code($view->result[$key]->field_field_isearch_campus_building[0]['raw']['value']))) {
-          $building_label = $view->result[$key]->field_field_isearch_campus_building[0]['raw']['value'];
-          $building_map_link = l($building_label, 'http://www.asu.edu/map/interactive/?building=' . $building_code,
-            array(
-              'attributes' => array(
-                'target' => '_blank',
-              ),
-            ));
+        if (!empty($view->result[$key]->field_field_isearch_campus_building)) {
+          if ($building_code = (asu_isearch_fetch_asu_building_code($view->result[$key]->field_field_isearch_campus_building[0]['raw']['value']))) {
+            $building_label = $view->result[$key]->field_field_isearch_campus_building[0]['raw']['value'];
+            $building_map_link = l($building_label, 'http://www.asu.edu/map/interactive/?building=' . $building_code,
+              array(
+                'attributes' => array(
+                  'target' => '_blank',
+                ),
+              ));
 
-          $view->result[$key]->field_field_isearch_campus_building[0]['rendered']['#markup'] = $building_map_link;
+            $view->result[$key]->field_field_isearch_campus_building[0]['rendered']['#markup'] = $building_map_link;
+          }
         }
-
       }
 
       // display correct photo if any
@@ -146,23 +147,36 @@ function asu_isearch_views_query_alter(&$view, &$query) {
   if (asu_isearch_is_isearch_view($view) && isset($view->view_config)) {
 
 
-    // figure out and adjust view sorting here
     // ensure tenure sort order is always descending
-    // if (isset($view->sort['field_isearch_affil_rank_tenure_value'])) {
-    //   $view->sort['field_isearch_affil_rank_tenure_value']->options['order'] = 'DESC';
-    // }
+    if (isset($view->sort['field_isearch_affil_rank_tenure_value'])) {
+      $view->sort['field_isearch_affil_rank_tenure_value']->options['order'] = 'DESC';
+    }
 
-    // if (isset($view->sort['field_isearch_lastname_value'])) {
-    //   $view->sort['field_isearch_lastname_value']->options['order'] = 'ASC';
-    // }
+    switch ($view->view_config->default_sort_by) {
+      case 'field_isearch_firstname_value':
+        if (isset($view->sort['field_isearch_lastname_value'])) {
+          unset($view->sort['field_isearch_lastname_value']);
+        }
 
-    // if (isset($view->sort['field_isearch_firstname_value'])) {
-    //   $view->sort['field_isearch_firstname_value']->options['order'] = 'ASC';
-    // }
+      case 'field_isearch_lastname_value':
+        if (isset($view->sort['field_isearch_affil_rank_weight_value'])) {
+          unset($view->sort['field_isearch_affil_rank_weight_value']);
+        }
+        if (isset($view->sort['field_isearch_affil_rank_tenure_value'])) {
+          unset($view->sort['field_isearch_affil_rank_tenure_value']);
+        }
+        break;
 
-    // if (isset($view->sort['field_isearch_affil_rank_weight_value'])) {
-    //   $view->sort['field_isearch_affil_rank_weight_value']->options['order'] = 'ASC';
-    // }
+      case 'field_isearch_affil_rank_weight_value':
+      default:
+        if (isset($view->sort['field_isearch_affil_rank_weight_value'])) {
+          $view->sort['field_isearch_affil_rank_weight_value']->options['order'] = 'ASC';
+        }
+        if (isset($view->sort['field_isearch_affil_rank_tenure_value'])) {
+          unset($view->sort['field_isearch_affil_rank_tenure_value']);
+        }
+        break;
+    }
 
     $query->orderby = array();
 

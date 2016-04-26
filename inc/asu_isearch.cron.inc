@@ -9,8 +9,11 @@
  */
 function asu_isearch_cron() {
 
+  // Cache data from configuration
+  _asu_isearch_cache_dept_feed();
+
   // Cache dept tree and employee types data
-  _asu_isearch_cache_dept_data();
+  _asu_isearch_cache_dept_tree_data();
 
   // Begin profile migrations
   _asu_isearch_begin_migrate();
@@ -58,11 +61,44 @@ function asu_isearch_fetch_profile_photo($data) {
 }
 
 
+function _asu_isearch_cache_dept_feed() {
+
+  if (!file_exists(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT)) {
+    mkdir(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT, 0644, TRUE);
+  }
+
+  // set timeout of request to 60 seconds
+  $options = array(
+    'timeout' => 60,
+  );
+
+  // retrieve list of configured isearch dept urls for import
+  $source_urls = asu_isearch_get_migrate_source_urls();
+
+  foreach ($source_urls as $url) {
+    $data = NULL;
+
+    $request = drupal_http_request($url, $options);
+
+    if ($request->code == 200) {
+      $data = $request->data;
+    }
+
+    if (!is_null($data)) {
+      $info = pathinfo($url);
+      $dept_nid = $info['filename'];
+
+      file_save_data($data, ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT . $dept_nid, FILE_EXISTS_REPLACE);
+    }
+  }
+}
+
+
 /**
  * Caches the isearch department tree and employee types
  */
-function _asu_isearch_cache_dept_data() {
-  //set timeout of request to 60 seconds
+function _asu_isearch_cache_dept_tree_data() {
+  // set timeout of request to 60 seconds
   $options = array(
     'timeout' => 60,
   );

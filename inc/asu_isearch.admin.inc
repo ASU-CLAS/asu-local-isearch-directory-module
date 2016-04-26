@@ -15,20 +15,23 @@ function asu_isearch_admin_settings_form() {
   $form = array();
 
   $default_feed_dept = array(
+    array(
     'dept_id' => 'ASU',
     'dept_nid' => 'ASU',
     'tree_nids' => array(),
-  );
+  ));
 
   $form['isearch_display_affiliations'] = array(
     '#type' => 'checkbox',
     '#title' => 'Display all department affiliations on profile?',
+    '#description' => t("This option will show all the departments a person is affiliated on their profile page. They will appear as tabs."),
     '#default_value' => variable_get('isearch_display_affiliations', FALSE),
   );
 
   $form['isearch_import_subdepts'] = array(
     '#type' => 'checkbox',
     '#title' => 'Include sub-departments on import?',
+    '#access' => FALSE,
     '#default_value' => variable_get('isearch_import_subdepts', TRUE),
   );
 
@@ -56,9 +59,12 @@ function asu_isearch_admin_settings_form() {
     ),
   );
 
+  // @BC: ensure feed_dept configuration is an array for multi-depts
+  $isearch_admin_feed_dept = variable_get('isearch_admin_feed_dept', json_encode($default_feed_dept));
+
   $form['isearch_admin_feed_dept'] = array(
     '#type' => 'hidden',
-    '#default_value' => variable_get('isearch_admin_feed_dept', json_encode($default_feed_dept)),
+    '#default_value' => asu_isearch_bc_get_dept_picker_config($isearch_admin_feed_dept, TRUE),
     '#attributes' => array('id' => 'isearch_admin_feed_dept'),
   );
 
@@ -77,13 +83,39 @@ function asu_isearch_admin_settings_form() {
     ),
     '#markup' => theme('asu_isearch_dept_picker', array(
       'items' => array(),
-      'settings' => array('config_target' => '#isearch_admin_feed_dept'),
+      'settings' => array(
+        'config_target' => '#isearch_admin_feed_dept',
+      ),
       'label' => t('Select Department'),
     )),
   );
 
   $form = system_settings_form($form);
   $form['#submit'] = array('asu_isearch_admin_settings_form_submit');
+
+  // Load configuration eye-candy
+  asu_isearch_load_js();
+  $form['#attached']['css'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/bootstrap.css';
+  $form['#attached']['css'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/asu_isearch_config.css';
+  $form['#attached']['js'][]  = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/bootstrap.js';
+  $form['#attached']['js'][]  = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/asu_isearch_config.js';
+  $form['#attached']['js'][]  = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch.admin.js';
+
+  $form['#prefix'] = '<div class="asu-isearch-configuration">';
+  $form['#suffix'] = '</div>';
+
+  $form['addons'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Add-ons'),
+  );
+
+  $office_hours_exists = module_exists('office_hours');
+  $form['addons']['isearch_office_hours'] = array(
+    '#type' => 'checkbox',
+    '#title' => 'Display office hours',
+    '#default_value' => variable_get('isearch_office_hours', $office_hours_exists),
+    '#description' => t('This option will allow you to add office-hours to profiles locally. Requires office_hours module'),
+  );
 
   // change display of action buttons
   $form['footer_actions'] = $form['actions'];
@@ -146,11 +178,24 @@ function asu_isearch_import_isearch_form() {
   $allow_import = ($depts && $migration->getStatus() == MigrationBase::STATUS_IDLE);
 
   $form['isearch_import_limit'] = array(
-    '#type' => 'textfield',
-    '#default_value' => variable_get('isearch_import_limit', 50),
-    '#title' => t('Number of items to import'),
-    '#description' => t('Specify how many items to import when running the batch. It is recommended to import 50 at a time.'),
-    '#required' => TRUE,
+    '#tree' => TRUE,
+    '#type' => 'fieldset',
+    '#attributes' => array('class' => array('container-inline')),
+    'value' => array(
+      '#type' => 'textfield',
+      '#title' => t('Limit to:'),
+      '#default_value' => 50,
+      '#required' => TRUE,
+      '#size' => 10,
+    ),
+    'unit' => array(
+      '#type' => 'select',
+      '#options' => array(
+        'items' => t('items'),
+        'seconds' => t('seconds'),
+      ),
+      '#description' => t('Set a limit of how many items to process, or how long it should run.'),
+    ),
   );
 
   $form = system_settings_form($form);
@@ -184,7 +229,6 @@ function asu_isearch_import_isearch_form_submit($form, &$form_state) {
   }
 
   _asu_isearch_begin_batch($force_update);
-//   _asu_isearch_begin_migrate();
 }
 
 
