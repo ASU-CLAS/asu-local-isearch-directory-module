@@ -220,3 +220,10 @@ function asu_isearch_check_addon($addon) {
   return FALSE;
 }
 
+
+/**
+ * Helper function to test for devmode
+ */
+function asu_isearch_devmode() {
+  return (bool) variable_get('asu_isearch_devmode', FALSE);
+}

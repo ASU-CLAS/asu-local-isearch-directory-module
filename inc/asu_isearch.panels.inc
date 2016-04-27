@@ -505,6 +505,22 @@ function asu_isearch_preprocess_fieldable_panels_pane(&$variables){
 /**
  * Implementation of hook_form_FORM_ID_alter()
  */
+function asu_isearch_form_ctools_entity_field_content_type_formatter_options_alter(&$form, &$form_state, $form_id) {
+
+  $content_type = isset($form_state['display']->context['panelizer']->data->type)
+    ? $form_state['display']->context['panelizer']->data->type
+    : false;
+
+  if ($content_type == 'asu_isearch_profile' && asu_isearch_devmode() == FALSE) {
+    $isearch_field = str_replace('node:', '', $form_state['subtype_name']);
+    $form[$isearch_field]['#disabled'] = TRUE;
+  }
+}
+
+
+/**
+ * Implementation of hook_form_FORM_ID_alter()
+ */
 function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_alter(&$form, &$form_state, $form_id) {
   if (isset($form['#entity']) && $form['#entity']->bundle == 'isearch_directory') {
     // add our custom submit handler
@@ -708,7 +724,7 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
         '#collapsible' => FALSE,
         '#options' => array(),
         '#attributes' => array(
-          'class' => array('employee-types-group'),
+          'class' => array('employee-types-group', 'employee-types-group-'.$group_key ),
         ),
       );
       $form['horizontal_tabs']['content']['content_tabs']['employeetypes'][$group_key]['options'] = array(
@@ -1018,6 +1034,7 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       '#title' => 'Select a view to display',
       '#options' => $available_views,
       '#default_value' => $config->view_display,
+      '#description' => t('You can select a custom view that was cloned from the iSearch Directory view. Please note, some settings may not work as expected when using a custom view and changes are made to fields and filters.'),
     );
 
     // Advanced horizontal tab definition
@@ -1096,7 +1113,7 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     'show_filter_sort'      => $values['horizontal_tabs']['appearance']['appearance_tabs']['exposed']['show_filter_sort'],
     'show_az_index'      => $values['horizontal_tabs']['appearance']['appearance_tabs']['exposed']['show_az_index'],
 
-    // Appearnace -> Paging
+    // Appearance -> Paging
     'pager_display'         => $values['horizontal_tabs']['appearance']['appearance_tabs']['paging']['pager_display'],
     'pager_items_per_page'  => $values['horizontal_tabs']['appearance']['appearance_tabs']['paging']['pager_items_per_page'],
     'pager_offset'          => $values['horizontal_tabs']['appearance']['appearance_tabs']['paging']['pager_offset'],

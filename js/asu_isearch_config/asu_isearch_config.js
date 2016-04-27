@@ -61,6 +61,16 @@ function initIsearchConfig() {
     ReactDOM.render(el, this);
   });
 
+  $('.asu-isearch-configuration .form-item:not(.form-type-checkbox) .help-block:not([data-reactid])').each(function() {
+    var tooltip_message = $(this).text();
+    var label = $(this).siblings('label');
+
+    var el = React.createElement(Tooltip, { message: tooltip_message });
+    ReactDOM.render(el, this);
+
+    $(this).appendTo(label);
+  });
+
   // activate tooltips
   $('[data-toggle="tooltip"]').tooltip();
 }

@@ -65,6 +65,9 @@
 .asu-isearch-configuration .tooltip {
   pointer-events: none;
 }
+.asu-isearch-configuration .help-block {
+  display: inline;
+}
 .asu-isearch-configuration .employee-types-group {
   display: inline-block;
   width: 33%;

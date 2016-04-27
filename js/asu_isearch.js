@@ -9,6 +9,7 @@
 (function ($) {
   Drupal.behaviors.asu_isearch = {
     attach: function (context, settings) {
+
       $(document).ready(function() {
         var profile_photo_pane = $(".node-asu-isearch-profile .profile-header .isearch-profile-photo");
 
