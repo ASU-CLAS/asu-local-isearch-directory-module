@@ -15,6 +15,13 @@
           }
         });
       });
+
+      if ($('#toggle-all-employee-types:checked', context).length) {
+        $('.employee-types-group input:checkbox').prop('checked', true);
+      }
+      else if ($('.employee-types-group input:checkbox', context).not(':checked').length == 0) {
+        $('#toggle-all-employee-types').prop('checked', true);
+      }
     }
   }
 })(jQuery);
