@@ -155,11 +155,12 @@ function asu_isearch_bc_get_dept_picker_config($data, $passing_string = FALSE) {
   }
 
   if (!isset($data->options)) {
-    $data->options = array();
+    $data->options = new stdclass();
     if (count($data->items)) {
       $import_subdepts = (boolean) variable_get('isearch_import_subdepts', TRUE);
       foreach ($data->items as $item) {
-        $data->options[$item->dept_id] = (object) array('subdepts' => $import_subdepts);
+        $deptid = $item->dept_id;
+        $data->options->$deptid = (object) array('subdepts' => $import_subdepts);
       }
     }
   }
