@@ -109,7 +109,8 @@ function asu_isearch_admin_settings_form() {
     '#title' => t('Add-ons'),
   );
 
-  $office_hours_exists = module_exists('office_hours');
+  $office_hours_exists = module_exists('asu_isearch_office_hours') && module_exists('office_hours');
+
   $form['addons']['isearch_office_hours'] = array(
     '#type' => 'checkbox',
     '#title' => 'Display office hours',
