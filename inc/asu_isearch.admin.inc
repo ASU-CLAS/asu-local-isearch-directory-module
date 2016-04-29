@@ -107,15 +107,7 @@ function asu_isearch_admin_settings_form() {
   $form['addons'] = array(
     '#type' => 'fieldset',
     '#title' => t('Add-ons'),
-  );
-
-  $office_hours_exists = module_exists('asu_isearch_office_hours') && module_exists('office_hours');
-
-  $form['addons']['isearch_office_hours'] = array(
-    '#type' => 'checkbox',
-    '#title' => 'Display office hours',
-    '#default_value' => variable_get('isearch_office_hours', $office_hours_exists),
-    '#description' => t('This option will allow you to add office-hours to profiles locally. Requires office_hours module'),
+    '#description' => t('Additional add-ons can be enabled as separate modules to extend the functionality of iSearch profiles. They will appear here when they are enabled.'),
   );
 
   // change display of action buttons
