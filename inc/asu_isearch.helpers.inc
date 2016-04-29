@@ -211,17 +211,6 @@ function asu_isearch_get_migrate_source_urls($from_cache = FALSE) {
 }
 
 
-function asu_isearch_check_addon($addon) {
-  switch ($addon) {
-    case 'office_hours':
-      return (module_exists('office_hours') && variable_get('asu_isearch_check_addon', FALSE));
-      break;
-  }
-
-  return FALSE;
-}
-
-
 /**
  * Helper function to test for devmode
  */
