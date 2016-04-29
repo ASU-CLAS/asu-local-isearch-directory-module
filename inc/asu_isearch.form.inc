@@ -19,16 +19,19 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
       'field_isearch_local_tags',
       'field_isearch_local_photo_url',
       'field_isearch_local_office_hours',
+      'field_isearch_local_primary_aff',
+
       'field_isearch_affiliations',
       'field_isearch_affil_local_weight',
-      'field_isearch_local_primary_aff',
       'field_isearch_link_building_code',
     );
 
     // Hide the rest of the fields
     // handle top level fields
     foreach ($form as $form_field => $value) {
-      if (preg_match('/^field_isearch_/', $form_field) && !in_array($form_field, $field_exception_manifest)) {
+      $is_local_field = (bool) preg_match('/^field_isearch_local_/', $form_field);
+
+      if (!$is_local_field && preg_match('/^field_isearch_/', $form_field) && !in_array($form_field, $field_exception_manifest)) {
         if (asu_isearch_devmode() === FALSE) {
           $form[$form_field]['#disabled'] = TRUE;
           $form[$form_field]['#access']   = FALSE;
