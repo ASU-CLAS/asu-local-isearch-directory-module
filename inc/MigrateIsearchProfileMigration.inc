@@ -335,9 +335,6 @@ class MigrateIsearchProfileMigration extends Migration {
 
     // Setup title rank terms
     $this->setupTitleRanks($entity, $row);
-
-    dpm($row, '$row');
-    dpm($entity, '$entity');
   }
 
   // This will get called after the destination entity has been created,
