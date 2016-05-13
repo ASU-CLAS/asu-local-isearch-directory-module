@@ -150,12 +150,12 @@ function asu_isearch_bc_get_dept_picker_config($data, $passing_string = FALSE) {
 
   if (!isset($data->items) || !is_array($data->items)) {
     $items = $data;
-    $data = new stdclass();
-    $data->items = array($items);
+    $data = new stdClass();
+    $data->items = $items;
   }
 
   if (!isset($data->options)) {
-    $data->options = new stdclass();
+    $data->options = new stdClass();
     if (count($data->items)) {
       $import_subdepts = (boolean) variable_get('isearch_import_subdepts', TRUE);
       foreach ($data->items as $item) {
@@ -168,6 +168,8 @@ function asu_isearch_bc_get_dept_picker_config($data, $passing_string = FALSE) {
   if ($passing_string) {
     $data = json_encode($data);
   }
+
+  dpm($data);
 
   return $data;
 }
