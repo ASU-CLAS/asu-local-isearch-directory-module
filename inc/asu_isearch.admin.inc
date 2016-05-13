@@ -14,12 +14,7 @@ function asu_isearch_admin_settings_form() {
 
   $form = array();
 
-  $default_feed_dept = array(
-    array(
-    'dept_id' => 'ASU',
-    'dept_nid' => ASU_ISEARCH_DIRECTORY_TOP_LEVEL_DEPT_NID,
-    'tree_nids' => array(),
-  ));
+  $default_feed_dept = array();
 
   $form['isearch_display_affiliations'] = array(
     '#type' => 'checkbox',
