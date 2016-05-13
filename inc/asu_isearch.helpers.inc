@@ -169,8 +169,6 @@ function asu_isearch_bc_get_dept_picker_config($data, $passing_string = FALSE) {
     $data = json_encode($data);
   }
 
-  dpm($data);
-
   return $data;
 }
 
