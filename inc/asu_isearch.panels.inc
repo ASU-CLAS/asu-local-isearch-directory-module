@@ -233,14 +233,11 @@ function asu_isearch_preprocess_panels_pane(&$variables){
     $contextual_expertise_areas = 'all';
     $contextual_local_tags      = 'all';
 
-    
-    // @BC: get structure
-    $view_config->depts = asu_isearch_bc_get_dept_picker_config($view_config->depts);
 
-    if (count($view_config->depts->items)) {
+    if (count($view_config->depts->items) && $view_config->depts->items[0] != null) {
       $contextual_departments = array();
       $department_options = (object) $view_config->depts->options;
-    
+
       foreach ($view_config->depts->items as $dept_item) {
         $contextual_departments[] = $dept_item->dept_nid;
         $dept_id = $dept_item->dept_id;
@@ -603,7 +600,7 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     if (!is_null($feed_depts)) {
       $feed_depts = json_decode($feed_depts);
       // @BC: ensure admin feed depts configuration is structured correctly
-      $feed_depts = asu_isearch_bc_get_dept_picker_config($feed_depts);
+      $feed_depts = $feed_depts;
     }
     else {
       $item = new stdclass();
@@ -614,21 +611,12 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       $feed_depts = array($item);
     }
 
-    // lets make sure we load the correct department tree nids into our widget
-    if (isset($config->depts)) {
-      $config->depts = asu_isearch_bc_get_dept_picker_config($config->depts);
-    }
-    else {
-      // $config->depts = 
-    }
-
     $form['filter_departments'] = array(
       '#type' => 'hidden',
       '#default_value' => json_encode($config->depts),
       '#attributes' => array('id' => 'filter_departments'),
     );
 
-    
     $query = db_select('field_data_field_isearch_affil_dept_id', 'd');
     $query->join('field_data_field_isearch_affil_primary', 'p', 'd.entity_id = p.entity_id');
     $query->leftJoin('field_data_field_isearch_local_primary_aff', 'l', '(d.entity_id = l.entity_id)');

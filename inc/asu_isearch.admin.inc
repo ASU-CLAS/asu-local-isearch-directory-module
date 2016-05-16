@@ -14,8 +14,6 @@ function asu_isearch_admin_settings_form() {
 
   $form = array();
 
-  $default_feed_dept = array();
-
   $form['isearch_display_affiliations'] = array(
     '#type' => 'checkbox',
     '#title' => 'Display all department affiliations on profile?',
@@ -54,12 +52,12 @@ function asu_isearch_admin_settings_form() {
     ),
   );
 
-  // @BC: ensure feed_dept configuration is an array for multi-depts
-  $isearch_admin_feed_dept = variable_get('isearch_admin_feed_dept', json_encode($default_feed_dept));
+  // retrieve global dept configuration
+  $isearch_admin_feed_dept = asu_isearch_get_dept_config();
 
   $form['isearch_admin_feed_dept'] = array(
     '#type' => 'hidden',
-    '#default_value' => asu_isearch_bc_get_dept_picker_config($isearch_admin_feed_dept, TRUE),
+    '#default_value' => $isearch_admin_feed_dept,
     '#attributes' => array('id' => 'isearch_admin_feed_dept'),
   );
 
@@ -221,5 +219,5 @@ function asu_isearch_import_isearch_form_submit($form, &$form_state) {
 
 
 // Temporary function used with devel/php
-function asu_isearch_devel() {
+function asu_isearch_devel() { 
 }
