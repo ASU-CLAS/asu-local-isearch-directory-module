@@ -43,6 +43,10 @@ function asu_isearch_get_view_column_widths(stdClass $display_options) {
  * This will help avoid undefined warnings when new options added
  */
 function asu_isearch_get_default_view_config() {
+  $depts = new stdClass();
+  $depts->items = array();
+  $depts->options = new stdClass();
+
   return array(
     'employee_types'        => array('All'),
     'employee_type_exclude' => 0,
@@ -72,6 +76,7 @@ function asu_isearch_get_default_view_config() {
     'show_filter_sort'      => TRUE,
     'show_az_index'         => FALSE,
     'link_building_codes'   => variable_get('isearch_link_buildings', FALSE),
+    'depts'                 => $depts,
   );
 }
 
@@ -141,38 +146,15 @@ function asu_isearch_get_tenure_config($setting) {
 
 
 /**
- * Backwards compatible method to get multi-depts configuration
+ * Returns the 
  */
-function asu_isearch_bc_get_dept_picker_config($data, $passing_string = FALSE) {
-  if ($passing_string) {
-    $data = json_decode($data);
-  }
+function asu_isearch_get_dept_config() {
+  $default_feed_dept = array(
+    'items' => array(),
+    'options' => array(),
+  );
 
-  if (!isset($data->items) || !is_array($data->items)) {
-    $items = $data;
-    $data = new stdClass();
-    $data->items = $items;
-  }
-
-  if (!isset($data->options)) {
-    $data->options = new stdClass();
-    if (count($data->items)) {
-      $import_subdepts = (boolean) variable_get('isearch_import_subdepts', TRUE);
-      foreach ($data->items as $item) {
-
-        if ($item->dept_id != ASU_ISEARCH_DIRECTORY_TOP_LEVEL_DEPT_NID) {
-          $deptid = $item->dept_id;
-          $data->options->$deptid = (object) array('subdepts' => $import_subdepts);
-        }
-      }
-    }
-  }
-
-  if ($passing_string) {
-    $data = json_encode($data);
-  }
-
-  return $data;
+  return variable_get('isearch_admin_feed_dept', json_encode($default_feed_dept));
 }
 
 /**
@@ -193,8 +175,6 @@ function asu_isearch_get_migrate_source_urls($from_cache = FALSE) {
   $migrate_config = variable_get('isearch_admin_feed_dept', null);
 
   if (!is_null($migrate_config)) {
-    // @BC: new config data structure
-    $migrate_config = asu_isearch_bc_get_dept_picker_config($migrate_config, TRUE);
     $migrate_config = json_decode($migrate_config);
 
     foreach ($migrate_config->items as $migrate_item) {

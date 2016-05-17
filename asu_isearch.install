@@ -126,3 +126,98 @@ function asu_isearch_setup_panelizer_defaults() {
   panels_edit_cache_set($cache);
   drupal_set_message('iSearch panelizer defaults setup successfully');
 }
+
+
+/**
+ * Fixes deprecated iSearch configurations to new format.
+ */
+function asu_isearch_update_7137(&$sandbox) {
+  include_once(drupal_get_path('module', 'asu_isearch') . '/inc/asu_isearch.helpers.inc');
+
+  // transform global dept configuration
+  $global_config = asu_isearch_get_dept_config();
+  $global_config = _asu_isearch_fix_dept_config($global_config);
+
+  variable_set('isearch_admin_feed_dept', $global_config);
+
+  // transform any directory panes that were setup
+  $query = new EntityFieldQuery();
+  $results = $query->entityCondition('entity_type', 'fieldable_panels_pane')
+    ->entityCondition('bundle', 'isearch_directory')
+    ->fieldCondition('field_isearch_config', 'value', '', '!=')
+    ->fieldCondition('field_isearch_config', 'value', '{}', '!=')
+    ->execute();
+
+  foreach ($results['fieldable_panels_pane'] as $item) {
+    // panel entity
+    $entity = current(entity_load('fieldable_panels_pane', array($item->fpid)));
+
+    $config = $entity->field_isearch_config[LANGUAGE_NONE][0]['value'];
+
+    // configuration object
+    $config = json_decode($config);
+
+    if (is_null($config->depts)) {
+      $config->depts = new stdclass();
+      $config->depts->items = array();
+      $config->depts->options = new stdclass();
+    }
+
+    // fix the ->depts property
+    $config->depts = _asu_isearch_fix_dept_config($config->depts);
+
+    $entity->field_isearch_config[LANGUAGE_NONE][0]['value'] = json_encode($config);
+    entity_save('fieldable_panels_pane', $entity);
+  }
+}
+
+
+function _asu_isearch_fix_dept_config($data) {
+  try {
+    // return the same format that was passed in
+    $return_string = FALSE;
+
+    if (is_string($data)) {
+      $data = json_decode($data);
+      $return_string = TRUE;
+    }
+
+    if (!isset($data->items) || !is_array($data->items)) {
+      $items = $data;
+      $data = new stdClass();
+      $data->items = array($items);
+    }
+
+    if (!isset($data->options)) {
+      $data->options = new stdClass();
+
+      if (count($data->items)) {
+
+        $import_subdepts = (boolean) variable_get('isearch_import_subdepts', TRUE);
+        foreach ($data->items as $item) {
+
+          if ($item->dept_id && $item->dept_id != ASU_ISEARCH_DIRECTORY_TOP_LEVEL_DEPT_NID) {
+            $deptid = $item->dept_id;
+            $data->options->$deptid = (object) array('subdepts' => $import_subdepts);
+          }
+        }
+      }
+    }
+  }
+  catch (Exception $e) {
+    $data = array(
+      'items' => array(),
+      'options' => new stdclass(),
+    );
+    $data = (object) $data;
+  }
+
+  if ($return_string) {
+    // return data as json encoded string
+    $data = json_encode($data);
+  }
+  
+
+  return $data;
+}
+
