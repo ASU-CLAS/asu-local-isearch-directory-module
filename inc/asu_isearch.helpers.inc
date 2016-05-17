@@ -161,13 +161,6 @@ function asu_isearch_get_dept_config() {
  * Retrieves an array of source urls
  */
 function asu_isearch_get_migrate_source_urls($from_cache = FALSE) {
-  // determine which endpoint to use
-  if ($from_cache) {
-    $endpoint = ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT;
-  }
-  else {
-    $endpoint = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT;
-  }
 
   $source_urls = array();
 
@@ -178,13 +171,31 @@ function asu_isearch_get_migrate_source_urls($from_cache = FALSE) {
     $migrate_config = json_decode($migrate_config);
 
     foreach ($migrate_config->items as $migrate_item) {
+      // determine which endpoint to use
       $dept_id = $migrate_item->dept_id;
+
       if ($migrate_config->options->$dept_id->subdepts) {
         foreach ($migrate_item->tree_nids as $department_nid) {
+
+          if ($from_cache && file_exists(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT . $department_nid)) {
+            $endpoint = ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT;
+          }
+          else {
+            $endpoint = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT;
+          }
+
           $source_urls[] = $endpoint . $department_nid;
         }
       }
       else {
+        // determine which endpoint to use
+        if ($from_cache && file_exists(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT . $migrate_item->dept_nid)) {
+          $endpoint = ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT;
+        }
+        else {
+          $endpoint = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT;
+        }
+
         $source_urls[] = $endpoint . $migrate_item->dept_nid;
       }
     }
