@@ -50,9 +50,21 @@ function asu_isearch_fetch_profile_photo($data) {
   $response = drupal_http_request($photo_url);
   if ($response->code == 200) {
 
-    if (!file_exists($destination) || filesize($destination) != $response->headers['content-length']) {
-      $file = system_retrieve_file($photo_url, $destination, TRUE, $replace = FILE_EXISTS_REPLACE);
+    $file = FALSE;
+    $photo_exists = file_exists($destination);
 
+    // does the file already exist on the server?
+    // if yes, associate it
+
+    if ($photo_exists) {
+      $file = current(entity_load('file', array(), array('uri' => $destination.'')));
+    }
+
+    if (!$photo_exists || filesize($destination) != $response->headers['content-length']) {
+      $file = system_retrieve_file($photo_url, $destination, TRUE, $replace = FILE_EXISTS_REPLACE);
+    }
+    
+    if ($file) {
       // Load the node so we can set
       $entity->field_isearch_photo_url[LANGUAGE_NONE][0]['fid'] = $file->fid;
       node_save($entity);
