@@ -187,6 +187,7 @@ function asu_isearch_preprocess_panels_pane(&$variables){
 
     // Setup variables here...
     $content['title'] = '';
+    $directory = new IsearchProfileDirectory();
 
     // fixes a bug with pagination when sort order field is exposed in view
     if (isset($_GET['sort_by']) && in_array(strtoupper($_GET['sort_by']), array('DESC', 'ASC'))) {
@@ -344,8 +345,10 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       $view->display_handler->handlers['field']['field_isearch_campus_room']->options['alter']['text'] = '&nbsp;';
     }
 
-    if (isset($_GET['isrch_index'])) {
-      $contextual_last_name = check_plain($_GET['isrch_index']{0});
+    if (isset($_GET['isrch_index']) && isset($_GET['isrch_id'])) {
+      if (intval($_GET['isrch_id']) == $directory->getInstanceId()) {
+        $contextual_last_name = check_plain($_GET['isrch_index']{0});
+      }
     }
 
     // FIXME: Can this be dynamic somehow so we do not break views unintentionally (those that are missing a contextual filter
@@ -393,7 +396,7 @@ function asu_isearch_preprocess_panels_pane(&$variables){
     $view->view_config = $view_config;
     $view->pre_execute();
 
-    $directory = new IsearchProfileDirectory($view_config);
+    $directory->setViewConfig($view_config);
     $directory->setContextualFilters($contextual_filters);
 
     if ($view_config->show_az_index) {
