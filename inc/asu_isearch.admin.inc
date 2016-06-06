@@ -52,15 +52,6 @@ function asu_isearch_admin_settings_form() {
     ),
   );
 
-  // retrieve global dept configuration
-  $isearch_admin_feed_dept = asu_isearch_get_dept_config();
-
-  $form['isearch_admin_feed_dept'] = array(
-    '#type' => 'hidden',
-    '#default_value' => $isearch_admin_feed_dept,
-    '#attributes' => array('id' => 'isearch_admin_feed_dept'),
-  );
-
   $form['isearch_link_buildings'] = array(
     '#type' => 'checkbox',
     '#title' => 'Detect and link building codes?',
@@ -68,19 +59,13 @@ function asu_isearch_admin_settings_form() {
     '#description' => t('Check this option to link building codes on profiles and directory listings to the ASU Campus map'),
   );
 
-  $form['isearch_dept_tree'] = array(
-    '#attached' => array(
-      'css' => array(
-        drupal_get_path('module', 'asu_isearch') . '/css/asu_isearch.dept_tree.css',
-      ),
-    ),
-    '#markup' => theme('asu_isearch_dept_picker', array(
-      'items' => array(),
-      'settings' => array(
-        'config_target' => '#isearch_admin_feed_dept',
-      ),
-      'label' => t('Select Department'),
-    )),
+  // retrieve global dept configuration
+  $isearch_admin_feed_dept = asu_isearch_get_dept_config();
+
+  $form['isearch_admin_feed_dept'] = array(
+    '#type' => 'asu_dept_picker',
+    '#default_value' => $isearch_admin_feed_dept,
+    '#attributes' => array('id' => 'isearch_admin_feed_dept'),
   );
 
   $form = system_settings_form($form);
