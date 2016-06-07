@@ -35,41 +35,49 @@ function initIsearchConfig() {
     $(document).data.isearch_config = {};
   }
 
-  $('.asu-isearch-configuration .form-type-checkbox:not([data-reactid])').each(function(){
-    var label = $(this).find('label');
-    var input = $(this).find('input');
-    var targetId = input.attr('id');
-    var className = targetId.replace(/^edit-/, '');
+  $('.asu-isearch-configuration .form-type-checkbox:not([data-reactid])')
+    .filter(function(index) {
+      return $(this).parents('.widget-asu-dept-picker').length === 0;
+    }).each(function(){
+      var label = $(this).find('label');
+      var input = $(this).find('input');
+      var targetId = input.attr('id') || '';
 
-    options = {
-      id: targetId,
-      label: label.text(),
-      tooltipMessage: $(this).find('.help-block, .description').text(),
-      fieldName: input.attr('name'),
-      checked: input.is(':checked'),
-      value: input.attr('value'),
-      className: className,
-    };
+      var className = targetId.replace(/^edit-/, '');
 
-    if ($(document).data.isearch_config[targetId]) {
-      ReactDOM.unmountComponentAtNode(this);
-    }
+      options = {
+        id: targetId,
+        label: label.text(),
+        tooltipMessage: $(this).find('.help-block, .description').text(),
+        fieldName: input.attr('name'),
+        checked: input.is(':checked'),
+        value: input.attr('value'),
+        className: className,
+      };
 
-    var el = React.createElement(CheckboxToggle, options);
-    $(document).data.isearch_config[targetId] = el;
+      if ($(document).data.isearch_config[targetId]) {
+        ReactDOM.unmountComponentAtNode(this);
+      }
 
-    ReactDOM.render(el, this);
-  });
+      var el = React.createElement(CheckboxToggle, options);
+      $(document).data.isearch_config[targetId] = el;
 
-  $('.asu-isearch-configuration .form-item:not(.form-type-checkbox) .help-block:not([data-reactid])').each(function() {
-    var tooltip_message = $(this).text();
-    var label = $(this).siblings('label');
+      ReactDOM.render(el, this);
+    });
 
-    var el = React.createElement(Tooltip, { message: tooltip_message });
-    ReactDOM.render(el, this);
+  $('.asu-isearch-configuration .form-item:not(.form-type-checkbox) .help-block:not([data-reactid])')
+    .filter(function(index) {
+      return $(this).parents('.widget-asu-dept-picker').length === 0;
+    })
+    .each(function() {
+      var tooltip_message = $(this).text();
+      var label = $(this).siblings('label');
 
-    $(this).appendTo(label);
-  });
+      var el = React.createElement(Tooltip, { message: tooltip_message });
+      ReactDOM.render(el, this);
+
+      $(this).appendTo(label);
+    });
 
   // activate tooltips
   $('[data-toggle="tooltip"]').tooltip();
