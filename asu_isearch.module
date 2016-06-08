@@ -349,7 +349,7 @@ function asu_isearch_panelizer_defaults_alter(&$items) {
     else {
       // create the data for the first time
       $default_tabs_map = array(
-          'bio_tab' => array(
+        'bio_tab' => array(
           'pane_uuid' => 'adfb4591-2608-4c80-a849-1c2924acf758',
           'fpp_uuid' => '61e05864-8ba7-4858-b9ca-3b9b078b4ca3',
         ),
