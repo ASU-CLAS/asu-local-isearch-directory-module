@@ -56,9 +56,6 @@
   font-size: 1em;
   font-family: Helvetica, Sans-serif;
 }
-.asu-isearch-configuration .form-type-checkbox input {
-  display: none;
-}
 .asu-isearch-configuration .tooltip-wrap {
   color: #666;
 }

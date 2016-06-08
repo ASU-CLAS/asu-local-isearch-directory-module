@@ -19,12 +19,15 @@ class IsearchProfileDirectory {
 
   private static $currentInstance = 1;
 
-  public function __construct($view_config) {
-    $this->viewConfig = $view_config;
+  public function __construct() {
     $this->view = views_get_view('isearch_directory', TRUE);
 
     $this->instanceId = self::$currentInstance++;
     $this->view->isearch_instance_id = $this->instanceId;
+  }
+
+  public function setViewConfig($view_config) {
+    $this->viewConfig = $view_config;
   }
 
   public function render() {

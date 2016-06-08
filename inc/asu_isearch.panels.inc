@@ -187,6 +187,7 @@ function asu_isearch_preprocess_panels_pane(&$variables){
 
     // Setup variables here...
     $content['title'] = '';
+    $directory = new IsearchProfileDirectory();
 
     // fixes a bug with pagination when sort order field is exposed in view
     if (isset($_GET['sort_by']) && in_array(strtoupper($_GET['sort_by']), array('DESC', 'ASC'))) {
@@ -344,8 +345,10 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       $view->display_handler->handlers['field']['field_isearch_campus_room']->options['alter']['text'] = '&nbsp;';
     }
 
-    if (isset($_GET['isrch_index'])) {
-      $contextual_last_name = check_plain($_GET['isrch_index']{0});
+    if (isset($_GET['isrch_index']) && isset($_GET['isrch_id'])) {
+      if (intval($_GET['isrch_id']) == $directory->getInstanceId()) {
+        $contextual_last_name = check_plain($_GET['isrch_index']{0});
+      }
     }
 
     // FIXME: Can this be dynamic somehow so we do not break views unintentionally (those that are missing a contextual filter
@@ -393,7 +396,7 @@ function asu_isearch_preprocess_panels_pane(&$variables){
     $view->view_config = $view_config;
     $view->pre_execute();
 
-    $directory = new IsearchProfileDirectory($view_config);
+    $directory->setViewConfig($view_config);
     $directory->setContextualFilters($contextual_filters);
 
     if ($view_config->show_az_index) {
@@ -593,14 +596,12 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     );
 
     /** start department picker **/
-
-    // Load the departments from our global configuration to use in our dept tree widget
+    // Load the departments from our global configuration
+    // to use in our dept tree widget
     $feed_depts = variable_get('isearch_admin_feed_dept', null);
 
     if (!is_null($feed_depts)) {
       $feed_depts = json_decode($feed_depts);
-      // @BC: ensure admin feed depts configuration is structured correctly
-      $feed_depts = $feed_depts;
     }
     else {
       $item = new stdclass();
@@ -611,16 +612,9 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       $feed_depts = array($item);
     }
 
-    $form['filter_departments'] = array(
-      '#type' => 'hidden',
-      '#default_value' => json_encode($config->depts),
-      '#attributes' => array('id' => 'filter_departments'),
-    );
-
     $query = db_select('field_data_field_isearch_affil_dept_id', 'd');
     $query->join('field_data_field_isearch_affil_primary', 'p', 'd.entity_id = p.entity_id');
     $query->leftJoin('field_data_field_isearch_local_primary_aff', 'l', '(d.entity_id = l.entity_id)');
-    // $query->addField('d', 'field_isearch_affil_dept_id_value', 'dept_id');
     $query->addExpression('COALESCE(l.field_isearch_local_primary_aff_target_id, d.field_isearch_affil_dept_id_value)', 'dept_id');
     $result = $query->condition('p.field_isearch_affil_primary_value', 1, '=')
       ->distinct()
@@ -628,24 +622,15 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
 
     $dept_picker_items = array_keys($result->fetchAllAssoc('dept_id'));
 
-    foreach ($feed_depts->items as $feed_dept_item) {
-      // if ($feed_depts->options[$feed_dept_item->])
-      $dept_picker_items = array_merge($dept_picker_items, $feed_dept_item->tree_nids);
-    }
-
     $form['horizontal_tabs']['content']['content_tabs']['department']['isearch_dept_tree'] = array(
-      '#markup' => theme('asu_isearch_dept_picker', array(
-        'label' => t('Select department'),
-        'items' => array(
-          array('directory_items' => $dept_picker_items),
-        ),
-        'settings' => array(
-          'standalone_tree' => TRUE,
-          'config_target' => '#filter_departments',
-        ),
-      )),
+      '#type' => 'asu_dept_picker',
+      '#default_value' => json_encode($config->depts),
+      '#attributes' => array('id' => 'filter_departments'),
+      '#delta' => $form['#entity']->fpid,
+      '#asu_dept_tree' => array(
+        'showOnly' => $dept_picker_items,
+      ),
     );
-
     /** end department picker **/
 
 
@@ -1077,7 +1062,7 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     // Content -> Department
     // TODO: Set correct array index for 'depts'... ['horizontal_tabs']['content']['content_tabs']['department']
     'include_subdepts'      => $values['horizontal_tabs']['content']['content_tabs']['department']['include_subdepts'],
-    'depts'                 => json_decode($values['filter_departments']),
+    'depts'                 => json_decode($values['horizontal_tabs']['content']['content_tabs']['department']['isearch_dept_tree']),
 
     // Content -> Employee types
     'employee_types'        => $employee_types,
