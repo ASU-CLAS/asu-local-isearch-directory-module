@@ -4,64 +4,169 @@
  * Implements hook_form_alter()
  */
 function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
+
   // hide the profile tabs placeholder field that can be rendered on a node display
   if ($form_id == 'asu_isearch_profile_node_form') {
-    $form['field_isearch_profile_tabs']['#access'] = FALSE;
-//     $form['field_isearch_hash']['#access'] = FALSE;
-    $form['title'] = array(
-      '#default_value' => 'Set on save...',
-      '#disabled' => TRUE,
-    );
 
 
-    // provide a list of fields we allow users to edit
-    $field_exception_manifest = array(
-      'field_isearch_local_tags',
-      'field_isearch_local_photo_url',
-      'field_isearch_local_office_hours',
-      'field_isearch_local_primary_aff',
 
-      'field_isearch_affiliations',
-      'field_isearch_affil_local_weight',
-      'field_isearch_link_building_code',
-    );
+    if (arg(1) == 'add' || $form['#node']->field_isearch_eid['und'][0]['value'] == -1) {
 
-    // Hide the rest of the fields
-    // handle top level fields
-    foreach ($form as $form_field => $value) {
-      $is_local_field = (bool) preg_match('/^field_isearch_local_/', $form_field);
+      //TODO:  move this to custom module specific to CHS site?
+      //disable the workbench access settings if they are there
+      if (isset($form['workbench_access'])) {
+        $form['workbench_access']['workbench_access']['#required'] = FALSE;
+        $form['workbench_access']['workbench_access']['#access'] = FALSE;
+      }
 
-      if (!$is_local_field && preg_match('/^field_isearch_/', $form_field) && !in_array($form_field, $field_exception_manifest)) {
-        if (asu_isearch_devmode() === FALSE) {
-          $form[$form_field]['#disabled'] = TRUE;
-          $form[$form_field]['#access']   = FALSE;
+      $form['field_isearch_local_photo_url']['#access'] = FALSE;
+
+      $form['field_isearch_eid']['und'][0]['value']['#default_value'] = -1;
+      $form['field_isearch_eid']['#access'] = FALSE;
+      $form['field_isearch_photo_preference']['#access'] = FALSE;
+      $form['field_isearch_photo_permission']['#access'] = FALSE;
+
+      //get the employee types and populate a helper widget
+      $employee_types = asu_isearch_get_employee_types();
+
+      //dropdown widget to select employee type
+      $prefix = "<div class='asu-isearch-e-type-select'>" .
+        "<select>";
+      $prefix .= "<option>Select Employee Type to Autofill</option>";
+      foreach($employee_types['nodes'] as $emp) {
+        $prefix .= "<option>" . $emp['node']['name'] . "</option>";
+      }
+
+      $prefix .= "</select>";
+
+      $form['field_isearch_employee_type']['#prefix'] = $prefix;
+      $form['field_isearch_employee_type']['#suffix'] = "</div>";
+
+      $settings = array();
+      $configs = json_decode(asu_isearch_get_dept_config());
+      $dept_tree = json_decode(asu_isearch_get_dept_tree());
+
+      $locations = array();
+
+      foreach($configs->items as $conf) {
+       $root = asu_isearch_dept_find_root($dept_tree, $conf->dept_nid);
+        $nid = $conf->dept_nid;
+
+        if ($configs->options->$nid->subdepts === FALSE) {
+          $newItem = new stdClass();
+          $newItem->name = $root->name;
+          $newItem->dept_nid = $root->dept_nid;
+
+          $locations[] = $newItem;
+        } else {
+          $locations = array_merge($locations, asu_isearch_dept_get_tree_data($root));
         }
       }
-    }
 
-    // loop through any field collection fields
-    $protected_field_collections = array(
-      'field_isearch_affiliations',
-    );
-
-    foreach ($protected_field_collections as $field_collection) {
-
-      if (asu_isearch_devmode() === FALSE) {
-        $form[$field_collection][LANGUAGE_NONE]['add_more']['#disabled'] = TRUE;
+      //sort by the name of the department
+      function naturalSortByName($a, $b) {
+        return strnatcmp($a->name, $b->name);
       }
 
-      foreach ($form[$field_collection][LANGUAGE_NONE] as $item_key => $item_value) {
-        if (is_integer($item_key)) {
-          foreach ($form[$field_collection][LANGUAGE_NONE][$item_key] as $field_key => $field_value) {
-            if (asu_isearch_devmode() === FALSE) {
-              $form[$field_collection][LANGUAGE_NONE][$item_key]['remove_button']['#disabled'] = TRUE;
-              $form[$field_collection][LANGUAGE_NONE][$item_key]['field_isearch_affil_rank_tenure']['#access'] = FALSE;
-              $form[$field_collection][LANGUAGE_NONE][$item_key]['field_isearch_affil_rank_weight']['#access'] = FALSE;
+      usort($locations, "naturalSortByName");
+
+      $settings['employee_types'] = $employee_types;
+      $settings['imported_depts'] = $locations;
+
+      drupal_add_js(array('asu_isearch_profile_form' => $settings), 'setting');
+      drupal_add_js(drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_profile_form.js');
+
+      if (isset($form['field_isearch_affiliations']['und'])) {
+
+        foreach ($form['field_isearch_affiliations']['und'] as $key => $item) {
+          if (is_int($key)) {
+
+            //dropdown to select department
+            $dept_prefx = "<div class='asu-isearch-dept-select-wrap'>";
+            $dept_prefx .= "<select class='chosen-disable'>";
+            $dept_prefx .= "<option>Select Department to Autofill</option>";
+            foreach ($locations as $loc) {
+              $dept_prefx .= "<option deptnid='$loc->dept_nid'>$loc->name</option>";
             }
 
-            if (preg_match('/^field_isearch_/', $field_key) && !in_array($field_key, $field_exception_manifest)) {
+            $dept_prefx .= "</select>";
+
+            $form['field_isearch_affiliations']['und'][$key]['field_isearch_affil_dept_id']['#prefix'] = $dept_prefx;
+            $form['field_isearch_affiliations']['und'][$key]['field_isearch_affil_dept_name']['#suffix'] = "</div>";
+
+            //dropdown widget to select employee type
+            $prefx = "<div class='asu-isearch-empl-type-select'>" .
+                         "<select>";
+            $prefx .= "<option>Select Employee Type to Autofill</option>";
+            foreach($employee_types['nodes'] as $emp) {
+              $prefx .= "<option>" . $emp['node']['name'] . "</option>";
+            }
+
+            $prefx .= "</select>";
+
+            $form['field_isearch_affiliations']['und'][$key]['field_isearch_affil_empl_type']['#prefix'] = $prefx;
+            $form['field_isearch_affiliations']['und'][$key]['field_isearch_affil_empl_key']['#suffix'] = '</div>';
+          }
+        }
+      }
+    } else {
+
+      $form['field_isearch_profile_tabs']['#access'] = FALSE;
+//     $form['field_isearch_hash']['#access'] = FALSE;
+      $form['title'] = array(
+        '#default_value' => 'Set on save...',
+        '#disabled' => TRUE,
+      );
+
+      // provide a list of fields we allow users to edit
+      $field_exception_manifest = array(
+        'field_isearch_local_tags',
+        'field_isearch_local_photo_url',
+        'field_isearch_local_office_hours',
+        'field_isearch_local_primary_aff',
+
+        'field_isearch_affiliations',
+        'field_isearch_affil_local_weight',
+        'field_isearch_link_building_code',
+      );
+
+      // Hide the rest of the fields
+      // handle top level fields
+      foreach ($form as $form_field => $value) {
+        $is_local_field = (bool) preg_match('/^field_isearch_local_/', $form_field);
+
+        if (!$is_local_field && preg_match('/^field_isearch_/', $form_field) && !in_array($form_field, $field_exception_manifest)) {
+          if (asu_isearch_devmode() === FALSE) {
+            $form[$form_field]['#disabled'] = TRUE;
+            $form[$form_field]['#access']   = FALSE;
+          }
+        }
+      }
+
+      // loop through any field collection fields
+      $protected_field_collections = array(
+        'field_isearch_affiliations',
+      );
+
+      foreach ($protected_field_collections as $field_collection) {
+
+        if (asu_isearch_devmode() === FALSE) {
+          $form[$field_collection][LANGUAGE_NONE]['add_more']['#disabled'] = TRUE;
+        }
+
+        foreach ($form[$field_collection][LANGUAGE_NONE] as $item_key => $item_value) {
+          if (is_integer($item_key)) {
+            foreach ($form[$field_collection][LANGUAGE_NONE][$item_key] as $field_key => $field_value) {
               if (asu_isearch_devmode() === FALSE) {
-                $form[$field_collection][LANGUAGE_NONE][$item_key][$field_key]['#disabled'] = TRUE;
+                $form[$field_collection][LANGUAGE_NONE][$item_key]['remove_button']['#disabled'] = TRUE;
+                $form[$field_collection][LANGUAGE_NONE][$item_key]['field_isearch_affil_rank_tenure']['#access'] = FALSE;
+                $form[$field_collection][LANGUAGE_NONE][$item_key]['field_isearch_affil_rank_weight']['#access'] = FALSE;
+              }
+
+              if (preg_match('/^field_isearch_/', $field_key) && !in_array($field_key, $field_exception_manifest)) {
+                if (asu_isearch_devmode() === FALSE) {
+                  $form[$field_collection][LANGUAGE_NONE][$item_key][$field_key]['#disabled'] = TRUE;
+                }
               }
             }
           }
@@ -177,3 +282,4 @@ function asu_isearch_directory_list_form_alter(&$form, &$form_state, $form_id) {
   }
 
 }
+

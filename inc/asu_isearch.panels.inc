@@ -201,10 +201,12 @@ function asu_isearch_preprocess_panels_pane(&$variables){
     if (!isset($view_config->view_display)) {
       $view_config->view_display = 'isearch_directory:directory_list';
     }
+
     list($view_name, $view_display_id) = explode(':', $view_config->view_display);
 
     // build out the view
     $view = views_get_view($view_name);
+
     $display_id = $view_display_id;
 
     $view->set_display($display_id);
