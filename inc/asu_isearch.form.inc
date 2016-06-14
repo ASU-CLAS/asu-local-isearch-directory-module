@@ -12,13 +12,6 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
 
     if (arg(1) == 'add' || $form['#node']->field_isearch_eid['und'][0]['value'] == -1) {
 
-      //TODO:  move this to custom module specific to CHS site?
-      //disable the workbench access settings if they are there
-      if (isset($form['workbench_access'])) {
-        $form['workbench_access']['workbench_access']['#required'] = FALSE;
-        $form['workbench_access']['workbench_access']['#access'] = FALSE;
-      }
-
       $form['field_isearch_local_photo_url']['#access'] = FALSE;
 
       $form['field_isearch_eid']['und'][0]['value']['#default_value'] = -1;
