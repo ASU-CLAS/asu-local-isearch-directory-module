@@ -17,6 +17,15 @@ function asu_isearch_cron() {
 
   // Begin profile migrations
   _asu_isearch_begin_migrate();
+
+  // Cleanup the profiles which are no longer associated with
+  // unit depts in iSearch.  Only run once per day.
+  $last_clean = variable_get('last_profile_cleanup', NULL);
+
+  if ($last_clean != date('ymd', time())) {
+    _asu_isearch_cleanup();
+    variable_set('last_profile_cleanup', date('ymd', time()));
+  }
 }
 
 
@@ -26,6 +35,11 @@ function asu_isearch_cron() {
 function asu_isearch_cron_queue_info() {
   $queues['isearch_fetch_profile_photo'] = array(
     'worker callback' => 'asu_isearch_fetch_profile_photo',
+    'time' => 120,
+  );
+
+  $queues['isearch_clean_profiles'] = array(
+    'worker callback' => 'asu_isearch_cleanup_profile',
     'time' => 120,
   );
 
@@ -145,5 +159,87 @@ function _asu_isearch_cache_dept_tree_data() {
 
     $expire_date = time() + 3600 * ASU_ISEARCH_DIRECTORY_FORM_CACHE_DURATION;
     cache_set('asu_employee_types', $employee_types, 'cache', $expire_date);
+  }
+}
+
+/**
+ * Iterate over all imported iSearch profiles,
+ * cleaning up the profiles which are no longer associated with the dept
+ * in iSearch
+ *
+ */
+function _asu_isearch_cleanup() {
+  $type = "asu_isearch_profile";
+  $nodes = node_load_multiple(array(), array('type' => $type));
+  $queue = DrupalQueue::get("isearch_clean_profiles");
+
+  foreach($nodes as $key => $profile) {
+
+    //we only cleanup profiles which have been imported from iSearch
+    if ($profile->field_isearch_eid['und'][0]['value'] != -1) {
+      $queue->createItem($profile);
+    }
+  }
+}
+
+/**
+ * @param $profile
+ *
+ * Worker callback for cleaning up dept profiles
+ */
+function asu_isearch_cleanup_profile($profile) {
+
+  $sources = asu_isearch_get_migrate_source_urls(TRUE);
+  $asurite = $profile->field_isearch_asurite_id['und'][0]['value'];
+  $pfound = FALSE;
+
+  // load each affiliation, and check the profile against the listings from
+  // isearch
+  foreach($profile->field_isearch_affiliations['und'] as $item) {
+    $affil = entity_load('field_collection_item', array($item['value']));
+
+    foreach ($affil as $af) {
+      $feed = array();
+      $nid = $af->field_isearch_affil_dept_id['und'][0]['value'];
+
+      $locache = ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT.$nid;
+      $idir = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT.$nid;
+
+      if (in_array($locache, $sources)) {
+
+        $feed = drupal_json_decode(file_get_contents($locache));
+
+      } else if (in_array($idir, $sources)) {
+
+        $request = drupal_http_request($idir);
+
+        if ($request->code == 200) {
+          $feed = drupal_json_decode($request->data);
+
+        // if there was a bad request, then set the $pfound var to true, so that
+        // we don't delete an entire dept
+        } else {
+          $pfound = TRUE;
+        }
+      }
+
+      //check the asurite value of the profile agains the asurites in the feed,
+      // and set the $pfound flag to true if found
+      if (!empty($feed)) {
+        foreach($feed as $fitem) {
+          if ($fitem['asuriteId'] == $asurite) {
+            $pfound = TRUE;
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  //if the profile wasn't found, then delete
+  if ($pfound == FALSE) {
+    $title = $profile->title;
+    watchdog('asu_isearch',"Profile'[@id]'deletedviacroncleanup",array('@id'=>$title));
+    node_delete($profile->nid);
   }
 }
