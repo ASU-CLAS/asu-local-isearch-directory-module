@@ -80,50 +80,6 @@
             });
           }
         });
-
-        /* ===========================================================
-        * Patch
-        * -- issue: pagination/filters persist through each tab.
-        * When a not active tab is clicked and a filter has been selected, reset the filters
-        *
-        * - tthai1@asu.edu
-        */
-
-        // get each tabs content, add click listener
-        $('.ui-tabs-nav .ui-corner-top:not(.ui-tabs-selected) a').each(function(){
-          this.onclick=function(){
-            if(!$(this).hasClass('ui-tabs-selected')){
-              // trigger the reset if a non-active tab is clicked
-              tabReset();
-            }
-          }
-        });
-
-        // reset logic
-        function tabReset() {
-          // reset iff a filter has been changed. If no filters are changed, do not call reset
-          // when a filter is used, the url will have a query ?
-          $('.ui-tabs-panel .asu-isearch-directory-pane').each(function() {
-            // get the url
-            var currentUrl = $(location).attr('href');
-
-            // if a query is present, trigger the reset
-            if(currentUrl.toLowerCase().indexOf("\?") >= 0){
-              $('#views-exposed-form-isearch-directory-isearch-directory-list input#edit-reset').each(function(index){
-                // get all the values of the filters
-
-                // only the clicked tab will have height
-                if($(this).height()) {
-                  // triggers the reset submit
-                  $(this).trigger('click');
-                }
-              });
-            }
-          });
-        }
-        /* ----------------------------------------
-        * -- end of patch
-        */
       });
     }
   }
