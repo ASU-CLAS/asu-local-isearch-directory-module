@@ -126,24 +126,36 @@ function _asu_isearch_begin_migrate($force_update = FALSE) {
     }
   }
 
-  // feed endpoint
-  $endpoint = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT;
-  $source_urls = array();
+  $source_urls = asu_isearch_get_migrate_source_urls();
+  
+  // determine how many items we attempt to pull at a time
+  $limit = variable_get('isearch_import_limit', null);
+  if (is_null($limit) || is_numeric($limit)) {
+    $value = 50;
 
-  $import_subdepts = variable_get('isearch_import_subdepts', TRUE);
-  if ($import_subdepts) {
-    foreach ($migrate_config->tree_nids as $department_id) {
-      $source_urls[] = $endpoint . $department_id;
+    if (is_numeric($limit)) {
+      $value = $limit;
     }
-  }
-  else {
-    $source_urls[] = $endpoint . $migrate_config->dept_nid;
+
+    $limit = array(
+      'value' => $value,
+      'unit' => 'items',
+    );
   }
 
-  $migration->setMigrateSource($source_urls);
+  // instantiate the drupal queue for fetching department profiles
+  $queue = DrupalQueue::get('isearch_fetch_department');
 
-  $update = $migration->prepareUpdate();
-  $result = $migration->processImport(array('force' => $force_update));
+  foreach ($source_urls as $url) {
+    $data = array(
+      'endpoint' => $url,
+      'force' => $force_update,
+      'limit' => $limit,
+      'queue' => TRUE,
+    );
+
+    $queue->createItem($data);
+  }
 
   variable_set('isearch_last_import', time());
 }

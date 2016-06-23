@@ -8,8 +8,6 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
   // hide the profile tabs placeholder field that can be rendered on a node display
   if ($form_id == 'asu_isearch_profile_node_form') {
 
-
-
     if (arg(1) == 'add' || $form['#node']->field_isearch_eid['und'][0]['value'] == -1) {
 
       $form['field_isearch_local_photo_url']['#access'] = FALSE;
