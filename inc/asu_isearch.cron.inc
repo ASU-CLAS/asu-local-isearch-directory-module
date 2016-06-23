@@ -16,7 +16,7 @@ function asu_isearch_cron() {
   _asu_isearch_cache_dept_tree_data();
 
   // Begin profile migrations
-  _asu_isearch_begin_migrate();
+  _asu_isearch_begin_migrate(FALSE);
 
   // Cleanup the profiles which are no longer associated with
   // unit depts in iSearch.  Only run once per day.
