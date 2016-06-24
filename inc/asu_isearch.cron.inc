@@ -16,7 +16,7 @@ function asu_isearch_cron() {
   _asu_isearch_cache_dept_tree_data();
 
   // Begin profile migrations
-  _asu_isearch_begin_migrate();
+  _asu_isearch_begin_migrate(FALSE);
 }
 
 
@@ -29,8 +29,51 @@ function asu_isearch_cron_queue_info() {
     'time' => 120,
   );
 
+  $queues['isearch_fetch_department'] = array(
+    'worker callback' => 'asu_isearch_fetch_departments',
+    'time' => 120,
+  );
+
   return $queues;
 }
+
+
+/**
+ * Cron queue worker callback for fetching department profiles
+ */
+function asu_isearch_fetch_departments($data) {
+  // feed endpoint
+  $source_urls = array($data['endpoint']);
+
+  $migration = _asu_isearch_get_migration();
+  $migration->setMigrateSource($source_urls);
+
+  if (isset($data['queue']) && $data['queue']) {
+
+    $batch_limit = 50;
+    if (isset($data['limit']['unit']) && $data['limit']['unit'] == 'items') {
+      $batch_limit = intval($data['limit']['value']);
+    }
+
+    $source_count = $migration->sourceCount();
+    $batch_size = ceil($source_count / $batch_limit);
+
+    $queue = DrupalQueue::get('isearch_fetch_department');
+    // avoid an inifinite loop by resetting queue to false
+    unset($data['queue']);
+
+    for ($i = 1; $i <= $batch_size; $i++) {
+      $data['limit']['value'] = $i * $batch_limit;
+      $queue->createItem($data);
+    }
+  }
+  else {
+    // begin the migration
+    $update = $migration->prepareUpdate();
+    $result = $migration->processImport($data);
+  }
+}
+
 
 
 /**

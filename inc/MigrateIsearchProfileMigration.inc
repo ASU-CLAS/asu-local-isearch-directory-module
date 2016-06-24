@@ -85,15 +85,10 @@ class MigrateIsearchProfileMigration extends Migration {
     }
 
     $this->setMigrateSource($source_urls);
-    // $this->source = new MigrateSourceJSON($source_urls, 'eid', $this->getSourceFields(), array('reader_class' => 'IsearchProfileJSONReader'));
     $this->destination = new MigrateDestinationNode('asu_isearch_profile');
 
-    // Setup other variables we need
-    $this->profilePhotoDirectory = file_build_uri('asu_isearch_photos');
-
-    if (!file_exists($this->profilePhotoDirectory)) {
-      drupal_mkdir($this->profilePhotoDirectory);
-    }
+    // Setup profile photo directory
+    $this->setupProfilePhotoDirectory();
 
     $this->addFieldMapping('status'                                  , 'status');
     $this->addFieldMapping('field_isearch_displayname'               , 'displayName');
@@ -159,53 +154,53 @@ class MigrateIsearchProfileMigration extends Migration {
 
   public function getSourceFields() {
     $source_fields = array(
-    	'eid' => 'eid',
-    	'displayName' => 'The profile display name',
-    	'firstName' => 'First Name',
-    	'lastName' => 'Last Name',
-    	'emailAddress' => 'Email address',
-    	'asuriteId' => 'asuriteId',
-    	'primaryTitle' => 'primaryTitle',
-    	'phone' => 'phone',
-    	'fax' => 'fax',
-    	'building' => 'building',
-    	'room' => 'room',
-    	'primaryJobCampus' => 'primaryJobCampus',
-    	'shortBio' => 'shortBio',
-    	'bio' => 'Biography',
-    	'education' => 'education',
-    	'cvUrl' => 'cvUrl',
-      'website' => 'The personal website',
-      'twitter' => 'The profile twitter link',
-      'facebook' => 'The profile facebook link',
-      'linkedin' => 'The profile linkedin link',
-      'googlePlus' => 'The profile googleplus link',
-      'photoPreference' => 'Photo preference',
-      'photoPermission' => 'Photo permission',
-      'researchInterests' => 'researchInterests',
-      'researchGroup' => 'researchGroup',
-      'researchActivity' => 'researchActivity',
-      'publications' => 'publications',
-    	'researchWebsite' => 'researchWebsite',
-    	'courses' => 'courses',
-    	'presentations' => 'presentations',
-    	'teachingWebsite' => 'teachingWebsite',
-    	'honorsAwards' => 'honorsAwards',
-    	'editorships' => 'editorships',
-    	'professionalAssociations' => 'professionalAssociations',
-    	'graduateFaculties' => 'graduateFaculties',
-    	'workHistory' => 'workHistory',
-    	'service' => 'service',
-    	'primaryAffiliation' => 'primaryAffiliation',
-    	'departmentIds' => 'departmentIds',
-    	'departments' => 'departments',
-    	'vpAreas' => 'vpAreas',
-    	'campuses' => 'campuses',
-    	'mailCodes' => 'mailCodes',
-    	'employeeTypes' => 'employeeTypes',
-    	'personalWebsite' => 'personalWebsite',
-    	'htmlFormat' => 'Placeholder source field used for setting HTML format on text fields',
-    	'migrateHash' => 'Migrate hash used to determine if the entity should be updated or skipped on import',
+      'eid'                      => 'Profile identifier',
+      'displayName'              => 'The profile display name',
+      'firstName'                => 'First name',
+      'lastName'                 => 'Last name',
+      'emailAddress'             => 'Email address',
+      'asuriteId'                => 'ASURITE ID',
+      'primaryTitle'             => 'Primary title',
+      'phone'                    => 'Phone',
+      'fax'                      => 'Fax',
+      'building'                 => 'Building',
+      'room'                     => 'Room',
+      'primaryJobCampus'         => 'Primary job campus',
+      'shortBio'                 => 'Short bio',
+      'bio'                      => 'Biography',
+      'education'                => 'Education',
+      'cvUrl'                    => 'CV url',
+      'website'                  => 'Personal website',
+      'twitter'                  => 'Profile twitter link',
+      'facebook'                 => 'Profile facebook link',
+      'linkedin'                 => 'Profile linkedin link',
+      'googlePlus'               => 'Profile googleplus link',
+      'photoPreference'          => 'Photo preference',
+      'photoPermission'          => 'Photo permission',
+      'researchInterests'        => 'Research interests',
+      'researchGroup'            => 'Research group',
+      'researchActivity'         => 'Research activity',
+      'publications'             => 'Publications',
+      'researchWebsite'          => 'Research website',
+      'courses'                  => 'Courses',
+      'presentations'            => 'Presentations',
+      'teachingWebsite'          => 'Teaching website',
+      'honorsAwards'             => 'Honors awards',
+      'editorships'              => 'Editorships',
+      'professionalAssociations' => 'Professional associations',
+      'graduateFaculties'        => 'Graduate Faculties',
+      'workHistory'              => 'Work history',
+      'service'                  => 'Service',
+      'primaryAffiliation'       => 'PrimaryAffiliation',
+      'departmentIds'            => 'DepartmentIds',
+      'departments'              => 'Departments',
+      'vpAreas'                  => 'VP areas',
+      'campuses'                 => 'Campuses',
+      'mailCodes'                => 'Mail codes',
+      'employeeTypes'            => 'Employee types',
+      'personalWebsite'          => 'Personal website',
+      'htmlFormat'               => 'Placeholder source field used for setting HTML format on text fields',
+      'migrateHash'              => 'Migrate hash used to determine if the entity should be updated or skipped on import',
     );
 
     return $source_fields;
@@ -213,6 +208,15 @@ class MigrateIsearchProfileMigration extends Migration {
 
   private function isDevMode() {
     return variable_get('asu_isearch_devmode', FALSE);
+  }
+
+  private function setupProfilePhotoDirectory() {
+    // Setup other variables we need
+    $this->profilePhotoDirectory = file_build_uri('asu_isearch_photos');
+
+    if (!file_exists($this->profilePhotoDirectory)) {
+      drupal_mkdir($this->profilePhotoDirectory);
+    }
   }
 
   // This method gives us an opportunity to modify the raw source data

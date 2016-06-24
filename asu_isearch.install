@@ -221,3 +221,17 @@ function _asu_isearch_fix_dept_config($data) {
   return $data;
 }
 
+/**
+ * Enables the asu_dept_picker module which is required.
+ */
+function asu_isearch_update_7140() {
+  // this update requires the asu_dept_picker module to be enabled and installed
+  if (drupal_get_path('module', 'asu_dept_picker') != '' && !module_exists('asu_dept_picker')) {
+    module_enable(array('asu_dept_picker'));
+  }
+
+  if (drupal_get_path('module', 'react') != '' && !module_exists('react')) {
+    module_enable(array('react'));
+  }
+}
+
