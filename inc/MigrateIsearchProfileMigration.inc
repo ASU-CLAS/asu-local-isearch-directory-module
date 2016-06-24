@@ -28,8 +28,8 @@ class MigrateIsearchProfileMigration extends Migration {
 
   public static $currentFeedUrl = null;
 
-  public function __construct() {
-    parent::__construct();
+  public function __construct($arguments) {
+    parent::__construct($arguments);
 
     $this->description = t('Migrates iSearch profiles by department.');
 
