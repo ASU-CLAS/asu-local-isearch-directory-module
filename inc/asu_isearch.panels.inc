@@ -4,8 +4,10 @@
  * Implements hook_panels_pane_content_alter().
  */
 function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts) {
-  if (is_object($content) && empty($content->content) || (isset($content->content[0]['#markup']) && strlen($content->content[0]['#markup']) === 0)) {
-    $content->content = array();
+  $content_empty = (is_object($content) && empty($content->content));
+  $content_disabled = (isset($content->content[0]['#markup']) && strlen($content->content[0]['#markup']) === 0);
+
+  if (is_null($content) || $content_empty || $content_disabled) {
     return;
   }
 
