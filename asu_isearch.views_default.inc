@@ -1055,6 +1055,7 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['relationship'] = 'field_isearch_affiliations_value';
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['operator'] = 'regular_expression';
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['group'] = 1;
+  $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['value'] = '.*';
 
   /* Display: Directory - List */
   $handler = $view->new_display('panel_pane', 'Directory - List', 'isearch_directory_list');
@@ -1129,6 +1130,7 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['relationship'] = 'field_isearch_affiliations_value';
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['operator'] = 'regular_expression';
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['group'] = 1;
+  $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['value'] = '.*';
   $handler->display->display_options['allow']['use_pager'] = 'use_pager';
   $handler->display->display_options['allow']['items_per_page'] = 'items_per_page';
   $handler->display->display_options['allow']['offset'] = 'offset';
@@ -1190,6 +1192,7 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['relationship'] = 'field_isearch_affiliations_value';
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['operator'] = 'regular_expression';
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['group'] = 1;
+  $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['value'] = '.*';
   $handler->display->display_options['allow']['use_pager'] = 'use_pager';
   $handler->display->display_options['allow']['items_per_page'] = 'items_per_page';
   $handler->display->display_options['allow']['offset'] = 'offset';
