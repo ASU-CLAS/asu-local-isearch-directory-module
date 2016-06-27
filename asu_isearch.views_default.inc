@@ -139,72 +139,8 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['force_single'] = 0;
   $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['entity_load_capacity'] = '10';
   $handler->display->display_options['fields']['views_bulk_operations']['vbo_operations'] = array(
-    'action::node_assign_owner_action' => array(
-      'selected' => 0,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-    ),
     'action::views_bulk_operations_delete_item' => array(
       'selected' => 1,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-    ),
-    'action::views_bulk_operations_delete_revision' => array(
-      'selected' => 0,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-    ),
-    'action::views_bulk_operations_script_action' => array(
-      'selected' => 0,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-    ),
-    'action::node_make_sticky_action' => array(
-      'selected' => 0,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-    ),
-    'action::node_make_unsticky_action' => array(
-      'selected' => 0,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-    ),
-    'action::views_bulk_operations_modify_action' => array(
-      'selected' => 0,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'settings' => array(
-        'show_all_tokens' => 1,
-        'display_values' => array(
-          '_all_' => '_all_',
-        ),
-      ),
-    ),
-    'action::views_bulk_operations_argument_selector_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'settings' => array(
-        'url' => '',
-      ),
-    ),
-    'action::node_promote_action' => array(
-      'selected' => 0,
       'postpone_processing' => 0,
       'skip_confirmation' => 0,
       'override_label' => 0,
@@ -217,50 +153,8 @@ function asu_isearch_views_default_views() {
       'override_label' => 0,
       'label' => '',
     ),
-    'action::node_unpromote_action' => array(
-      'selected' => 0,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-    ),
-    'action::node_save_action' => array(
-      'selected' => 0,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-    ),
-    'action::system_send_email_action' => array(
-      'selected' => 0,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-    ),
-    'action::panelizer_set_status_action' => array(
-      'selected' => 0,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-    ),
     'action::node_unpublish_action' => array(
       'selected' => 1,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-    ),
-    'action::node_unpublish_by_keyword_action' => array(
-      'selected' => 0,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-    ),
-    'action::pathauto_node_update_action' => array(
-      'selected' => 0,
       'postpone_processing' => 0,
       'skip_confirmation' => 0,
       'override_label' => 0,
@@ -1054,8 +948,29 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['field'] = 'field_isearch_affil_title_value';
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['relationship'] = 'field_isearch_affiliations_value';
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['operator'] = 'regular_expression';
-  $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['group'] = 1;
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['value'] = '.*';
+  $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['group'] = 1;
+  /* Filter criterion: Content: Local Tags (field_isearch_local_tags) */
+  $handler->display->display_options['filters']['field_isearch_local_tags_tid']['id'] = 'field_isearch_local_tags_tid';
+  $handler->display->display_options['filters']['field_isearch_local_tags_tid']['table'] = 'field_data_field_isearch_local_tags';
+  $handler->display->display_options['filters']['field_isearch_local_tags_tid']['field'] = 'field_isearch_local_tags_tid';
+  $handler->display->display_options['filters']['field_isearch_local_tags_tid']['value'] = '';
+  $handler->display->display_options['filters']['field_isearch_local_tags_tid']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_isearch_local_tags_tid']['expose']['operator_id'] = 'field_isearch_local_tags_tid_op';
+  $handler->display->display_options['filters']['field_isearch_local_tags_tid']['expose']['label'] = 'Local Tags (field_isearch_local_tags)';
+  $handler->display->display_options['filters']['field_isearch_local_tags_tid']['expose']['operator'] = 'field_isearch_local_tags_tid_op';
+  $handler->display->display_options['filters']['field_isearch_local_tags_tid']['expose']['identifier'] = 'field_isearch_local_tags_tid';
+  $handler->display->display_options['filters']['field_isearch_local_tags_tid']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    8 => 0,
+    6 => 0,
+    7 => 0,
+    4 => 0,
+    5 => 0,
+  );
+  $handler->display->display_options['filters']['field_isearch_local_tags_tid']['vocabulary'] = 'isearch_local_tags';
 
   /* Display: Directory - List */
   $handler = $view->new_display('panel_pane', 'Directory - List', 'isearch_directory_list');
@@ -1130,7 +1045,6 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['relationship'] = 'field_isearch_affiliations_value';
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['operator'] = 'regular_expression';
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['group'] = 1;
-  $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['value'] = '.*';
   $handler->display->display_options['allow']['use_pager'] = 'use_pager';
   $handler->display->display_options['allow']['items_per_page'] = 'items_per_page';
   $handler->display->display_options['allow']['offset'] = 'offset';
@@ -1192,7 +1106,6 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['relationship'] = 'field_isearch_affiliations_value';
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['operator'] = 'regular_expression';
   $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['group'] = 1;
-  $handler->display->display_options['filters']['field_isearch_affil_title_value_1']['value'] = '.*';
   $handler->display->display_options['allow']['use_pager'] = 'use_pager';
   $handler->display->display_options['allow']['items_per_page'] = 'items_per_page';
   $handler->display->display_options['allow']['offset'] = 'offset';
