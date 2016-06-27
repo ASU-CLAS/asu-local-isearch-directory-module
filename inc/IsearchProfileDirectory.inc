@@ -51,6 +51,9 @@ class IsearchProfileDirectory {
     $this->view->set_arguments($contextual_filters);
 
     if (isset($this->view->filter['field_isearch_affil_title_value_1'])) {
+      if ($this->viewConfig->filter_title == '') {
+        $this->viewConfig->filter_title = '.*';
+      }
       $this->view->filter['field_isearch_affil_title_value_1']->value = $this->viewConfig->filter_title;
     }
 
@@ -58,6 +61,7 @@ class IsearchProfileDirectory {
     $this->view->execute();
 
     $items = array();
+
     foreach ($this->view->result as $key => $result) {
       $index_letter = $result->field_isearch_lastname_value_truncated;
       $items[] = t('<a href="@url">@letter</a>', array(

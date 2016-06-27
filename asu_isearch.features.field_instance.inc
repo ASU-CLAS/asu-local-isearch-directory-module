@@ -10,7 +10,8 @@
 function asu_isearch_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_campus'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_affiliations-field_isearch_affil_campus'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_campus'] = array(
     'bundle' => 'field_isearch_affiliations',
     'default_value' => NULL,
@@ -58,7 +59,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_dept_id'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_affiliations-field_isearch_affil_dept_id'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_dept_id'] = array(
     'bundle' => 'field_isearch_affiliations',
     'default_value' => NULL,
@@ -104,7 +106,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_dept_name'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_affiliations-field_isearch_affil_dept_name'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_dept_name'] = array(
     'bundle' => 'field_isearch_affiliations',
     'default_value' => NULL,
@@ -152,7 +155,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_empl_key'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_affiliations-field_isearch_affil_empl_key'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_empl_key'] = array(
     'bundle' => 'field_isearch_affiliations',
     'default_value' => NULL,
@@ -193,7 +197,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_empl_type'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_affiliations-field_isearch_affil_empl_type'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_empl_type'] = array(
     'bundle' => 'field_isearch_affiliations',
     'default_value' => NULL,
@@ -241,7 +246,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_local_weight'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_affiliations-field_isearch_affil_local_weight'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_local_weight'] = array(
     'bundle' => 'field_isearch_affiliations',
     'default_value' => NULL,
@@ -281,7 +287,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_mailcode'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_affiliations-field_isearch_affil_mailcode'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_mailcode'] = array(
     'bundle' => 'field_isearch_affiliations',
     'default_value' => NULL,
@@ -329,7 +336,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_manager'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_affiliations-field_isearch_affil_manager'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_manager'] = array(
     'bundle' => 'field_isearch_affiliations',
     'default_value' => NULL,
@@ -367,7 +375,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_primary'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_affiliations-field_isearch_affil_primary'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_primary'] = array(
     'bundle' => 'field_isearch_affiliations',
     'default_value' => array(
@@ -409,7 +418,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_rank'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_affiliations-field_isearch_affil_rank'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_rank'] = array(
     'bundle' => 'field_isearch_affiliations',
     'default_value' => NULL,
@@ -448,7 +458,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_rank_tenure'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_affiliations-field_isearch_affil_rank_tenure'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_rank_tenure'] = array(
     'bundle' => 'field_isearch_affiliations',
     'default_value' => array(
@@ -485,7 +496,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_rank_weight'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_affiliations-field_isearch_affil_rank_weight'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_rank_weight'] = array(
     'bundle' => 'field_isearch_affiliations',
     'default_value' => array(
@@ -535,7 +547,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_affiliations-field_isearch_affil_title'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_affiliations-field_isearch_affil_title'
   $field_instances['field_collection_item-field_isearch_affiliations-field_isearch_affil_title'] = array(
     'bundle' => 'field_isearch_affiliations',
     'default_value' => NULL,
@@ -583,7 +596,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_audio-field_isearch_audio_caption'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_audio-field_isearch_audio_caption'
   $field_instances['field_collection_item-field_isearch_audio-field_isearch_audio_caption'] = array(
     'bundle' => 'field_isearch_audio',
     'default_value' => NULL,
@@ -626,7 +640,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_audio-field_isearch_audio_url'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_audio-field_isearch_audio_url'
   $field_instances['field_collection_item-field_isearch_audio-field_isearch_audio_url'] = array(
     'bundle' => 'field_isearch_audio',
     'default_value' => NULL,
@@ -646,6 +661,7 @@ function asu_isearch_field_default_field_instances() {
     'label' => 'URL',
     'required' => 0,
     'settings' => array(
+      'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
         'configurable_title' => 0,
@@ -664,6 +680,7 @@ function asu_isearch_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'optional',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -679,7 +696,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_images-field_isearch_images_caption'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_images-field_isearch_images_caption'
   $field_instances['field_collection_item-field_isearch_images-field_isearch_images_caption'] = array(
     'bundle' => 'field_isearch_images',
     'default_value' => NULL,
@@ -722,7 +740,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_images-field_isearch_images_url'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_images-field_isearch_images_url'
   $field_instances['field_collection_item-field_isearch_images-field_isearch_images_url'] = array(
     'bundle' => 'field_isearch_images',
     'default_value' => NULL,
@@ -742,6 +761,7 @@ function asu_isearch_field_default_field_instances() {
     'label' => 'URL',
     'required' => 0,
     'settings' => array(
+      'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
         'configurable_title' => 0,
@@ -760,6 +780,7 @@ function asu_isearch_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'optional',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -775,7 +796,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_videos-field_isearch_videos_title'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_videos-field_isearch_videos_title'
   $field_instances['field_collection_item-field_isearch_videos-field_isearch_videos_title'] = array(
     'bundle' => 'field_isearch_videos',
     'default_value' => NULL,
@@ -818,7 +840,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_isearch_videos-field_isearch_videos_url'
+  // Exported field_instance:
+  // 'field_collection_item-field_isearch_videos-field_isearch_videos_url'
   $field_instances['field_collection_item-field_isearch_videos-field_isearch_videos_url'] = array(
     'bundle' => 'field_isearch_videos',
     'default_value' => NULL,
@@ -838,6 +861,7 @@ function asu_isearch_field_default_field_instances() {
     'label' => 'URL',
     'required' => 0,
     'settings' => array(
+      'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
         'configurable_title' => 0,
@@ -856,6 +880,7 @@ function asu_isearch_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'optional',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -871,7 +896,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'fieldable_panels_pane-isearch_directory-field_isearch_config'
+  // Exported field_instance:
+  // 'fieldable_panels_pane-isearch_directory-field_isearch_config'
   $field_instances['fieldable_panels_pane-isearch_directory-field_isearch_config'] = array(
     'bundle' => 'isearch_directory',
     'default_value' => array(
@@ -918,7 +944,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_affiliations'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_affiliations'
   $field_instances['node-asu_isearch_profile-field_isearch_affiliations'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -966,7 +993,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_asurite_id'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_asurite_id'
   $field_instances['node-asu_isearch_profile-field_isearch_asurite_id'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -1153,7 +1181,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_campus_building'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_campus_building'
   $field_instances['node-asu_isearch_profile-field_isearch_campus_building'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -1220,7 +1249,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_campus_room'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_campus_room'
   $field_instances['node-asu_isearch_profile-field_isearch_campus_room'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -1353,7 +1383,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_displayname'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_displayname'
   $field_instances['node-asu_isearch_profile-field_isearch_displayname'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -1419,7 +1450,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_editorships'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_editorships'
   $field_instances['node-asu_isearch_profile-field_isearch_editorships'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -1670,7 +1702,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_employee_type'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_employee_type'
   $field_instances['node-asu_isearch_profile-field_isearch_employee_type'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -1736,7 +1769,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_employment_title'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_employment_title'
   $field_instances['node-asu_isearch_profile-field_isearch_employment_title'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -1802,7 +1836,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_expertise_areas'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_expertise_areas'
   $field_instances['node-asu_isearch_profile-field_isearch_expertise_areas'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -1986,7 +2021,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_graduate_faculties'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_graduate_faculties'
   $field_instances['node-asu_isearch_profile-field_isearch_graduate_faculties'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -2114,7 +2150,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_honors_awards'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_honors_awards'
   $field_instances['node-asu_isearch_profile-field_isearch_honors_awards'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -2301,7 +2338,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_link_building_code'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_link_building_code'
   $field_instances['node-asu_isearch_profile-field_isearch_link_building_code'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => array(
@@ -2356,7 +2394,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_local_photo_url'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_local_photo_url'
   $field_instances['node-asu_isearch_profile-field_isearch_local_photo_url'] = array(
     'bundle' => 'asu_isearch_profile',
     'deleted' => 0,
@@ -2447,7 +2486,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_local_primary_aff'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_local_primary_aff'
   $field_instances['node-asu_isearch_profile-field_isearch_local_primary_aff'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -2500,7 +2540,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_local_tags'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_local_tags'
   $field_instances['node-asu_isearch_profile-field_isearch_local_tags'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -2618,7 +2659,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_photo_permission'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_photo_permission'
   $field_instances['node-asu_isearch_profile-field_isearch_photo_permission'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -2667,7 +2709,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_photo_preference'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_photo_preference'
   $field_instances['node-asu_isearch_profile-field_isearch_photo_preference'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => array(
@@ -2803,7 +2846,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_primary_aff'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_primary_aff'
   $field_instances['node-asu_isearch_profile-field_isearch_primary_aff'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -2856,7 +2900,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_primary_campus'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_primary_campus'
   $field_instances['node-asu_isearch_profile-field_isearch_primary_campus'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -2915,7 +2960,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_prof_associations'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_prof_associations'
   $field_instances['node-asu_isearch_profile-field_isearch_prof_associations'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -2984,7 +3030,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_profile_tabs'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_profile_tabs'
   $field_instances['node-asu_isearch_profile-field_isearch_profile_tabs'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => array(
@@ -3055,7 +3102,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_rsrch_activity'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_rsrch_activity'
   $field_instances['node-asu_isearch_profile-field_isearch_rsrch_activity'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -3123,7 +3171,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_rsrch_group'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_rsrch_group'
   $field_instances['node-asu_isearch_profile-field_isearch_rsrch_group'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -3191,7 +3240,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_rsrch_interests'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_rsrch_interests'
   $field_instances['node-asu_isearch_profile-field_isearch_rsrch_interests'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -3259,7 +3309,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_rsrch_publications'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_rsrch_publications'
   $field_instances['node-asu_isearch_profile-field_isearch_rsrch_publications'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -3327,7 +3378,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_rsrch_website'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_rsrch_website'
   $field_instances['node-asu_isearch_profile-field_isearch_rsrch_website'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -3521,7 +3573,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_social_facebook'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_social_facebook'
   $field_instances['node-asu_isearch_profile-field_isearch_social_facebook'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -3588,7 +3641,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_social_googleplus'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_social_googleplus'
   $field_instances['node-asu_isearch_profile-field_isearch_social_googleplus'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -3655,7 +3709,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_social_linkedin'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_social_linkedin'
   $field_instances['node-asu_isearch_profile-field_isearch_social_linkedin'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -3722,7 +3777,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_social_personalweb'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_social_personalweb'
   $field_instances['node-asu_isearch_profile-field_isearch_social_personalweb'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -3789,7 +3845,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_social_twitter'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_social_twitter'
   $field_instances['node-asu_isearch_profile-field_isearch_social_twitter'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -3848,7 +3905,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_tch_courses'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_tch_courses'
   $field_instances['node-asu_isearch_profile-field_isearch_tch_courses'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -3908,7 +3966,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_tch_presentations'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_tch_presentations'
   $field_instances['node-asu_isearch_profile-field_isearch_tch_presentations'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -3976,7 +4035,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_tch_website'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_tch_website'
   $field_instances['node-asu_isearch_profile-field_isearch_tch_website'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -4098,7 +4158,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-asu_isearch_profile-field_isearch_work_history'
+  // Exported field_instance:
+  // 'node-asu_isearch_profile-field_isearch_work_history'
   $field_instances['node-asu_isearch_profile-field_isearch_work_history'] = array(
     'bundle' => 'asu_isearch_profile',
     'default_value' => NULL,
@@ -4167,7 +4228,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-isearch_departments-field_isearch_department_id'
+  // Exported field_instance:
+  // 'taxonomy_term-isearch_departments-field_isearch_department_id'
   $field_instances['taxonomy_term-isearch_departments-field_isearch_department_id'] = array(
     'bundle' => 'isearch_departments',
     'default_value' => NULL,
@@ -4214,7 +4276,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-isearch_departments-field_isearch_department_nid'
+  // Exported field_instance:
+  // 'taxonomy_term-isearch_departments-field_isearch_department_nid'
   $field_instances['taxonomy_term-isearch_departments-field_isearch_department_nid'] = array(
     'bundle' => 'isearch_departments',
     'default_value' => NULL,
@@ -4260,7 +4323,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-isearch_departments-field_isearch_department_tid'
+  // Exported field_instance:
+  // 'taxonomy_term-isearch_departments-field_isearch_department_tid'
   $field_instances['taxonomy_term-isearch_departments-field_isearch_department_tid'] = array(
     'bundle' => 'isearch_departments',
     'default_value' => NULL,
@@ -4306,7 +4370,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-isearch_expertise-field_isearch_expertise_tid'
+  // Exported field_instance:
+  // 'taxonomy_term-isearch_expertise-field_isearch_expertise_tid'
   $field_instances['taxonomy_term-isearch_expertise-field_isearch_expertise_tid'] = array(
     'bundle' => 'isearch_expertise',
     'default_value' => NULL,
@@ -4346,7 +4411,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-isearch_ranks-field_isearch_rank_tenure'
+  // Exported field_instance:
+  // 'taxonomy_term-isearch_ranks-field_isearch_rank_tenure'
   $field_instances['taxonomy_term-isearch_ranks-field_isearch_rank_tenure'] = array(
     'bundle' => 'isearch_ranks',
     'default_value' => array(
@@ -4389,7 +4455,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-isearch_ranks-field_isearch_rank_tid'
+  // Exported field_instance:
+  // 'taxonomy_term-isearch_ranks-field_isearch_rank_tid'
   $field_instances['taxonomy_term-isearch_ranks-field_isearch_rank_tid'] = array(
     'bundle' => 'isearch_ranks',
     'default_value' => NULL,
@@ -4435,7 +4502,8 @@ function asu_isearch_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-isearch_ranks-field_isearch_rank_weight'
+  // Exported field_instance:
+  // 'taxonomy_term-isearch_ranks-field_isearch_rank_weight'
   $field_instances['taxonomy_term-isearch_ranks-field_isearch_rank_weight'] = array(
     'bundle' => 'isearch_ranks',
     'default_value' => NULL,
