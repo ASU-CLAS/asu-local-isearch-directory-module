@@ -14,6 +14,7 @@ function asu_isearch_admin_settings_form() {
 
   $form = array();
 
+<<<<<<< HEAD
   $default_feed_dept = array(
     array(
     'dept_id' => 'ASU',
@@ -21,6 +22,8 @@ function asu_isearch_admin_settings_form() {
     'tree_nids' => array(),
   ));
 
+=======
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
   $form['isearch_display_affiliations'] = array(
     '#type' => 'checkbox',
     '#title' => 'Display all department affiliations on profile?',
@@ -59,6 +62,7 @@ function asu_isearch_admin_settings_form() {
     ),
   );
 
+<<<<<<< HEAD
   // @BC: ensure feed_dept configuration is an array for multi-depts
   $isearch_admin_feed_dept = variable_get('isearch_admin_feed_dept', json_encode($default_feed_dept));
 
@@ -68,6 +72,8 @@ function asu_isearch_admin_settings_form() {
     '#attributes' => array('id' => 'isearch_admin_feed_dept'),
   );
 
+=======
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
   $form['isearch_link_buildings'] = array(
     '#type' => 'checkbox',
     '#title' => 'Detect and link building codes?',
@@ -75,6 +81,7 @@ function asu_isearch_admin_settings_form() {
     '#description' => t('Check this option to link building codes on profiles and directory listings to the ASU Campus map'),
   );
 
+<<<<<<< HEAD
   $form['isearch_dept_tree'] = array(
     '#attached' => array(
       'css' => array(
@@ -88,6 +95,15 @@ function asu_isearch_admin_settings_form() {
       ),
       'label' => t('Select Department'),
     )),
+=======
+  // retrieve global dept configuration
+  $isearch_admin_feed_dept = asu_isearch_get_dept_config();
+
+  $form['isearch_admin_feed_dept'] = array(
+    '#type' => 'asu_dept_picker',
+    '#default_value' => $isearch_admin_feed_dept,
+    '#attributes' => array('id' => 'isearch_admin_feed_dept'),
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
   );
 
   $form = system_settings_form($form);
@@ -226,5 +242,9 @@ function asu_isearch_import_isearch_form_submit($form, &$form_state) {
 
 
 // Temporary function used with devel/php
+<<<<<<< HEAD
 function asu_isearch_devel() {
+=======
+function asu_isearch_devel() { 
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
 }

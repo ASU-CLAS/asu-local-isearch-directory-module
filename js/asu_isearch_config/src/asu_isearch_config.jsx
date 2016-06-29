@@ -21,7 +21,17 @@ var CheckboxToggle = React.createClass({
     }
 
     return <div className={"form-type-checkbox form-item-" + this.props.className + " form-item checkbox"}>
+<<<<<<< HEAD
       <input onClick={this.handleClick} type="checkbox" id={this.props.id} name={this.props.fieldName} defaultChecked={(this.state.checked || this.props.checked) ? 'checked' : ''} value={this.props.value} className="form-checkbox tgl tgl-light" />
+=======
+      <input
+        onClick={this.handleClick}
+        type="checkbox" id={this.props.id}
+        name={this.props.fieldName}
+        defaultChecked={(this.state.checked || this.props.checked) ? 'checked' : ''}
+        defaultValue={this.props.value}
+        className="form-checkbox tgl tgl-light" />
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
       <label htmlFor={this.props.id} className="tgl-btn"></label>
       <div className="fake-label">{this.props.label} {tooltip}</div>
     </div>

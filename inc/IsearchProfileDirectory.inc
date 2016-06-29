@@ -19,14 +19,25 @@ class IsearchProfileDirectory {
 
   private static $currentInstance = 1;
 
+<<<<<<< HEAD
   public function __construct($view_config) {
     $this->viewConfig = $view_config;
+=======
+  public function __construct() {
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     $this->view = views_get_view('isearch_directory', TRUE);
 
     $this->instanceId = self::$currentInstance++;
     $this->view->isearch_instance_id = $this->instanceId;
   }
 
+<<<<<<< HEAD
+=======
+  public function setViewConfig($view_config) {
+    $this->viewConfig = $view_config;
+  }
+
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
   public function render() {
 
   }
@@ -48,6 +59,12 @@ class IsearchProfileDirectory {
     $this->view->set_arguments($contextual_filters);
 
     if (isset($this->view->filter['field_isearch_affil_title_value_1'])) {
+<<<<<<< HEAD
+=======
+      if ($this->viewConfig->filter_title == '') {
+        $this->viewConfig->filter_title = '.*';
+      }
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
       $this->view->filter['field_isearch_affil_title_value_1']->value = $this->viewConfig->filter_title;
     }
 
@@ -55,6 +72,10 @@ class IsearchProfileDirectory {
     $this->view->execute();
 
     $items = array();
+<<<<<<< HEAD
+=======
+
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     foreach ($this->view->result as $key => $result) {
       $index_letter = $result->field_isearch_lastname_value_truncated;
       $items[] = t('<a href="@url">@letter</a>', array(

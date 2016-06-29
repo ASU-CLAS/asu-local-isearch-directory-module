@@ -28,8 +28,13 @@ class MigrateIsearchProfileMigration extends Migration {
 
   public static $currentFeedUrl = null;
 
+<<<<<<< HEAD
   public function __construct() {
     parent::__construct();
+=======
+  public function __construct($arguments) {
+    parent::__construct($arguments);
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
 
     $this->description = t('Migrates iSearch profiles by department.');
 
@@ -85,6 +90,7 @@ class MigrateIsearchProfileMigration extends Migration {
     }
 
     $this->setMigrateSource($source_urls);
+<<<<<<< HEAD
     // $this->source = new MigrateSourceJSON($source_urls, 'eid', $this->getSourceFields(), array('reader_class' => 'IsearchProfileJSONReader'));
     $this->destination = new MigrateDestinationNode('asu_isearch_profile');
 
@@ -94,6 +100,12 @@ class MigrateIsearchProfileMigration extends Migration {
     if (!file_exists($this->profilePhotoDirectory)) {
       drupal_mkdir($this->profilePhotoDirectory);
     }
+=======
+    $this->destination = new MigrateDestinationNode('asu_isearch_profile');
+
+    // Setup profile photo directory
+    $this->setupProfilePhotoDirectory();
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
 
     $this->addFieldMapping('status'                                  , 'status');
     $this->addFieldMapping('field_isearch_displayname'               , 'displayName');
@@ -159,6 +171,7 @@ class MigrateIsearchProfileMigration extends Migration {
 
   public function getSourceFields() {
     $source_fields = array(
+<<<<<<< HEAD
     	'eid' => 'eid',
     	'displayName' => 'The profile display name',
     	'firstName' => 'First Name',
@@ -206,6 +219,55 @@ class MigrateIsearchProfileMigration extends Migration {
     	'personalWebsite' => 'personalWebsite',
     	'htmlFormat' => 'Placeholder source field used for setting HTML format on text fields',
     	'migrateHash' => 'Migrate hash used to determine if the entity should be updated or skipped on import',
+=======
+      'eid'                      => 'Profile identifier',
+      'displayName'              => 'The profile display name',
+      'firstName'                => 'First name',
+      'lastName'                 => 'Last name',
+      'emailAddress'             => 'Email address',
+      'asuriteId'                => 'ASURITE ID',
+      'primaryTitle'             => 'Primary title',
+      'phone'                    => 'Phone',
+      'fax'                      => 'Fax',
+      'building'                 => 'Building',
+      'room'                     => 'Room',
+      'primaryJobCampus'         => 'Primary job campus',
+      'shortBio'                 => 'Short bio',
+      'bio'                      => 'Biography',
+      'education'                => 'Education',
+      'cvUrl'                    => 'CV url',
+      'website'                  => 'Personal website',
+      'twitter'                  => 'Profile twitter link',
+      'facebook'                 => 'Profile facebook link',
+      'linkedin'                 => 'Profile linkedin link',
+      'googlePlus'               => 'Profile googleplus link',
+      'photoPreference'          => 'Photo preference',
+      'photoPermission'          => 'Photo permission',
+      'researchInterests'        => 'Research interests',
+      'researchGroup'            => 'Research group',
+      'researchActivity'         => 'Research activity',
+      'publications'             => 'Publications',
+      'researchWebsite'          => 'Research website',
+      'courses'                  => 'Courses',
+      'presentations'            => 'Presentations',
+      'teachingWebsite'          => 'Teaching website',
+      'honorsAwards'             => 'Honors awards',
+      'editorships'              => 'Editorships',
+      'professionalAssociations' => 'Professional associations',
+      'graduateFaculties'        => 'Graduate Faculties',
+      'workHistory'              => 'Work history',
+      'service'                  => 'Service',
+      'primaryAffiliation'       => 'PrimaryAffiliation',
+      'departmentIds'            => 'DepartmentIds',
+      'departments'              => 'Departments',
+      'vpAreas'                  => 'VP areas',
+      'campuses'                 => 'Campuses',
+      'mailCodes'                => 'Mail codes',
+      'employeeTypes'            => 'Employee types',
+      'personalWebsite'          => 'Personal website',
+      'htmlFormat'               => 'Placeholder source field used for setting HTML format on text fields',
+      'migrateHash'              => 'Migrate hash used to determine if the entity should be updated or skipped on import',
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     );
 
     return $source_fields;
@@ -215,6 +277,18 @@ class MigrateIsearchProfileMigration extends Migration {
     return variable_get('asu_isearch_devmode', FALSE);
   }
 
+<<<<<<< HEAD
+=======
+  private function setupProfilePhotoDirectory() {
+    // Setup other variables we need
+    $this->profilePhotoDirectory = file_build_uri('asu_isearch_photos');
+
+    if (!file_exists($this->profilePhotoDirectory)) {
+      drupal_mkdir($this->profilePhotoDirectory);
+    }
+  }
+
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
   // This method gives us an opportunity to modify the raw source data
   // to create additional fields that will get mapped possibly
   public function prepareRow($row) {

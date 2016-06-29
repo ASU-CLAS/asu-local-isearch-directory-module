@@ -143,7 +143,11 @@
             
             $('#treediv').bind('tree.click', function (event) {
 
+<<<<<<< HEAD
               if ($depts.data.dept_nid == event.node.dept_nid || event.node.dept_id == 'ASU') {
+=======
+              if ($depts.data.dept_nid == event.node.dept_nid || event.node.dept_id == 'ASU' || !event.node.dept_nid) {
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
                 return false;
               }
 
@@ -205,6 +209,13 @@
             $(document).on('click', '#asu-isearch-dept-picker-select', function(){
               var include_subdepts = ($('#asu-isearch-dept-include-subdept:checked').length != 0);
 
+<<<<<<< HEAD
+=======
+              if (!$depts.data.dept_nid) {
+                return false;
+              }
+              
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
               var unique = true;
               $.each($config.items, function(index, item) {
                 if (item.dept_nid == $depts.data.dept_nid) {

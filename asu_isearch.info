@@ -2,9 +2,16 @@ name = ASU Local iSearch Directory
 description = Pulls iSearch data and stores/updates it locally. Sets up a default listing view and profile pages.
 core = 7.x
 package = ASU
+<<<<<<< HEAD
 version = 7.x-1.37
 project = asu_isearch
 dependencies[] = ctools
+=======
+version = 7.x-1.4.1
+project = asu_isearch
+dependencies[] = ctools
+dependencies[] = asu_dept_picker
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
 dependencies[] = defaultconfig
 dependencies[] = email
 dependencies[] = entity

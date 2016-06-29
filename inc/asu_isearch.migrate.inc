@@ -126,6 +126,7 @@ function _asu_isearch_begin_migrate($force_update = FALSE) {
     }
   }
 
+<<<<<<< HEAD
   // feed endpoint
   $endpoint = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT;
   $source_urls = array();
@@ -144,6 +145,38 @@ function _asu_isearch_begin_migrate($force_update = FALSE) {
 
   $update = $migration->prepareUpdate();
   $result = $migration->processImport(array('force' => $force_update));
+=======
+  $source_urls = asu_isearch_get_migrate_source_urls();
+  
+  // determine how many items we attempt to pull at a time
+  $limit = variable_get('isearch_import_limit', null);
+  if (is_null($limit) || is_numeric($limit)) {
+    $value = 50;
+
+    if (is_numeric($limit)) {
+      $value = $limit;
+    }
+
+    $limit = array(
+      'value' => $value,
+      'unit' => 'items',
+    );
+  }
+
+  // instantiate the drupal queue for fetching department profiles
+  $queue = DrupalQueue::get('isearch_fetch_department');
+
+  foreach ($source_urls as $url) {
+    $data = array(
+      'endpoint' => $url,
+      'force' => $force_update,
+      'limit' => $limit,
+      'queue' => TRUE,
+    );
+
+    $queue->createItem($data);
+  }
+>>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
 
   variable_set('isearch_last_import', time());
 }
