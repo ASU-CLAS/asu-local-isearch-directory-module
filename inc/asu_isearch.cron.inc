@@ -279,10 +279,18 @@ function asu_isearch_cleanup_profile($profile) {
     }
   }
 
-  //if the profile wasn't found, then delete
-  if ($pfound == FALSE) {
+  //if the profile wasn't found, then unpublish
+  if ($pfound == FALSE) {//TODO: RESET AFTER TESTING
     $title = $profile->title;
-    watchdog('asu_isearch',"Profile'[@id]'deletedviacroncleanup",array('@id'=>$title));
-    node_delete($profile->nid);
+    watchdog('asu_isearch',"Profile'[@id]'unpublishedviacroncleanup",array('@id'=>$title));
+    $profile->status = 0;
+    node_save($profile);
+
+  //if node was unpublished, but was found on iSearch, republish the node
+  } else if ($pfound == TRUE && $profile->status == 0) {
+    $profile->status = 1;
+    $title = $profile->title;
+    watchdog('asu_isearch',"Profile'[@id]'REpublishedviacroncleanup",array('@id'=>$title));
+    node_save($profile);
   }
 }
