@@ -112,7 +112,6 @@ function asu_isearch_fetch_profile_photo($data) {
 
     // does the file already exist on the server?
     // if yes, associate it
-
     if ($photo_exists) {
       $file = current(entity_load('file', array(), array('uri' => $destination.'')));
     }
@@ -280,7 +279,7 @@ function asu_isearch_cleanup_profile($profile) {
   }
 
   //if the profile wasn't found, then unpublish
-  if ($pfound == FALSE) {//TODO: RESET AFTER TESTING
+  if ($pfound == FALSE) {
     $title = $profile->title;
     watchdog('asu_isearch',"Profile'[@id]'unpublishedviacroncleanup",array('@id'=>$title));
     $profile->status = 0;

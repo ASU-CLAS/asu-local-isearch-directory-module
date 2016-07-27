@@ -14,6 +14,7 @@ function asu_isearch_views_pre_render(&$view) {
   }
 
   if (asu_isearch_is_isearch_view($view) && isset($view->view_config)) {
+
     $display_options = array(
       'display_header' => $view->view_config->display_header,
       'display_photo' => $view->view_config->display_photo,
@@ -68,7 +69,11 @@ function asu_isearch_views_pre_render(&$view) {
         $display_default_photo = variable_get('isearch_display_default_photo', FALSE);
         $default_photo = asu_isearch_get_default_photo();
 
+
         if ($display_default_photo && $default_photo) {
+
+          $view->result[$key]->field_field_isearch_photo_url[0]['rendered']['#access'] = TRUE;
+          $view->result[$key]->field_field_isearch_photo_url[0]['rendered']['#theme'] = 'image_formatter';
           $view->result[$key]->field_field_isearch_photo_url[0]['rendered']['#item'] = (array) $default_photo;
           $view->result[$key]->field_field_isearch_photo_url[0]['raw'] = (array) $default_photo;
         }
