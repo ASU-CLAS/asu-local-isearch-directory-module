@@ -322,6 +322,7 @@ function asu_isearch_get_employee_types() {
 
 function asu_isearch_get_default_photo() {
   $default_photo = variable_get('isearch_default_photo', 0);
+
   return file_load($default_photo);
 }
 

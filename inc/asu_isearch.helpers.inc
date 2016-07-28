@@ -151,7 +151,7 @@ function asu_isearch_get_tenure_config($setting) {
 function asu_isearch_get_dept_config() {
   $default_feed_dept = array(
     'items' => array(),
-    'options' => array(),
+    'options' => new stdClass(),
   );
 
   return variable_get('isearch_admin_feed_dept', json_encode($default_feed_dept));
@@ -210,4 +210,50 @@ function asu_isearch_get_migrate_source_urls($from_cache = FALSE) {
  */
 function asu_isearch_devmode() {
   return (bool) variable_get('asu_isearch_devmode', FALSE);
+}
+
+/**
+ * Returns the node (and all children) where (node.tid == @param tid)
+ * @param {Object} data
+ *  Nested JSON object with department data
+ * @param {integer} dept_id
+ *  ID of the department that should be the root of the hierarchy
+ */
+function asu_isearch_dept_find_root($data, $dept_id, $lookup = 'dept_nid') {
+  $success = array();
+
+  for ($i = 0; $i < count($data); $i++) {
+    if (count($success) == 0 && $data[$i] != NULL) {
+      if ($data[$i]->$lookup == $dept_id) {
+        return $data[$i];
+      }
+      else if (isset($data[$i]->children)) {
+        $success = asu_isearch_dept_find_root($data[$i]->children, $dept_id, $lookup);
+      }
+    }
+    else {
+      break;
+    }
+  }
+  return $success;
+}
+
+/**
+ * Saves the ids of all departments under currently selected tree on #people's data object
+ * @param {object}
+ *  Nested JSON object with department data
+ */
+function asu_isearch_dept_get_tree_data($tree, $tree_ids = array()) {
+
+  $newItem = new stdClass();
+  $newItem->name = $tree->name;
+  $newItem->dept_nid = $tree->dept_nid;
+
+  $tree_ids[] = $newItem;
+
+  for ($i = 0; $i < count($tree->children); $i++) {
+    $tree_ids = asu_isearch_dept_get_tree_data($tree->children[$i], $tree_ids);
+  }
+
+  return $tree_ids;
 }
