@@ -525,9 +525,13 @@ function asu_isearch_form_ctools_entity_field_content_type_formatter_options_alt
  */
 function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_alter(&$form, &$form_state, $form_id) {
   if (isset($form['#entity']) && $form['#entity']->bundle == 'isearch_directory') {
+
+    //turn off live preview
+    variable_set('panopoly_magic_live_preview', 0);
+
     // add our custom submit handler
-    //$form['#submit'][] = 'asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit';
-    $form['#submit'] = array('asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit');
+    $form['#submit'][0] = 'asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit';
+    unset($form['#submit'][1]);
     $form['#pre_render'][] = 'asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_group_pre_render';
     $form['#attributes']['class'][] = 'asu-isearch-configuration';
 
@@ -1114,8 +1118,75 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     'view_display'          => $values['horizontal_tabs']['advanced']['isearch_view_display'],
   );
 
-  $form_state['entity']->field_isearch_config[LANGUAGE_NONE][0]['value'] = json_encode($config);
-  entity_save('fieldable_panels_pane', $form_state['entity']);
+  //$form_state['entity']->field_isearch_config[LANGUAGE_NONE][0]['value'] = json_encode($config);
+
+  $entity = $form_state['entity'];
+
+  // Copy hardcoded fields.
+  $entity->title = $form_state['values']['title'];
+  $entity->link = $form_state['values']['link'];
+  $entity->path = $form_state['values']['path'];
+  $entity->language = $form_state['values']['language'];
+  $entity->reusable = $form_state['values']['reusable'];
+  $entity->category = $form_state['values']['category'];
+  $entity->admin_title = $form_state['values']['admin_title'];
+  $entity->admin_description = $form_state['values']['admin_description'];
+  $entity->field_isearch_config[LANGUAGE_NONE][0]['value'] = json_encode($config);
+
+  $entity->revision = $form_state['values']['revision'];
+  // Only set a log message if there was a new revision. This prevents
+  // overwriting a log message on the current revision
+  if ($entity->revision) {
+    $entity->log = $form_state['values']['log'];
+  }
+
+  fieldable_panels_panes_save($entity);
+  if (!empty($form_state['add submit'])) {
+    drupal_set_message(t('The entity has been saved.'));
+  }
+
+  /*** FROM fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit   **/
+  // Determine how to handle revision locking.
+  $revision_context_aware = fieldable_panels_panes_revision_is_lockable($entity);
+
+  // If this is a new entity entity, or revision locking is enabled, look for a
+  // specific ID to use.
+  if (!empty($entity->is_new) || $revision_context_aware) {
+    // If UUID is available, use it.
+    if (module_exists('uuid') && isset($entity->uuid)) {
+      if ($revision_context_aware) {
+        $subtype = 'vuuid:' . $entity->vuuid;
+      }
+      else {
+        $subtype = 'uuid:' . $entity->uuid;
+      }
+    }
+
+    // Otherwise use the native ID values.
+    else {
+      if ($revision_context_aware) {
+        $subtype = 'vid:' . $entity->vid;
+      }
+      else {
+        $subtype = 'fpid:' . $entity->fpid;
+      }
+    }
+  }
+
+  // The 'current' key will tell FPP to load up the current revision. This
+  // bypasses the entity cache on the FPP entity class and loads the revision
+  // that was just saved instead of the previous revision. This is only really
+  // relevant in Panels IPE administration or similar circumstances.
+  else {
+    $subtype = 'current:' . $entity->fpid;
+  }
+
+  // @todo: This won't work if $form_state does not contain 'pane' which could
+  // theoretically happen in a non-Panels use case. Not that anybody uses this
+  // outside of Panels.
+  $form_state['pane']->subtype = $subtype;
+
+  //entity_save('fieldable_panels_pane', $form_state['entity']);
 }
 
 /*
