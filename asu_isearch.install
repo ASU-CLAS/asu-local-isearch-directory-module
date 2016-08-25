@@ -234,4 +234,3 @@ function asu_isearch_update_7140() {
     module_enable(array('react'));
   }
 }
-

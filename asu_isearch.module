@@ -396,5 +396,4 @@ function asu_isearch_panelizer_defaults_alter(&$items) {
       }
     }
   }
-
 }

@@ -526,7 +526,8 @@ function asu_isearch_form_ctools_entity_field_content_type_formatter_options_alt
 function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_alter(&$form, &$form_state, $form_id) {
   if (isset($form['#entity']) && $form['#entity']->bundle == 'isearch_directory') {
     // add our custom submit handler
-    $form['#submit'][] = 'asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit';
+    //$form['#submit'][] = 'asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit';
+    $form['#submit'] = array('asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit');
     $form['#pre_render'][] = 'asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_group_pre_render';
     $form['#attributes']['class'][] = 'asu-isearch-configuration';
 
@@ -1038,7 +1039,12 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
 }
 
 
-
+/***
+ * Submit handler for the asu_isearch panel pane form
+ *
+ * @param $form
+ * @param $form_state
+ */
 function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit($form, &$form_state) {
   // store values
   $values = $form_state['values'];
@@ -1112,10 +1118,10 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
   entity_save('fieldable_panels_pane', $form_state['entity']);
 }
 
-
+/*
 function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_group_pre_render(&$element) {
   $element['content_settings']['horizontal_tabs'] = $element['horizontal_tabs'];
   unset($element['horizontal_tabs']);
 
   return field_group_build_entity_groups($element, 'form');
-}
+}*/
