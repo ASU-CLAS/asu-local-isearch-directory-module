@@ -531,8 +531,8 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
 
     // add our custom submit handler
     $form['#submit'][0] = 'asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit';
-    unset($form['#submit'][1]);
-    $form['#pre_render'][] = 'asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_group_pre_render';
+    //unset($form['#submit'][1]);
+    //$form['#pre_render'][] = 'asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_group_pre_render';
     $form['#attributes']['class'][] = 'asu-isearch-configuration';
 
     $form['isearch_custom'] = array(
@@ -1145,8 +1145,10 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     drupal_set_message(t('The entity has been saved.'));
   }
 
+
   /*** FROM fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit   **/
   // Determine how to handle revision locking.
+
   $revision_context_aware = fieldable_panels_panes_revision_is_lockable($entity);
 
   // If this is a new entity entity, or revision locking is enabled, look for a
