@@ -26,3 +26,15 @@
 #edit-field-isearch-local-tags-tid {
   display: none;
 }
+
+#edit-isearch-omni-search {
+  max-width: 250px;
+}
+
+#edit-field-isearch-affil-title-value {
+  max-width: 250px;
+}
+
+#edit-field-isearch-expertise-areas-tid {
+  max-width: 250px;
+}
