@@ -100,8 +100,8 @@ class MigrateIsearchProfileMigration extends Migration {
     $this->addFieldMapping('field_isearch_email'                     , 'emailAddress');
     $this->addFieldMapping('field_isearch_phone'                     , 'phone');
     $this->addFieldMapping('field_isearch_fax'                       , 'fax');
-    $this->addFieldMapping('field_isearch_campus_building'           , 'building');
-    $this->addFieldMapping('field_isearch_campus_room'               , 'room');
+    $this->addFieldMapping('field_isearch_campus_building'           , 'addressLine1');
+    $this->addFieldMapping('field_isearch_campus_room'               , 'addressLine2');
     $this->addFieldMapping('field_isearch_primary_campus'            , 'primaryJobCampus');
     $this->addFieldMapping('field_isearch_photo_preference'          , 'photoPreference');
     $this->addFieldMapping('field_isearch_photo_permission'          , 'photoPermission');
