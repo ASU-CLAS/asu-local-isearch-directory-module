@@ -184,7 +184,7 @@ function asu_isearch_get_migrate_source_urls($from_cache = FALSE) {
             $endpoint = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT;
           }
 
-          $source_urls[] = $endpoint . $department_nid;
+          $source_urls[$department_nid] = $endpoint . $department_nid;
         }
       }
       else {
@@ -196,7 +196,7 @@ function asu_isearch_get_migrate_source_urls($from_cache = FALSE) {
           $endpoint = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT;
         }
 
-        $source_urls[] = $endpoint . $migrate_item->dept_nid;
+        $source_urls[$department_nid] = $endpoint . $migrate_item->dept_nid;
       }
     }
   }
@@ -257,3 +257,5 @@ function asu_isearch_dept_get_tree_data($tree, $tree_ids = array()) {
 
   return $tree_ids;
 }
+
+

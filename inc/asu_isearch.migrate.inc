@@ -92,70 +92,31 @@ function _asu_isearch_get_migration() {
  * Begins the iSearch profile migration
  */
 function _asu_isearch_begin_migrate($force_update = FALSE) {
+
   $migrate_config = variable_get('isearch_admin_feed_dept', null);
 
   if (is_null($migrate_config)) {
     return FALSE;
   }
 
-  $migrate_config = json_decode($migrate_config);
+  $data = array(
+    'endpoint' => ASU_ISEARCH_MASTER_FILE_ENDPOINT,
+    'force' => $force_update,
+    //'limit' => $limit,
+    //'queue' => TRUE,
+  );
+
+  // feed endpoint
+  $source_urls = array(ASU_ISEARCH_MASTER_FILE_ENDPOINT);
 
   $migration = _asu_isearch_get_migration();
+  $migration->setMigrateSource($source_urls);
+  // begin the migration
+  $update = $migration->prepareUpdate();
+  $result = $migration->processImport($data);
 
-  if ($migration->getStatus() != MigrationBase::STATUS_IDLE) {
-
-    $last_import = variable_get('isearch_last_import', null);
-    if (!is_null($last_import)) {
-      $today = new DateTime();
-      $last_import = new DateTime('@'.$last_import);
-
-      // calculate the difference
-      $import_diff = $last_import->diff($today);
-
-      // if it has been more than 2 hours, reset migration
-      // to allow import
-      if ($import_diff->h > 1) {
-        $migration->resetStatus();
-      } else {
-        // too soon, warn the user to wait a few minutes before trying again
-        $message = 'An import is currently running. Please wait a few minutes for it to finish before importing again.';
-
-        drupal_set_message($message, 'warning');
-        return FALSE;
-      }
-    }
-  }
-
-  $source_urls = asu_isearch_get_migrate_source_urls();
-  
-  // determine how many items we attempt to pull at a time
-  $limit = variable_get('isearch_import_limit', null);
-  if (is_null($limit) || is_numeric($limit)) {
-    $value = 50;
-
-    if (is_numeric($limit)) {
-      $value = $limit;
-    }
-
-    $limit = array(
-      'value' => $value,
-      'unit' => 'items',
-    );
-  }
-
-  // instantiate the drupal queue for fetching department profiles
-  $queue = DrupalQueue::get('isearch_fetch_department');
-
-  foreach ($source_urls as $url) {
-    $data = array(
-      'endpoint' => $url,
-      'force' => $force_update,
-      'limit' => $limit,
-      'queue' => TRUE,
-    );
-
-    $queue->createItem($data);
-  }
+  //watchdog log the result
+  watchdog('asu_isearch','<pre>'.print_r($result,TRUE).'</pre>');
 
   variable_set('isearch_last_import', time());
 }
@@ -192,5 +153,269 @@ function _asu_isearch_begin_batch($force_update = FALSE) {
     'error_message' => t('An error occurred. Some or all of the migrate processing has failed.'),
     'finished' => 'migrate_ui_batch_finish',
   );
+
   batch_set($batch);
+}
+
+/*****************************************************************************
+ * MIGRATION HELPER FUNCTIONS
+ *****************************************************************************/
+
+
+/***
+ * Cache the dept feed data, and build the source file for migration
+ *
+ * @param bool|FALSE $build_source - will append data to the master source file
+ */
+function _asu_isearch_cache_dept_feed($build_source = FALSE) {
+
+  if (!file_exists(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT)) {
+    mkdir(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT, 0644, TRUE);
+  }
+
+  // retrieve list of configured isearch dept urls for import
+  $source_urls = asu_isearch_get_migrate_source_urls(FALSE);
+  $track_urls = asu_isearch_get_dept_tracker();
+
+  foreach ($track_urls as $key => $url) {
+
+
+    $data = _asu_isearch_cache_dept($source_urls[$key]);
+
+    //build the source master
+    if ($build_source) {
+      if (_asu_isearch_append_to_source($data)) {
+        asu_isearch_remove_from_tracker($key);
+      }
+    }
+  }
+
+  $thesource = asu_isearch_get_master_source();
+}
+
+/***
+ * Build the sourc efile
+ *
+ * @param bool|FALSE $build_source
+ */
+function _asu_isearch_build_migrate_master($sources) {
+
+  $master_list = array();
+
+  if (!file_exists(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT)) {
+    mkdir(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT, 0644, TRUE);
+  }
+
+  // retrieve list of configured isearch dept urls for import
+  foreach ($sources as $key => $url) {
+    $data = asu_isearch_get_department($url, $key);
+
+    if (_asu_isearch_append_to_source($data)) {
+      asu_isearch_remove_from_tracker($key);
+    }
+  }
+}
+
+
+/***
+ * Cache a single department, and return the decoded data
+ *
+ * @param $url - the URL of the dept endpoint to cache
+ * @return mixed - a PHP array of data which was cached
+ */
+function _asu_isearch_cache_dept($url) {
+
+  // set timeout of request to 60 seconds
+  $options = array(
+    'timeout' => 60,
+  );
+
+  $decoded = NULL;
+  $data = NULL;
+
+  $request = drupal_http_request($url, $options);
+
+  if ($request->code == 200) {
+    $data = $request->data;
+  }
+
+  if (!is_null($data)) {
+
+    $decoded = drupal_json_decode($data);
+    $info = pathinfo($url);
+    $dept_nid = $info['filename'];
+    file_save_data($data, ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT . $dept_nid, FILE_EXISTS_REPLACE);
+  }
+
+  return $decoded;
+}
+
+/*****
+ * Returns a department given an endpoint
+ */
+function asu_isearch_get_department($url, $deptnid) {
+
+  // if we're not grabbing from cache, we might as well cache what we find at the
+  // isearch endpoint
+  $from_cache = ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT . $deptnid;
+
+  //cache dept if it is not already
+  if ($url != $from_cache) {
+    $decoded = _asu_isearch_cache_dept($url);
+    return $decoded;
+  }
+
+  $ctx = stream_context_create(array('http'=>
+    array(
+      'timeout' => 30,  //30 second timeout
+    )
+  ));
+
+  //
+  $dept = file_get_contents($url, false, $ctx);
+
+  if ($decoded = drupal_json_decode($dept)) {
+    return $decoded;
+  } else {
+    return array();
+  }
+}
+
+
+/**
+ * Append to the migrate source
+ *
+ * @param $data
+ */
+function _asu_isearch_append_to_source($data) {
+
+  $master_list = asu_isearch_get_master_source();
+
+  if (is_array($master_list) && count($master_list) < 1000) {
+
+    if (is_array($data)) {
+      $master_list = array_merge($master_list, $data);
+    }
+
+    $master_list = drupal_json_encode($master_list);
+
+    //replace the source
+    file_save_data($master_list, ASU_ISEARCH_MASTER_FILE_ENDPOINT, FILE_EXISTS_REPLACE);
+
+    return TRUE;
+  } else {
+    return FALSE;
+  }
+}
+
+/***
+ * Refreshes the source json file
+ *
+ * @param $data
+ */
+function _asu_isearch_refresh_source($data) {
+  $data = json_encode($data);
+  file_save_data($data, ASU_ISEARCH_MASTER_FILE_ENDPOINT, FILE_EXISTS_REPLACE);
+}
+
+
+
+/***
+ * Returns a department tracker array, which is an array of departments which have not yet been added to the source
+ *
+ * @return array|mixed
+ */
+function asu_isearch_get_dept_tracker() {
+
+  $tracker = array();
+  $source_urls = asu_isearch_get_migrate_source_urls(TRUE);
+
+  $track = variable_get('asu_isearch_dept_tracker', NULL);
+
+  if ($track != NULL) {
+    $track = json_decode($track, TRUE);
+  }
+
+  //if the tracker array is empty, then reload it
+  if ($track == NULL || empty($track)) {
+
+    variable_set('asu_isearch_dept_tracker', json_encode($source_urls));
+    $tracker = $source_urls;
+  } else {
+    $tracker = json_decode($track, TRUE);
+
+    // set to proper source urls, since we may have cached some depts since
+    // getting the tracker last
+    foreach ($tracker as $key => $track) {
+      $tracker[$key] = $source_urls[$key];
+    }
+  }
+
+  return $tracker;
+}
+
+/*****
+ * Removes an item from the department tracker
+ */
+function asu_isearch_remove_from_tracker($dept_nid) {
+  if (variable_get('asu_isearch_dept_tracker', NULL) != NULL) {
+    $tracker = json_decode(variable_get('asu_isearch_dept_tracker', NULL), TRUE);
+
+    foreach ($tracker as $key => $track) {
+      if ($key == $dept_nid) {
+        unset($tracker[$key]);
+      }
+    }
+
+    variable_set('asu_isearch_dept_tracker', json_encode($tracker));
+  }
+}
+
+
+function asu_isearch_get_master_source() {
+  $master_list = array();
+
+  //todo:  check for master list
+  if (file_exists(ASU_ISEARCH_MASTER_FILE_ENDPOINT)) {
+    $master_data = file_get_contents(ASU_ISEARCH_MASTER_FILE_ENDPOINT);
+
+    $master_data = json_decode($master_data, TRUE);
+
+    if ($master_data != NULL) {
+      $master_list = $master_data;
+    }
+  }
+
+  return $master_list;
+}
+
+/***
+ * Reset the migration sources, if the source depts are changed
+ */
+function _asu_isearch_reset_migration_sources() {
+  //reset, and then reload the tracker with the new dept sources
+  variable_set('asu_isearch_dept_tracker', '[]');
+  $newtracker = asu_isearch_get_dept_tracker();
+  $newlist = array();
+  $counter = 0;
+
+  foreach($newtracker as $key => $item) {
+    // we're likely to timeout if we're doing a ton of requests to the
+    // endpoint, so we need to cap this at a reasonable number
+    if ($counter > 24) {
+      break;
+    } else {
+      $newdept = asu_isearch_get_department($item, $key);
+
+      if ($newdept) {
+        $newlist = array_merge($newlist, $newdept);
+        asu_isearch_remove_from_tracker($key);
+      }
+    }
+
+    $counter++;
+  }
+
+  _asu_isearch_refresh_source($newlist);
+
 }

@@ -10,7 +10,8 @@
 function asu_isearch_cron() {
 
   // Cache data from configuration
-  _asu_isearch_cache_dept_feed();
+  //CACHE THE FEED AND BUILD THE SOURCE
+  _asu_isearch_cache_dept_feed(TRUE);
 
   // Cache dept tree and employee types data
   _asu_isearch_cache_dept_tree_data();
@@ -27,7 +28,6 @@ function asu_isearch_cron() {
     variable_set('last_profile_cleanup', date('ymd', time()));
   }
 }
-
 
 /**
  * Implements hook_cron_queue_info().
@@ -60,32 +60,15 @@ function asu_isearch_fetch_departments($data) {
   $source_urls = array($data['endpoint']);
 
   $migration = _asu_isearch_get_migration();
+
+
   $migration->setMigrateSource($source_urls);
+  // begin the migration
+  $update = $migration->prepareUpdate();
+  $result = $migration->processImport($data);
 
-  if (isset($data['queue']) && $data['queue']) {
-
-    $batch_limit = 50;
-    if (isset($data['limit']['unit']) && $data['limit']['unit'] == 'items') {
-      $batch_limit = intval($data['limit']['value']);
-    }
-
-    $source_count = $migration->sourceCount();
-    $batch_size = ceil($source_count / $batch_limit);
-
-    $queue = DrupalQueue::get('isearch_fetch_department');
-    // avoid an inifinite loop by resetting queue to false
-    unset($data['queue']);
-
-    for ($i = 1; $i <= $batch_size; $i++) {
-      $data['limit']['value'] = $i * $batch_limit;
-      $queue->createItem($data);
-    }
-  }
-  else {
-    // begin the migration
-    $update = $migration->prepareUpdate();
-    $result = $migration->processImport($data);
-  }
+  //watchdog log the result
+  watchdog('asu_isearch','<pre>'.print_r($result,TRUE).'</pre>');
 }
 
 
@@ -124,39 +107,6 @@ function asu_isearch_fetch_profile_photo($data) {
       // Load the node so we can set
       $entity->field_isearch_photo_url[LANGUAGE_NONE][0]['fid'] = $file->fid;
       node_save($entity);
-    }
-  }
-}
-
-
-function _asu_isearch_cache_dept_feed() {
-
-  if (!file_exists(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT)) {
-    mkdir(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT, 0644, TRUE);
-  }
-
-  // set timeout of request to 60 seconds
-  $options = array(
-    'timeout' => 60,
-  );
-
-  // retrieve list of configured isearch dept urls for import
-  $source_urls = asu_isearch_get_migrate_source_urls();
-
-  foreach ($source_urls as $url) {
-    $data = NULL;
-
-    $request = drupal_http_request($url, $options);
-
-    if ($request->code == 200) {
-      $data = $request->data;
-    }
-
-    if (!is_null($data)) {
-      $info = pathinfo($url);
-      $dept_nid = $info['filename'];
-
-      file_save_data($data, ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT . $dept_nid, FILE_EXISTS_REPLACE);
     }
   }
 }

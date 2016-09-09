@@ -118,6 +118,8 @@ function asu_isearch_admin_settings_form_submit($form, &$form_state) {
     '@link' => '/admin/content/isearch/import',
   ));
 
+  _asu_isearch_reset_migration_sources();
+
   drupal_set_message($message, 'status');
 }
 
