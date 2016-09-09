@@ -189,8 +189,6 @@ function _asu_isearch_cache_dept_feed($build_source = FALSE) {
       }
     }
   }
-
-  $thesource = asu_isearch_get_master_source();
 }
 
 /***
