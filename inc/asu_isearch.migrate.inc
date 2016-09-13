@@ -116,8 +116,6 @@ function _asu_isearch_begin_migrate($force_update = FALSE) {
   $result = $migration->processImport($data);
 
   //watchdog log the result
-  watchdog('asu_isearch','<pre>'.print_r($result,TRUE).'</pre>');
-
   variable_set('isearch_last_import', time());
 }
 
@@ -178,7 +176,6 @@ function _asu_isearch_cache_dept_feed($build_source = FALSE) {
   $track_urls = asu_isearch_get_dept_tracker();
 
   foreach ($track_urls as $key => $url) {
-
 
     $data = _asu_isearch_cache_dept($source_urls[$key]);
 

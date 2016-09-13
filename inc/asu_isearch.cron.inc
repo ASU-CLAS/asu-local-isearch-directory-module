@@ -66,9 +66,6 @@ function asu_isearch_fetch_departments($data) {
   // begin the migration
   $update = $migration->prepareUpdate();
   $result = $migration->processImport($data);
-
-  //watchdog log the result
-  watchdog('asu_isearch','<pre>'.print_r($result,TRUE).'</pre>');
 }
 
 
