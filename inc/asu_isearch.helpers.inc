@@ -196,7 +196,7 @@ function asu_isearch_get_migrate_source_urls($from_cache = FALSE) {
           $endpoint = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT;
         }
 
-        $source_urls[$department_nid] = $endpoint . $migrate_item->dept_nid;
+        $source_urls[$migrate_item->dept_nid] = $endpoint . $migrate_item->dept_nid;
       }
     }
   }
