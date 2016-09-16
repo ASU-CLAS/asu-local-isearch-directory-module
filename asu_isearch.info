@@ -45,6 +45,7 @@ dependencies[] = webspark_featurescustom
 dependencies[] = wysiwyg_filter
 scripts[] = js/asu_isearch.js
 stylesheets[all][] = css/asu_isearch.css
+stylesheets[all][] = css/asu_isearch_assoc.css
 __drupal_alter_by_ref[][fieldable_panels_pane][panel_tabs_extended_tab] = panel_tabs_extended_tab
 features[ctools][] = field_group:field_group:1
 features[ctools][] = page_manager:pages_default:1

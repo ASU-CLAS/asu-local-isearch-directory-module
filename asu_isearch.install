@@ -234,3 +234,12 @@ function asu_isearch_update_7140() {
     module_enable(array('react'));
   }
 }
+
+
+/**
+ * Reverts the module in order to default to accordions for affiliation display
+ */
+function asu_isearch_update_7150() {
+  // this update requires the asu_dept_picker module to be enabled and installed
+  features_revert_module('asu_isearch');
+}
