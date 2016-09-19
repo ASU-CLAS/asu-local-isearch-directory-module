@@ -321,29 +321,19 @@ function _asu_isearch_refresh_source($data) {
  * @return array|mixed
  */
 function asu_isearch_get_dept_tracker() {
-
-  $tracker = array();
   $source_urls = asu_isearch_get_migrate_source_urls(TRUE);
 
-  $track = variable_get('asu_isearch_dept_tracker', NULL);
+  $tracker = variable_get('asu_isearch_dept_tracker', '[]');
+  $tracker = json_decode($tracker, TRUE);
 
-  if ($track != NULL) {
-    $track = json_decode($track, TRUE);
-  }
-
-  //if the tracker array is empty, then reload it
-  if ($track == NULL || empty($track)) {
-
+  if (!$tracker || empty($tracker)) {
     variable_set('asu_isearch_dept_tracker', json_encode($source_urls));
     $tracker = $source_urls;
-  } else {
-    $tracker = json_decode($track, TRUE);
-
+  }
+  else {
     // set to proper source urls, since we may have cached some depts since
     // getting the tracker last
-    foreach ($tracker as $key => $track) {
-      $tracker[$key] = $source_urls[$key];
-    }
+    $tracker = array_merge($tracker, $source_urls);
   }
 
   return $tracker;
@@ -388,7 +378,7 @@ function asu_isearch_get_master_source() {
  * Reset the migration sources, if the source depts are changed
  */
 function _asu_isearch_reset_migration_sources() {
-  //reset, and then reload the tracker with the new dept sources
+  // reset, and then reload the tracker with the new dept sources
   variable_set('asu_isearch_dept_tracker', '[]');
   $newtracker = asu_isearch_get_dept_tracker();
   $newlist = array();
