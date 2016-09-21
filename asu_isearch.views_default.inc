@@ -285,9 +285,12 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'full';
-  $handler->display->display_options['style_plugin'] = 'views_bootstrap_tab_plugin_style';
-  $handler->display->display_options['style_options']['tab_field'] = 'field_isearch_affil_title';
-  $handler->display->display_options['style_options']['justified'] = 0;
+  #$handler->display->display_options['style_plugin'] = 'views_bootstrap_tab_plugin_style';
+  #$handler->display->display_options['style_options']['tab_field'] = 'field_isearch_affil_title';
+  #$handler->display->display_options['style_options']['justified'] = 0;
+  # changing affiliation information from tabs to accordions  
+  $handler->display->display_options['style_plugin'] = 'views_bootstrap_accordion_plugin_style';
+  $handler->display->display_options['style_options']['title_field'] = 'field_isearch_affil_title';
   $handler->display->display_options['row_plugin'] = 'fields';
   /* Relationship: Field collection item: Entity with the Affiliations (field_isearch_affiliations) */
   $handler->display->display_options['relationships']['field_isearch_affiliations_node']['id'] = 'field_isearch_affiliations_node';

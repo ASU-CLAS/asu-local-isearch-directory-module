@@ -84,7 +84,16 @@ class MigrateIsearchProfileMigration extends Migration {
       $source_urls = $config_source_urls;
     }
 
-    $this->setMigrateSource($source_urls);
+    $test_sources = ASU_ISEARCH_MASTER_FILE_ENDPOINT;
+
+    $master = asu_isearch_get_master_source();
+
+    if (empty($master)) {
+      $tracker = asu_isearch_get_dept_tracker();
+      _asu_isearch_build_migrate_master($tracker);
+    }
+
+    $this->setMigrateSource($test_sources);
     $this->destination = new MigrateDestinationNode('asu_isearch_profile');
 
     // Setup profile photo directory
@@ -350,6 +359,29 @@ class MigrateIsearchProfileMigration extends Migration {
 
     // Fetch and store profile photo
     $this->fetchProfilePhoto($entity, $row);
+
+  }
+
+  //run after migration
+  public function postImport() {
+    parent::postImport();
+
+    $num = $this->total_successes;
+
+    if ($num < 25) {
+      $num = 25;
+    }
+
+    $themaster = asu_isearch_get_master_source();
+
+    $themaster = array_slice($themaster, $num);
+
+    _asu_isearch_refresh_source($themaster);
+
+    //watchdog log the result
+    //watchdog('asu_isearch','<pre>'.print_r($this,TRUE).'</pre>');
+    watchdog('asu_isearch',"Successfully processed '[@num]' nodes.",array('@num'=>$this->total_successes));
+
   }
 
   private function fetchProfilePhoto($entity, stdClass $row) {
@@ -369,8 +401,8 @@ class MigrateIsearchProfileMigration extends Migration {
       $queue = DrupalQueue::get('isearch_fetch_profile_photo');
       $queue->createItem($data);
     }
-
   }
+
 
   private function setupExpertiseAreas($entity, stdClass $row) {
 
