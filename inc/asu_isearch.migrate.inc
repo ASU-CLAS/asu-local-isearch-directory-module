@@ -195,8 +195,6 @@ function _asu_isearch_cache_dept_feed($build_source = FALSE) {
  */
 function _asu_isearch_build_migrate_master($sources) {
 
-  $master_list = array();
-
   if (!file_exists(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT)) {
     mkdir(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT, 0644, TRUE);
   }
@@ -205,8 +203,12 @@ function _asu_isearch_build_migrate_master($sources) {
   foreach ($sources as $key => $url) {
     $data = asu_isearch_get_department($url, $key);
 
+    // if the source gets too large, then stop appending
+    // and break out of for loop
     if (_asu_isearch_append_to_source($data)) {
       asu_isearch_remove_from_tracker($key);
+    } else {
+      break;
     }
   }
 }
@@ -326,6 +328,8 @@ function asu_isearch_get_dept_tracker() {
   $tracker = variable_get('asu_isearch_dept_tracker', '[]');
   $tracker = json_decode($tracker, TRUE);
 
+  //watchdog('thetracker','<pre>'.print_r($tracker,TRUE).'</pre>');
+
   if (!$tracker || empty($tracker)) {
     variable_set('asu_isearch_dept_tracker', json_encode($source_urls));
     $tracker = $source_urls;
@@ -333,7 +337,9 @@ function asu_isearch_get_dept_tracker() {
   else {
     // set to proper source urls, since we may have cached some depts since
     // getting the tracker last
-    $tracker = array_merge($tracker, $source_urls);
+    foreach ($tracker as $key => $track) {
+      $tracker[$key] = $source_urls[$key];
+    }
   }
 
   return $tracker;
