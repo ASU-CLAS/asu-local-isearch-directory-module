@@ -171,21 +171,14 @@ function _asu_isearch_cache_dept_feed($build_source = FALSE) {
     mkdir(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT, 0644, TRUE);
   }
 
-  // limit for how many departments will be cached on each cron run.
-  // this is a needed because of the slow nature of the isearch endpoint
-  $limit = 10;
 
   // retrieve list of configured isearch dept urls for import
   $source_urls = asu_isearch_get_migrate_source_urls(FALSE);
   $track_urls = asu_isearch_get_dept_tracker();
-  $count = 0;
+  
 
   foreach ($track_urls as $key => $url) {
-
-    if ($count > $limit) {
-      return FALSE;
-    }
-
+  
     $data = _asu_isearch_cache_dept($source_urls[$key]);
 
     //build the source master
