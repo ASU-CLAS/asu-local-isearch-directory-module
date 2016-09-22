@@ -325,8 +325,9 @@ class MigrateIsearchProfileMigration extends Migration {
         $titleRank->tid    = $row->departmentTitleRanksTids[$index];
         $titleRank->weight = $row->departmentTitleRanksWeight[$index];
         $titleRank->tenure = $row->departmentTitleRanksTenure[$index];
-
-        $row->titleranks[$titleRank->id] = $titleRank;
+        if (!empty($titleRank->id)) {
+          $row->titleranks[$titleRank->id] = $titleRank;
+        }
       }
     }
   }
