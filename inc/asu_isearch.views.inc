@@ -132,7 +132,7 @@ function asu_isearch_get_views() {
       // limit displays to those which have the isearch-directory-list class assigned
       $display_options = (isset($view->display['default'])) ? $view->display['default']->display_options : array();
       $display_options = array_merge($display_options, $display->display_options);
-      if (isset($display_options['css_class']) || preg_match('/\bisearch-directory-list/', $display_options['css_class']) || $display_name == 'isearch_directory_titles') {
+      if (isset($display_options['css_class']) && ( preg_match('/\bisearch-directory-list/', $display_options['css_class']) || $display_name == 'isearch_directory_titles')) {
         continue;
       }
 
