@@ -17,17 +17,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_affil_campus',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -49,17 +38,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_affil_dept_id',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -81,17 +59,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_affil_dept_name',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -113,17 +80,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_affil_empl_key',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -145,17 +101,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_affil_empl_type',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -177,10 +122,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_affil_local_weight',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
@@ -196,17 +137,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_affil_mailcode',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -228,10 +158,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_affil_manager',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -257,10 +183,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_affil_primary',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -286,17 +208,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_affil_rank',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'tid' => array(
-        'columns' => array(
-          'tid' => 'tid',
-        ),
-        'table' => 'taxonomy_term_data',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'tid' => array(
         0 => 'tid',
@@ -323,10 +234,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_affil_rank_tenure',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -352,10 +259,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_affil_rank_weight',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
@@ -371,17 +274,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_affil_title',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -403,10 +295,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_affiliations',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'revision_id' => array(
         0 => 'revision_id',
@@ -429,17 +317,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_asurite_id',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -461,10 +338,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_audio',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'revision_id' => array(
         0 => 'revision_id',
@@ -487,17 +360,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_audio_caption',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -517,10 +379,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_audio_url',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(),
     'locked' => 0,
     'module' => 'link',
@@ -550,17 +408,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_bio',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -580,17 +427,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_campus_building',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -612,17 +448,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_campus_room',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -644,17 +469,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_config',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -674,17 +488,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_cv_url',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -706,17 +509,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_department_id',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -738,10 +530,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_department_nid',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
@@ -757,10 +545,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_department_tid',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
@@ -776,17 +560,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_displayname',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -808,17 +581,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_editorships',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -838,17 +600,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_education',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -868,17 +619,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_eid',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -900,10 +640,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_email',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(),
     'locked' => 0,
     'module' => 'email',
@@ -919,17 +655,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_employee_type',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -951,17 +676,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_employment_title',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -983,17 +697,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_expertise_areas',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'tid' => array(
-        'columns' => array(
-          'tid' => 'tid',
-        ),
-        'table' => 'taxonomy_term_data',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'tid' => array(
         0 => 'tid',
@@ -1020,10 +723,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_expertise_tid',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
@@ -1039,17 +738,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_fax',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1071,17 +759,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_firstname',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1103,17 +780,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_graduate_faculties',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1133,17 +799,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_hash',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1165,17 +820,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_honors_awards',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1195,10 +839,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_images',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'revision_id' => array(
         0 => 'revision_id',
@@ -1221,17 +861,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_images_caption',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1251,10 +880,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_images_url',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(),
     'locked' => 0,
     'module' => 'link',
@@ -1284,17 +909,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_lastname',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1316,10 +930,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_link_building_code',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -1345,17 +955,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_local_photo_url',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'fid' => array(
-        'columns' => array(
-          'fid' => 'fid',
-        ),
-        'table' => 'file_managed',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'fid' => array(
         0 => 'fid',
@@ -1378,17 +977,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_local_primary_aff',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'field_collection_item' => array(
-        'columns' => array(
-          'target_id' => 'item_id',
-        ),
-        'table' => 'field_collection_item',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
@@ -1423,17 +1011,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_local_tags',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'tid' => array(
-        'columns' => array(
-          'tid' => 'tid',
-        ),
-        'table' => 'taxonomy_term_data',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'tid' => array(
         0 => 'tid',
@@ -1460,17 +1037,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_phone',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1492,10 +1058,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_photo_permission',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -1521,17 +1083,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_photo_preference',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1553,17 +1104,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_photo_url',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'fid' => array(
-        'columns' => array(
-          'fid' => 'fid',
-        ),
-        'table' => 'file_managed',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'fid' => array(
         0 => 'fid',
@@ -1586,17 +1126,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_primary_aff',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'field_collection_item' => array(
-        'columns' => array(
-          'target_id' => 'item_id',
-        ),
-        'table' => 'field_collection_item',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
@@ -1631,17 +1160,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_primary_campus',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1663,17 +1181,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_prof_associations',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1693,17 +1200,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_profile_tabs',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1725,10 +1221,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_rank_tenure',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -1754,10 +1246,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_rank_tid',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
@@ -1773,10 +1261,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_rank_weight',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
@@ -1794,17 +1278,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_rsrch_activity',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1824,17 +1297,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_rsrch_group',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1854,17 +1316,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_rsrch_interests',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1884,17 +1335,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_rsrch_publications',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1914,17 +1354,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_rsrch_website',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1946,17 +1375,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_service',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -1976,17 +1394,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_short_bio',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -2006,17 +1413,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_social_facebook',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -2038,17 +1434,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_social_googleplus',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -2070,17 +1455,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_social_linkedin',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -2102,17 +1476,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_social_personalweb',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -2134,17 +1497,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_social_twitter',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -2166,17 +1518,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_tch_courses',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -2196,17 +1537,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_tch_presentations',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -2226,17 +1556,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_tch_website',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -2258,10 +1577,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_videos',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'revision_id' => array(
         0 => 'revision_id',
@@ -2284,17 +1599,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_videos_title',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -2314,10 +1618,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_videos_url',
-<<<<<<< HEAD
-    'foreign keys' => array(),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(),
     'locked' => 0,
     'module' => 'link',
@@ -2347,17 +1647,6 @@ function asu_isearch_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_isearch_work_history',
-<<<<<<< HEAD
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     'indexes' => array(
       'format' => array(
         0 => 'format',

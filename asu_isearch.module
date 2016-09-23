@@ -35,6 +35,8 @@ define('ASU_ISEARCH_DIRECTORY_TREE_ENDPOINT', variable_get('asu_dir_tree_endpoin
 define('ASU_ISEARCH_EMPLOYEE_TYPES_ENDPOINT', variable_get('asu_dir_employee_types_endpoint', 'https://isearch.asu.edu/endpoints/employee-types'));
 define('ASU_ISEARCH_DIRECTORY_PHOTO_ENDPOINT', 'https://webapp4.asu.edu/photo-ws/directory_photo/');
 define('ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT', 'private://isearch/feeds/');
+define('ASU_ISEARCH_MASTER_FILE_ENDPOINT', 'private://isearch/feeds/asu_isearch_master.json');
+define('ASU_ISEARCH_DEPARTMENT_IMPORT_TRACKER', variable_get('asu_isearch_dept_tracker', NULL));
 
 // Feed URLs
 $asu_isearch_devmode = variable_get('asu_isearch_devmode', FALSE);
@@ -322,6 +324,7 @@ function asu_isearch_get_employee_types() {
 
 function asu_isearch_get_default_photo() {
   $default_photo = variable_get('isearch_default_photo', 0);
+
   return file_load($default_photo);
 }
 
@@ -339,33 +342,33 @@ function asu_isearch_format_phone($phone) {
 
 
 function asu_isearch_panelizer_defaults_alter(&$items) {
-  if (isset($items['node:asu_isearch_profile:default:default'])) {
-    $default_tabs_map = variable_get('asu_isearch_default_tabs', null);
+        if (isset($items['node:asu_isearch_profile:default:default'])) {
+          $default_tabs_map = variable_get('asu_isearch_default_tabs', null);
 
-    if (!is_null($default_tabs_map)) {
-      // we already have data, unserialize it
-      $default_tabs_map = unserialize($default_tabs_map);
-    }
-    else {
-      // create the data for the first time
-      $default_tabs_map = array(
-        'bio_tab' => array(
-          'pane_uuid' => 'adfb4591-2608-4c80-a849-1c2924acf758',
-          'fpp_uuid' => '61e05864-8ba7-4858-b9ca-3b9b078b4ca3',
-        ),
-        'teaching_tab' => array(
-          'pane_uuid' => 'bc98b089-23f9-4c8f-b93e-138b7b6083ba',
-          'fpp_uuid' => '2ffb11d5-0954-4090-a05e-d21f61573d13',
-        ),
-        'research_tab' => array(
-          'pane_uuid' => '8be2b6de-7166-4f46-9ad6-6a97b32073f1',
-          'fpp_uuid' => 'b3ac9a14-7900-413f-9c00-336674af69a5',
-        ),
-        'public_works_tab' => array(
-          'pane_uuid' => 'ad7abd4f-b4e2-4c77-902e-75b4e3bf7984',
-          'fpp_uuid' => 'e1993e63-c13a-4429-9787-9948ee480191',
-        ),
-      );
+          if (!is_null($default_tabs_map)) {
+            // we already have data, unserialize it
+            $default_tabs_map = unserialize($default_tabs_map);
+          }
+          else {
+            // create the data for the first time
+            $default_tabs_map = array(
+              'bio_tab' => array(
+                'pane_uuid' => 'adfb4591-2608-4c80-a849-1c2924acf758',
+                'fpp_uuid' => '61e05864-8ba7-4858-b9ca-3b9b078b4ca3',
+              ),
+              'teaching_tab' => array(
+                'pane_uuid' => 'bc98b089-23f9-4c8f-b93e-138b7b6083ba',
+                'fpp_uuid' => '2ffb11d5-0954-4090-a05e-d21f61573d13',
+              ),
+              'research_tab' => array(
+                'pane_uuid' => '8be2b6de-7166-4f46-9ad6-6a97b32073f1',
+                'fpp_uuid' => 'b3ac9a14-7900-413f-9c00-336674af69a5',
+              ),
+              'public_works_tab' => array(
+                'pane_uuid' => 'ad7abd4f-b4e2-4c77-902e-75b4e3bf7984',
+                'fpp_uuid' => 'e1993e63-c13a-4429-9787-9948ee480191',
+              ),
+            );
 
       $update = TRUE;
       foreach ($default_tabs_map as $tab_key => $tab) {
@@ -395,5 +398,4 @@ function asu_isearch_panelizer_defaults_alter(&$items) {
       }
     }
   }
-
 }

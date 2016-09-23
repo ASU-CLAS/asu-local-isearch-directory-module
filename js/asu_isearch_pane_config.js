@@ -8,9 +8,11 @@
         });
       });
 
-      $('.employee-types-group input:checkbox').each(function(){
-        $(this).change(function(){
-          if ($(this).prop('checked') === false) {
+      $('.employee-types-group label').each(function(){
+        $(this).mousedown(function(){
+          var $check = $(this).parent().find('input:checkbox');
+
+          if ($check.prop('checked') === true) {
             $('#toggle-all-employee-types').prop('checked', false);
           }
         });

@@ -38,30 +38,6 @@
             var action = filters.attr('action');
             filters.attr('action', action + tab_hash);
 
-<<<<<<< HEAD
-            // taken from chosen module
-            filters.find('select')
-              .not('#field-ui-field-overview-form select, #field-ui-display-overview-form select, .wysiwyg, .draggable select[name$="[weight]"], .draggable select[name$="[position]"], .chosen-disable, .chosen-processed')
-              .filter(function() {
-                // Filter out select widgets that do not meet the minimum number of
-                // options.
-                var minOptions = $(this).attr('multiple') ? settings.chosen.minimum_multiple : settings.chosen.minimum_single;
-                if (!minOptions) {
-                  // Zero value means no minimum.
-                  return true;
-                }
-                else {
-                  return $(this).find('option').length >= minOptions;
-                }
-              })
-              .once('chosen', function() {
-                if (typeof $(this).chosen === 'function') {
-                  var chosen_options = Drupal.settings.chosen.options;
-                  chosen_options.width = '100%';
-                  $(this).chosen(chosen_options);
-                }
-              });
-=======
             if (settings.chosen) {
               // taken from chosen module
               filters.find('select')
@@ -87,7 +63,6 @@
                 });
             }
             
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
           }
         });
 

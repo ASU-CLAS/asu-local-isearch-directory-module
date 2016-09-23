@@ -21,11 +21,7 @@ var CheckboxToggle = React.createClass({displayName: "CheckboxToggle",
     }
 
     return React.createElement("div", {className: "form-type-checkbox form-item-" + this.props.className + " form-item checkbox"},
-<<<<<<< HEAD
-      React.createElement("input", {onClick: this.handleClick, type: "checkbox", id: this.props.id, name: this.props.fieldName, defaultChecked: (this.state.checked || this.props.checked) ? 'checked' : '', value: this.props.value, className: "form-checkbox tgl tgl-light"}),
-=======
       React.createElement("input", {onClick: this.handleClick, type: "checkbox", id: this.props.id, name: this.props.fieldName, defaultChecked: (this.state.checked || this.props.checked) ? 'checked' : '', defaultValue: this.props.value, className: "form-checkbox tgl tgl-light"}),
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
       React.createElement("label", {htmlFor: this.props.id, className: "tgl-btn"}),
       React.createElement("div", {className: "fake-label"}, this.props.label, " ", tooltip)
     )
@@ -39,43 +35,6 @@ function initIsearchConfig() {
     $(document).data.isearch_config = {};
   }
 
-<<<<<<< HEAD
-  $('.asu-isearch-configuration .form-type-checkbox:not([data-reactid])').each(function(){
-    var label = $(this).find('label');
-    var input = $(this).find('input');
-    var targetId = input.attr('id');
-    var className = targetId.replace(/^edit-/, '');
-
-    options = {
-      id: targetId,
-      label: label.text(),
-      tooltipMessage: $(this).find('.help-block, .description').text(),
-      fieldName: input.attr('name'),
-      checked: input.is(':checked'),
-      value: input.attr('value'),
-      className: className,
-    };
-
-    if ($(document).data.isearch_config[targetId]) {
-      ReactDOM.unmountComponentAtNode(this);
-    }
-
-    var el = React.createElement(CheckboxToggle, options);
-    $(document).data.isearch_config[targetId] = el;
-
-    ReactDOM.render(el, this);
-  });
-
-  $('.asu-isearch-configuration .form-item:not(.form-type-checkbox) .help-block:not([data-reactid])').each(function() {
-    var tooltip_message = $(this).text();
-    var label = $(this).siblings('label');
-
-    var el = React.createElement(Tooltip, { message: tooltip_message });
-    ReactDOM.render(el, this);
-
-    $(this).appendTo(label);
-  });
-=======
   $('.asu-isearch-configuration .form-type-checkbox:not([data-reactid])')
     .filter(function(index) {
       return $(this).parents('.widget-asu-dept-picker').length === 0;
@@ -119,7 +78,6 @@ function initIsearchConfig() {
 
       $(this).appendTo(label);
     });
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
 
   // activate tooltips
   $('[data-toggle="tooltip"]').tooltip();

@@ -126,8 +126,6 @@ function asu_isearch_setup_panelizer_defaults() {
   panels_edit_cache_set($cache);
   drupal_set_message('iSearch panelizer defaults setup successfully');
 }
-<<<<<<< HEAD
-=======
 
 
 /**
@@ -237,4 +235,11 @@ function asu_isearch_update_7140() {
   }
 }
 
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
+
+/**
+ * Reverts the module in order to default to accordions for affiliation display
+ */
+function asu_isearch_update_7150() {
+  // this update requires the asu_dept_picker module to be enabled and installed
+  features_revert_module('asu_isearch');
+}

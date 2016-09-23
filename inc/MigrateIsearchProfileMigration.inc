@@ -28,13 +28,8 @@ class MigrateIsearchProfileMigration extends Migration {
 
   public static $currentFeedUrl = null;
 
-<<<<<<< HEAD
-  public function __construct() {
-    parent::__construct();
-=======
   public function __construct($arguments) {
     parent::__construct($arguments);
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
 
     $this->description = t('Migrates iSearch profiles by department.');
 
@@ -89,23 +84,20 @@ class MigrateIsearchProfileMigration extends Migration {
       $source_urls = $config_source_urls;
     }
 
-    $this->setMigrateSource($source_urls);
-<<<<<<< HEAD
-    // $this->source = new MigrateSourceJSON($source_urls, 'eid', $this->getSourceFields(), array('reader_class' => 'IsearchProfileJSONReader'));
-    $this->destination = new MigrateDestinationNode('asu_isearch_profile');
+    $test_sources = ASU_ISEARCH_MASTER_FILE_ENDPOINT;
 
-    // Setup other variables we need
-    $this->profilePhotoDirectory = file_build_uri('asu_isearch_photos');
+    $master = asu_isearch_get_master_source();
 
-    if (!file_exists($this->profilePhotoDirectory)) {
-      drupal_mkdir($this->profilePhotoDirectory);
+    if (empty($master)) {
+      $tracker = asu_isearch_get_dept_tracker();
+      _asu_isearch_build_migrate_master($tracker);
     }
-=======
+
+    $this->setMigrateSource($test_sources);
     $this->destination = new MigrateDestinationNode('asu_isearch_profile');
 
     // Setup profile photo directory
     $this->setupProfilePhotoDirectory();
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
 
     $this->addFieldMapping('status'                                  , 'status');
     $this->addFieldMapping('field_isearch_displayname'               , 'displayName');
@@ -117,8 +109,8 @@ class MigrateIsearchProfileMigration extends Migration {
     $this->addFieldMapping('field_isearch_email'                     , 'emailAddress');
     $this->addFieldMapping('field_isearch_phone'                     , 'phone');
     $this->addFieldMapping('field_isearch_fax'                       , 'fax');
-    $this->addFieldMapping('field_isearch_campus_building'           , 'building');
-    $this->addFieldMapping('field_isearch_campus_room'               , 'room');
+    $this->addFieldMapping('field_isearch_campus_building'           , 'addressLine1');
+    $this->addFieldMapping('field_isearch_campus_room'               , 'addressLine2');
     $this->addFieldMapping('field_isearch_primary_campus'            , 'primaryJobCampus');
     $this->addFieldMapping('field_isearch_photo_preference'          , 'photoPreference');
     $this->addFieldMapping('field_isearch_photo_permission'          , 'photoPermission');
@@ -171,55 +163,6 @@ class MigrateIsearchProfileMigration extends Migration {
 
   public function getSourceFields() {
     $source_fields = array(
-<<<<<<< HEAD
-    	'eid' => 'eid',
-    	'displayName' => 'The profile display name',
-    	'firstName' => 'First Name',
-    	'lastName' => 'Last Name',
-    	'emailAddress' => 'Email address',
-    	'asuriteId' => 'asuriteId',
-    	'primaryTitle' => 'primaryTitle',
-    	'phone' => 'phone',
-    	'fax' => 'fax',
-    	'building' => 'building',
-    	'room' => 'room',
-    	'primaryJobCampus' => 'primaryJobCampus',
-    	'shortBio' => 'shortBio',
-    	'bio' => 'Biography',
-    	'education' => 'education',
-    	'cvUrl' => 'cvUrl',
-      'website' => 'The personal website',
-      'twitter' => 'The profile twitter link',
-      'facebook' => 'The profile facebook link',
-      'linkedin' => 'The profile linkedin link',
-      'googlePlus' => 'The profile googleplus link',
-      'photoPreference' => 'Photo preference',
-      'photoPermission' => 'Photo permission',
-      'researchInterests' => 'researchInterests',
-      'researchGroup' => 'researchGroup',
-      'researchActivity' => 'researchActivity',
-      'publications' => 'publications',
-    	'researchWebsite' => 'researchWebsite',
-    	'courses' => 'courses',
-    	'presentations' => 'presentations',
-    	'teachingWebsite' => 'teachingWebsite',
-    	'honorsAwards' => 'honorsAwards',
-    	'editorships' => 'editorships',
-    	'professionalAssociations' => 'professionalAssociations',
-    	'graduateFaculties' => 'graduateFaculties',
-    	'workHistory' => 'workHistory',
-    	'service' => 'service',
-    	'primaryAffiliation' => 'primaryAffiliation',
-    	'departmentIds' => 'departmentIds',
-    	'departments' => 'departments',
-    	'vpAreas' => 'vpAreas',
-    	'campuses' => 'campuses',
-    	'mailCodes' => 'mailCodes',
-    	'employeeTypes' => 'employeeTypes',
-    	'personalWebsite' => 'personalWebsite',
-    	'htmlFormat' => 'Placeholder source field used for setting HTML format on text fields',
-    	'migrateHash' => 'Migrate hash used to determine if the entity should be updated or skipped on import',
-=======
       'eid'                      => 'Profile identifier',
       'displayName'              => 'The profile display name',
       'firstName'                => 'First name',
@@ -229,8 +172,8 @@ class MigrateIsearchProfileMigration extends Migration {
       'primaryTitle'             => 'Primary title',
       'phone'                    => 'Phone',
       'fax'                      => 'Fax',
-      'building'                 => 'Building',
-      'room'                     => 'Room',
+      'addressLine1'             => 'Building',
+      'addressLine2'             => 'Room',
       'primaryJobCampus'         => 'Primary job campus',
       'shortBio'                 => 'Short bio',
       'bio'                      => 'Biography',
@@ -267,7 +210,6 @@ class MigrateIsearchProfileMigration extends Migration {
       'personalWebsite'          => 'Personal website',
       'htmlFormat'               => 'Placeholder source field used for setting HTML format on text fields',
       'migrateHash'              => 'Migrate hash used to determine if the entity should be updated or skipped on import',
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     );
 
     return $source_fields;
@@ -277,8 +219,6 @@ class MigrateIsearchProfileMigration extends Migration {
     return variable_get('asu_isearch_devmode', FALSE);
   }
 
-<<<<<<< HEAD
-=======
   private function setupProfilePhotoDirectory() {
     // Setup other variables we need
     $this->profilePhotoDirectory = file_build_uri('asu_isearch_photos');
@@ -288,7 +228,6 @@ class MigrateIsearchProfileMigration extends Migration {
     }
   }
 
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
   // This method gives us an opportunity to modify the raw source data
   // to create additional fields that will get mapped possibly
   public function prepareRow($row) {
@@ -386,8 +325,9 @@ class MigrateIsearchProfileMigration extends Migration {
         $titleRank->tid    = $row->departmentTitleRanksTids[$index];
         $titleRank->weight = $row->departmentTitleRanksWeight[$index];
         $titleRank->tenure = $row->departmentTitleRanksTenure[$index];
-
-        $row->titleranks[$titleRank->id] = $titleRank;
+        if (!empty($titleRank->id)) {
+          $row->titleranks[$titleRank->id] = $titleRank;
+        }
       }
     }
   }
@@ -420,6 +360,29 @@ class MigrateIsearchProfileMigration extends Migration {
 
     // Fetch and store profile photo
     $this->fetchProfilePhoto($entity, $row);
+
+  }
+
+  //run after migration
+  public function postImport() {
+    parent::postImport();
+
+    $num = $this->total_successes;
+
+    if ($num < 25) {
+      $num = 25;
+    }
+
+    $themaster = asu_isearch_get_master_source();
+
+    $themaster = array_slice($themaster, $num);
+
+    _asu_isearch_refresh_source($themaster);
+
+    //watchdog log the result
+    //watchdog('asu_isearch','<pre>'.print_r($this,TRUE).'</pre>');
+    watchdog('asu_isearch',"Successfully processed '[@num]' nodes.",array('@num'=>$this->total_successes));
+
   }
 
   private function fetchProfilePhoto($entity, stdClass $row) {
@@ -439,8 +402,8 @@ class MigrateIsearchProfileMigration extends Migration {
       $queue = DrupalQueue::get('isearch_fetch_profile_photo');
       $queue->createItem($data);
     }
-
   }
+
 
   private function setupExpertiseAreas($entity, stdClass $row) {
 

@@ -4,15 +4,10 @@
  * Implements hook_panels_pane_content_alter().
  */
 function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts) {
-<<<<<<< HEAD
-  if (is_object($content) && empty($content->content) || (isset($content->content[0]['#markup']) && strlen($content->content[0]['#markup']) === 0)) {
-    $content->content = array();
-=======
   $content_empty = (is_object($content) && empty($content->content));
   $content_disabled = (isset($content->content[0]['#markup']) && strlen($content->content[0]['#markup']) === 0);
 
   if (is_null($content) || $content_empty || $content_disabled) {
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     return;
   }
 
@@ -194,10 +189,7 @@ function asu_isearch_preprocess_panels_pane(&$variables){
 
     // Setup variables here...
     $content['title'] = '';
-<<<<<<< HEAD
-=======
     $directory = new IsearchProfileDirectory();
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
 
     // fixes a bug with pagination when sort order field is exposed in view
     if (isset($_GET['sort_by']) && in_array(strtoupper($_GET['sort_by']), array('DESC', 'ASC'))) {
@@ -244,22 +236,11 @@ function asu_isearch_preprocess_panels_pane(&$variables){
     $contextual_expertise_areas = 'all';
     $contextual_local_tags      = 'all';
 
-<<<<<<< HEAD
-    
-    // @BC: get structure
-    $view_config->depts = asu_isearch_bc_get_dept_picker_config($view_config->depts);
-
-    if (count($view_config->depts->items)) {
-      $contextual_departments = array();
-      $department_options = (object) $view_config->depts->options;
-    
-=======
 
     if (count($view_config->depts->items) && $view_config->depts->items[0] != null) {
       $contextual_departments = array();
       $department_options = (object) $view_config->depts->options;
 
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
       foreach ($view_config->depts->items as $dept_item) {
         $contextual_departments[] = $dept_item->dept_nid;
         $dept_id = $dept_item->dept_id;
@@ -366,15 +347,10 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       $view->display_handler->handlers['field']['field_isearch_campus_room']->options['alter']['text'] = '&nbsp;';
     }
 
-<<<<<<< HEAD
-    if (isset($_GET['isrch_index'])) {
-      $contextual_last_name = check_plain($_GET['isrch_index']{0});
-=======
     if (isset($_GET['isrch_index']) && isset($_GET['isrch_id'])) {
       if (intval($_GET['isrch_id']) == $directory->getInstanceId()) {
         $contextual_last_name = check_plain($_GET['isrch_index']{0});
       }
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     }
 
     // FIXME: Can this be dynamic somehow so we do not break views unintentionally (those that are missing a contextual filter
@@ -422,11 +398,7 @@ function asu_isearch_preprocess_panels_pane(&$variables){
     $view->view_config = $view_config;
     $view->pre_execute();
 
-<<<<<<< HEAD
-    $directory = new IsearchProfileDirectory($view_config);
-=======
     $directory->setViewConfig($view_config);
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     $directory->setContextualFilters($contextual_filters);
 
     if ($view_config->show_az_index) {
@@ -553,9 +525,14 @@ function asu_isearch_form_ctools_entity_field_content_type_formatter_options_alt
  */
 function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_alter(&$form, &$form_state, $form_id) {
   if (isset($form['#entity']) && $form['#entity']->bundle == 'isearch_directory') {
+
+    //turn off live preview
+    variable_set('panopoly_magic_live_preview', 0);
+
     // add our custom submit handler
-    $form['#submit'][] = 'asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit';
-    $form['#pre_render'][] = 'asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_group_pre_render';
+    $form['#submit'][0] = 'asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit';
+    //unset($form['#submit'][1]);
+    //$form['#pre_render'][] = 'asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_group_pre_render';
     $form['#attributes']['class'][] = 'asu-isearch-configuration';
 
     $form['isearch_custom'] = array(
@@ -625,85 +602,21 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       '#access' => FALSE,
     );
 
-    /** start department picker **/
-<<<<<<< HEAD
+    // get list of imported departments
+    $dept_picker_items = array();
+    $feed_depts = json_decode(asu_isearch_get_dept_config(), TRUE);
+    $feed_items = $feed_depts['items'];
 
-    // Load the departments from our global configuration to use in our dept tree widget
-=======
-    // Load the departments from our global configuration
-    // to use in our dept tree widget
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
-    $feed_depts = variable_get('isearch_admin_feed_dept', null);
+    foreach ($feed_items as $dept) {
+      $id = $dept['dept_id'];
 
-    if (!is_null($feed_depts)) {
-      $feed_depts = json_decode($feed_depts);
-<<<<<<< HEAD
-      // @BC: ensure admin feed depts configuration is structured correctly
-      $feed_depts = asu_isearch_bc_get_dept_picker_config($feed_depts);
-=======
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
-    }
-    else {
-      $item = new stdclass();
-      $item->dept_nid  = 'ASU';
-      $item->dept_id   = 'ASU';
-      $item->tree_nids = array();
-
-      $feed_depts = array($item);
+      if ($feed_depts['options'][$id]['subdepts']) {
+        $dept_picker_items = array_merge($dept_picker_items, $dept['tree_nids']);
+      } else {
+        array_push($dept_picker_items, $dept['dept_nid']);
+      }
     }
 
-<<<<<<< HEAD
-    // lets make sure we load the correct department tree nids into our widget
-    if (isset($config->depts)) {
-      $config->depts = asu_isearch_bc_get_dept_picker_config($config->depts);
-    }
-    else {
-      // $config->depts = 
-    }
-
-    $form['filter_departments'] = array(
-      '#type' => 'hidden',
-      '#default_value' => json_encode($config->depts),
-      '#attributes' => array('id' => 'filter_departments'),
-    );
-
-    
-    $query = db_select('field_data_field_isearch_affil_dept_id', 'd');
-    $query->join('field_data_field_isearch_affil_primary', 'p', 'd.entity_id = p.entity_id');
-    $query->leftJoin('field_data_field_isearch_local_primary_aff', 'l', '(d.entity_id = l.entity_id)');
-    // $query->addField('d', 'field_isearch_affil_dept_id_value', 'dept_id');
-=======
-    $query = db_select('field_data_field_isearch_affil_dept_id', 'd');
-    $query->join('field_data_field_isearch_affil_primary', 'p', 'd.entity_id = p.entity_id');
-    $query->leftJoin('field_data_field_isearch_local_primary_aff', 'l', '(d.entity_id = l.entity_id)');
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
-    $query->addExpression('COALESCE(l.field_isearch_local_primary_aff_target_id, d.field_isearch_affil_dept_id_value)', 'dept_id');
-    $result = $query->condition('p.field_isearch_affil_primary_value', 1, '=')
-      ->distinct()
-      ->execute();
-
-    $dept_picker_items = array_keys($result->fetchAllAssoc('dept_id'));
-
-<<<<<<< HEAD
-    foreach ($feed_depts->items as $feed_dept_item) {
-      // if ($feed_depts->options[$feed_dept_item->])
-      $dept_picker_items = array_merge($dept_picker_items, $feed_dept_item->tree_nids);
-    }
-
-    $form['horizontal_tabs']['content']['content_tabs']['department']['isearch_dept_tree'] = array(
-      '#markup' => theme('asu_isearch_dept_picker', array(
-        'label' => t('Select department'),
-        'items' => array(
-          array('directory_items' => $dept_picker_items),
-        ),
-        'settings' => array(
-          'standalone_tree' => TRUE,
-          'config_target' => '#filter_departments',
-        ),
-      )),
-    );
-
-=======
     $form['horizontal_tabs']['content']['content_tabs']['department']['isearch_dept_tree'] = array(
       '#type' => 'asu_dept_picker',
       '#default_value' => json_encode($config->depts),
@@ -713,7 +626,6 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
         'showOnly' => $dept_picker_items,
       ),
     );
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
     /** end department picker **/
 
 
@@ -1119,7 +1031,12 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
 }
 
 
-
+/***
+ * Submit handler for the asu_isearch panel pane form
+ *
+ * @param $form
+ * @param $form_state
+ */
 function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit($form, &$form_state) {
   // store values
   $values = $form_state['values'];
@@ -1145,11 +1062,7 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     // Content -> Department
     // TODO: Set correct array index for 'depts'... ['horizontal_tabs']['content']['content_tabs']['department']
     'include_subdepts'      => $values['horizontal_tabs']['content']['content_tabs']['department']['include_subdepts'],
-<<<<<<< HEAD
-    'depts'                 => json_decode($values['filter_departments']),
-=======
     'depts'                 => json_decode($values['horizontal_tabs']['content']['content_tabs']['department']['isearch_dept_tree']),
->>>>>>> a316bb350e7ecb392b1b384664ed7b42cc7b2d4d
 
     // Content -> Employee types
     'employee_types'        => $employee_types,
@@ -1193,14 +1106,83 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     'view_display'          => $values['horizontal_tabs']['advanced']['isearch_view_display'],
   );
 
-  $form_state['entity']->field_isearch_config[LANGUAGE_NONE][0]['value'] = json_encode($config);
-  entity_save('fieldable_panels_pane', $form_state['entity']);
+  //$form_state['entity']->field_isearch_config[LANGUAGE_NONE][0]['value'] = json_encode($config);
+
+  $entity = $form_state['entity'];
+
+  // Copy hardcoded fields.
+  $entity->title = $form_state['values']['title'];
+  $entity->link = $form_state['values']['link'];
+  $entity->path = $form_state['values']['path'];
+  $entity->language = $form_state['values']['language'];
+  $entity->reusable = $form_state['values']['reusable'];
+  $entity->category = $form_state['values']['category'];
+  $entity->admin_title = $form_state['values']['admin_title'];
+  $entity->admin_description = $form_state['values']['admin_description'];
+  $entity->field_isearch_config[LANGUAGE_NONE][0]['value'] = json_encode($config);
+
+  $entity->revision = $form_state['values']['revision'];
+  // Only set a log message if there was a new revision. This prevents
+  // overwriting a log message on the current revision
+  if ($entity->revision) {
+    $entity->log = $form_state['values']['log'];
+  }
+
+  fieldable_panels_panes_save($entity);
+  if (!empty($form_state['add submit'])) {
+    drupal_set_message(t('The entity has been saved.'));
+  }
+
+
+  /*** FROM fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit   **/
+  // Determine how to handle revision locking.
+
+  $revision_context_aware = fieldable_panels_panes_revision_is_lockable($entity);
+
+  // If this is a new entity entity, or revision locking is enabled, look for a
+  // specific ID to use.
+  if (!empty($entity->is_new) || $revision_context_aware) {
+    // If UUID is available, use it.
+    if (module_exists('uuid') && isset($entity->uuid)) {
+      if ($revision_context_aware) {
+        $subtype = 'vuuid:' . $entity->vuuid;
+      }
+      else {
+        $subtype = 'uuid:' . $entity->uuid;
+      }
+    }
+
+    // Otherwise use the native ID values.
+    else {
+      if ($revision_context_aware) {
+        $subtype = 'vid:' . $entity->vid;
+      }
+      else {
+        $subtype = 'fpid:' . $entity->fpid;
+      }
+    }
+  }
+
+  // The 'current' key will tell FPP to load up the current revision. This
+  // bypasses the entity cache on the FPP entity class and loads the revision
+  // that was just saved instead of the previous revision. This is only really
+  // relevant in Panels IPE administration or similar circumstances.
+  else {
+    $subtype = 'current:' . $entity->fpid;
+  }
+
+  // @todo: This won't work if $form_state does not contain 'pane' which could
+  // theoretically happen in a non-Panels use case. Not that anybody uses this
+  // outside of Panels.
+  $form_state['pane']->subtype = $subtype;
+
+  //entity_save('fieldable_panels_pane', $form_state['entity']);
 }
 
-
+/*
 function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_type_group_pre_render(&$element) {
   $element['content_settings']['horizontal_tabs'] = $element['horizontal_tabs'];
   unset($element['horizontal_tabs']);
 
   return field_group_build_entity_groups($element, 'form');
-}
+}*/
