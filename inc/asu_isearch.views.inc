@@ -100,7 +100,7 @@ function asu_isearch_views_pre_view(&$view, &$display_id, &$args) {
 
         $local_primary_affiliation = (!empty($node->field_isearch_primary_aff))
           ? $node->field_isearch_primary_aff[LANGUAGE_NONE][0]['target_id']
-          : null;
+          : NULL;
 
         if (!empty($node->field_isearch_local_primary_aff)) {
           $local_primary_affiliation = $node->field_isearch_local_primary_aff[LANGUAGE_NONE][0]['target_id'];
@@ -112,7 +112,6 @@ function asu_isearch_views_pre_view(&$view, &$display_id, &$args) {
     }
   }
 }
-
 
 
 /**
@@ -133,10 +132,14 @@ function asu_isearch_get_views() {
       $display_options = (isset($view->display['default'])) ? $view->display['default']->display_options : array();
       $display_options = array_merge($display_options, $display->display_options);
 
-      if (isset($display_options['css_class']) && ( preg_match('/\bisearch-directory-list/', $display_options['css_class']) || $display_name == 'isearch_directory_titles')) {
+      if (isset($display_options['css_class']) && (preg_match('/\bisearch-directory-list/', $display_options['css_class']) || $display_name == 'isearch_directory_titles')) {
 
         $id = $view_name . ':' . $display_name;
-        $views[$id] = strip_tags(format_string(':view: :display (:display_id)', array(':view' => $view->human_name, ':display' => $display->display_title, ':display_id' => $display_name)));
+        $views[$id] = strip_tags(format_string(':view: :display (:display_id)', array(
+          ':view' => $view->human_name,
+          ':display' => $display->display_title,
+          ':display_id' => $display_name
+        )));
       }
     }
   }
@@ -164,6 +167,11 @@ function asu_isearch_views_query_alter(&$view, &$query) {
       $view->sort['field_isearch_affil_rank_tenure_value']->options['order'] = 'DESC';
     }
 
+    // reset the sort when passed in
+    if (isset($_GET['sort_by'])) {
+      $view->view_config->default_sort_by = $_GET['sort_by'];
+    }
+
     switch ($view->view_config->default_sort_by) {
       case 'field_isearch_firstname_value':
         if (isset($view->sort['field_isearch_lastname_value'])) {
@@ -187,6 +195,7 @@ function asu_isearch_views_query_alter(&$view, &$query) {
         if (isset($view->sort['field_isearch_affil_rank_tenure_value'])) {
           unset($view->sort['field_isearch_affil_rank_tenure_value']);
         }
+
         break;
     }
 
@@ -198,6 +207,7 @@ function asu_isearch_views_query_alter(&$view, &$query) {
         'direction' => $sort->options['order'],
       );
     }
+
 
     if ($view->view_config->employee_type_exclude == 1) {
       $dept_id_field = 'field_collection_item_field_data_field_isearch_affiliations__field_data_field_isearch_affil_empl_key.field_isearch_affil_empl_key_value';
@@ -228,5 +238,7 @@ function asu_isearch_views_query_alter(&$view, &$query) {
         );
       }
     }
+
+    //dpm($query, 'THE QUERY');
   }
 }

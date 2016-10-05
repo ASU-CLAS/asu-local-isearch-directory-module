@@ -15,7 +15,7 @@
                 settings = settings.asu_isearch_profile_form;
 
                 $(document).ready(function () {
-                    $('.asu-isearch-dept-select-wrap select').change(function(event) {
+                    $('.asu-isearch-dept-select-wrap select').change(function (event) {
 
                         var name = $(this).val();
                         var nid = $('option:selected', this).attr('deptnid');
@@ -28,7 +28,7 @@
                         }
                     });
 
-                    $('.asu-isearch-empl-type-select select').change(function(event) {
+                    $('.asu-isearch-empl-type-select select').change(function (event) {
 
                         var name = $(this).val();
                         var namefield = $(this).parent().find('.field-name-field-isearch-affil-empl-type input');
@@ -40,7 +40,7 @@
                         }
                     });
 
-                    $('.asu-isearch-e-type-select select').change(function(event) {
+                    $('.asu-isearch-e-type-select select').change(function (event) {
                         var name = $(this).val();
 
                         if (name != "Select Employee Type to Autofill") {

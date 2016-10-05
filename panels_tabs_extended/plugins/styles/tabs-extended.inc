@@ -53,7 +53,7 @@ function theme_panels_tabs_extended_style_render_region($vars) {
   }
 
   $element = array(
-    '#prefix' => '<div id="' . $tab_id . '"' . $tab_class .'>' . $region_title,
+    '#prefix' => '<div id="' . $tab_id . '"' . $tab_class . '>' . $region_title,
     '#suffix' => '</div>',
     '#attached' => array(
       'library' => array(array('system', 'ui.tabs')),

@@ -21,7 +21,11 @@ function asu_isearch_theme() {
     ),
     // ASU Spotlight container
     'asu_isearch_dept_picker' => array(
-      'variables' => array('items' => array(), 'settings' => array(), 'label' => 'Select Department'),
+      'variables' => array(
+        'items' => array(),
+        'settings' => array(),
+        'label' => 'Select Department'
+      ),
       'template' => 'theme/asu_isearch.dept_picker',
       'file' => 'inc/asu_isearch.theme.inc',
     ),
@@ -41,8 +45,8 @@ function asu_isearch_theme() {
  * Default theme implementation for iSearch department tree
  */
 function theme_asu_isearch_dept_tree(&$vars) {
-  $standalone    = FALSE;
-  $whole_tree    = FALSE;
+  $standalone = FALSE;
+  $whole_tree = FALSE;
   $config_target = FALSE;
 
   if (isset($vars['settings']['standalone_tree'])) {
@@ -85,8 +89,8 @@ function theme_asu_isearch_dept_tree(&$vars) {
     $settings = array(
       'tree' => $tree,
       'top_level_ids' => $top_level_ids,
-      'standalone'    => $standalone,
-      'dept_nids'     => $nids,
+      'standalone' => $standalone,
+      'dept_nids' => $nids,
     );
   }
   else {

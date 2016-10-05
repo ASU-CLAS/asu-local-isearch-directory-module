@@ -6,9 +6,9 @@
  */
 function asu_isearch_get_view_column_widths(stdClass $display_options) {
   $columns = array(
-    'photo'     => 2,
-    'name'      => 4,
-    'contact'   => 3,
+    'photo' => 2,
+    'name' => 4,
+    'contact' => 3,
     'expertise' => 3,
   );
 
@@ -48,35 +48,35 @@ function asu_isearch_get_default_view_config() {
   $depts->options = new stdClass();
 
   return array(
-    'employee_types'        => array('All'),
+    'employee_types' => array('All'),
     'employee_type_exclude' => 0,
-    'tenure_display'        => 0,
-    'show_managers'         => 0,
-    'show_filters'          => 1,
-    'include_subdepts'      => 0,
-    'view_display'          => 'isearch_directory:isearch_directory_list',
-    'pager_display'         => 'paged',
-    'pager_items_per_page'  => 10,
-    'pager_offset'          => 0,
-    'expertise_areas'       => array(),
-    'local_tags'            => array(),
-    'display_short_bio'     => TRUE,
-    'display_header'        => TRUE,
-    'display_photo'         => TRUE,
-    'display_name'          => TRUE,
-    'display_contact'       => TRUE,
-    'display_expertise'     => TRUE,
-    'display_building'      => TRUE,
-    'display_room'          => TRUE,
-    'default_sort_by'       => 'field_isearch_affil_rank_weight_value',
-    'filter_title'          => '',
-    'show_filter_titles'    => TRUE,
-    'show_filter_omni'      => TRUE,
+    'tenure_display' => 0,
+    'show_managers' => 0,
+    'show_filters' => 1,
+    'include_subdepts' => 0,
+    'view_display' => 'isearch_directory:isearch_directory_list',
+    'pager_display' => 'paged',
+    'pager_items_per_page' => 10,
+    'pager_offset' => 0,
+    'expertise_areas' => array(),
+    'local_tags' => array(),
+    'display_short_bio' => TRUE,
+    'display_header' => TRUE,
+    'display_photo' => TRUE,
+    'display_name' => TRUE,
+    'display_contact' => TRUE,
+    'display_expertise' => TRUE,
+    'display_building' => TRUE,
+    'display_room' => TRUE,
+    'default_sort_by' => 'field_isearch_affil_rank_weight_value',
+    'filter_title' => '',
+    'show_filter_titles' => TRUE,
+    'show_filter_omni' => TRUE,
     'show_filter_expertise' => TRUE,
-    'show_filter_sort'      => TRUE,
-    'show_az_index'         => FALSE,
-    'link_building_codes'   => variable_get('isearch_link_buildings', FALSE),
-    'depts'                 => $depts,
+    'show_filter_sort' => TRUE,
+    'show_az_index' => FALSE,
+    'link_building_codes' => variable_get('isearch_link_buildings', FALSE),
+    'depts' => $depts,
   );
 }
 
@@ -146,7 +146,7 @@ function asu_isearch_get_tenure_config($setting) {
 
 
 /**
- * Returns the 
+ * Returns the
  */
 function asu_isearch_get_dept_config() {
   $default_feed_dept = array(
@@ -165,7 +165,7 @@ function asu_isearch_get_migrate_source_urls($from_cache = FALSE) {
   $source_urls = array();
 
   // Check and see if we have configured our migration
-  $migrate_config = variable_get('isearch_admin_feed_dept', null);
+  $migrate_config = variable_get('isearch_admin_feed_dept', NULL);
 
   if (!is_null($migrate_config)) {
     $migrate_config = json_decode($migrate_config);
@@ -213,7 +213,7 @@ function asu_isearch_devmode() {
 }
 
 /**
- * Returns the node (and all children) where (node.tid == @param tid)
+ * Returns the node (and all children) where (node.tid == @param tid )
  * @param {Object} data
  *  Nested JSON object with department data
  * @param {integer} dept_id
@@ -227,8 +227,10 @@ function asu_isearch_dept_find_root($data, $dept_id, $lookup = 'dept_nid') {
       if ($data[$i]->$lookup == $dept_id) {
         return $data[$i];
       }
-      else if (isset($data[$i]->children)) {
-        $success = asu_isearch_dept_find_root($data[$i]->children, $dept_id, $lookup);
+      else {
+        if (isset($data[$i]->children)) {
+          $success = asu_isearch_dept_find_root($data[$i]->children, $dept_id, $lookup);
+        }
       }
     }
     else {
@@ -259,3 +261,57 @@ function asu_isearch_dept_get_tree_data($tree, $tree_ids = array()) {
 }
 
 
+/****
+ * Function to update profile from Solr
+ *
+ */
+function asu_isearch_solr_update_profile() {
+
+}
+
+function asu_isearch_get_field_solr_mappings() {
+
+  $map = array(
+    'status' => 'status',
+    'field_isearch_displayname' => 'displayName',
+    'field_isearch_firstname' => 'firstName',
+    'field_isearch_lastname' => 'lastName',
+    'field_isearch_employment_title' => 'primaryTitle',
+    'field_isearch_eid' => 'eid',
+    'field_isearch_asurite_id' => 'asuriteId',
+    'field_isearch_email' => 'emailAddress',
+    'field_isearch_phone' => 'phone',
+    'field_isearch_fax' => 'fax',
+    'field_isearch_campus_building' => 'addressLine1',
+    'field_isearch_campus_room' => 'addressLine2',
+    'field_isearch_primary_campus' => 'primaryJobCampus',
+    'field_isearch_photo_preference' => 'photoPreference',
+    'field_isearch_photo_permission' => 'photoPermission',
+    'field_isearch_social_twitter' => 'twitterLink',
+    'field_isearch_social_facebook' => 'facebook',
+    'field_isearch_social_linkedin' => 'linkedin',
+    'field_isearch_social_googleplus' => 'googlePlus',
+    'field_isearch_social_personalweb' => 'website',
+    'field_isearch_short_bio' => 'shortBio',
+    'field_isearch_bio' => 'bio',
+    'field_isearch_education' => 'education',
+    'field_isearch_cv_url' => 'cvUrl',
+    'field_isearch_rsrch_website' => 'researchWebsite',
+    'field_isearch_rsrch_interests' => 'researchInterests',
+    'field_isearch_rsrch_group' => 'researchGroup',
+    'field_isearch_rsrch_activity' => 'researchActivity',
+    'field_isearch_rsrch_publications' => 'publications',
+    'field_isearch_tch_website' => 'teachingWebsite',
+    'field_isearch_tch_courses' => 'courses',
+    'field_isearch_tch_presentations' => 'presentations',
+    'field_isearch_honors_awards' => 'honorsAwards',
+    'field_isearch_editorships' => 'editorships',
+    'field_isearch_prof_associations' => 'professionalAssociations',
+    'field_isearch_graduate_faculties' => 'graduateFaculties',
+    'field_isearch_work_history' => 'workHistory',
+    'field_isearch_service' => 'service',
+  );
+
+  return $map;
+
+}

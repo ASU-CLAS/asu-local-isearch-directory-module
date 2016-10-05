@@ -78,9 +78,11 @@ function asu_isearch_migrate_api() {
 function _asu_isearch_get_migration() {
   try {
     $migration = Migration::getInstance('MigrateIsearchProfile');
-  }
-  catch (MigrateException $e) {
-    MigrationBase::registerMigration('MigrateIsearchProfileMigration', 'MigrateIsearchProfile', array('group_name' => 'asu_isearch', 'default_uid' => 1));
+  } catch (MigrateException $e) {
+    MigrationBase::registerMigration('MigrateIsearchProfileMigration', 'MigrateIsearchProfile', array(
+      'group_name' => 'asu_isearch',
+      'default_uid' => 1
+    ));
     $migration = Migration::getInstance('MigrateIsearchProfile');
   }
 
@@ -93,7 +95,7 @@ function _asu_isearch_get_migration() {
  */
 function _asu_isearch_begin_migrate($force_update = FALSE) {
 
-  $migrate_config = variable_get('isearch_admin_feed_dept', null);
+  $migrate_config = variable_get('isearch_admin_feed_dept', NULL);
 
   if (is_null($migrate_config)) {
     return FALSE;
@@ -108,20 +110,29 @@ function _asu_isearch_begin_migrate($force_update = FALSE) {
 
   // feed endpoint
   $source_urls = array(ASU_ISEARCH_MASTER_FILE_ENDPOINT);
-
   $migration = _asu_isearch_get_migration();
-  $migration->setMigrateSource($source_urls);
-  // begin the migration
-  $update = $migration->prepareUpdate();
-  $result = $migration->processImport($data);
 
-  //watchdog log the result
-  variable_set('isearch_last_import', time());
+  try {
+
+    $migration->setMigrateSource($source_urls);
+    // begin the migration
+    $update = $migration->prepareUpdate();
+    $result = $migration->processImport($data);
+
+    //watchdog log the result
+    variable_set('isearch_last_import', time());
+
+  } catch (Exception $e) {
+
+    // end and reset the migration, if another is stuck
+    $migration->endProcess();
+    $migration->resetStatus();
+  }
 }
 
 
 function _asu_isearch_begin_batch($force_update = FALSE) {
-  $limit = variable_get('isearch_import_limit', null);
+  $limit = variable_get('isearch_import_limit', NULL);
 
   if (is_null($limit) || is_numeric($limit)) {
 
@@ -140,7 +151,10 @@ function _asu_isearch_begin_batch($force_update = FALSE) {
   $migration = _asu_isearch_get_migration();
   $migration->prepareUpdate();
 
-  $operations[] = array('migrate_ui_batch', array('import', 'MigrateIsearchProfile', $limit, $force_update));
+  $operations[] = array(
+    'migrate_ui_batch',
+    array('import', 'MigrateIsearchProfile', $limit, $force_update)
+  );
 
   $batch = array(
     'operations' => $operations,
@@ -171,26 +185,38 @@ function _asu_isearch_cache_dept_feed($build_source = FALSE) {
     mkdir(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT, 0644, TRUE);
   }
 
+  // limit for how many departments will be cached on each cron run.
+  // this is a needed because of the slow nature of the isearch endpoint
+  $limit = 10;
 
   // retrieve list of configured isearch dept urls for import
   $source_urls = asu_isearch_get_migrate_source_urls(FALSE);
   $track_urls = asu_isearch_get_dept_tracker();
-  
+  $count = 0;
 
   foreach ($track_urls as $key => $url) {
-  
+
+    if ($count > $limit) {
+      return FALSE;
+    }
+
     $data = _asu_isearch_cache_dept($source_urls[$key]);
 
     //build the source master
     if ($build_source) {
       if (_asu_isearch_append_to_source($data)) {
+
         asu_isearch_remove_from_tracker($key);
-      } else {
+        watchdog('asu_isearch', "Cached Dept'[@id]'", array('@id' => $key));
+      }
+      else {
 
         // stopped because the source was too large
         return FALSE;
       }
     }
+
+    $count++;
   }
 
   // return true if we've cached everything on the list
@@ -216,7 +242,8 @@ function _asu_isearch_build_migrate_master($sources) {
     // and break out of for loop
     if (_asu_isearch_append_to_source($data)) {
       asu_isearch_remove_from_tracker($key);
-    } else {
+    }
+    else {
       break;
     }
   }
@@ -271,18 +298,20 @@ function asu_isearch_get_department($url, $deptnid) {
     return $decoded;
   }
 
-  $ctx = stream_context_create(array('http'=>
-    array(
-      'timeout' => 30,  //30 second timeout
-    )
+  $ctx = stream_context_create(array(
+    'http' =>
+      array(
+        'timeout' => 30,  //30 second timeout
+      )
   ));
 
   //
-  $dept = file_get_contents($url, false, $ctx);
+  $dept = file_get_contents($url, FALSE, $ctx);
 
   if ($decoded = drupal_json_decode($dept)) {
     return $decoded;
-  } else {
+  }
+  else {
     return array();
   }
 }
@@ -297,7 +326,7 @@ function _asu_isearch_append_to_source($data) {
 
   $master_list = asu_isearch_get_master_source();
 
-  if (is_array($master_list) && count($master_list) < 1000) {
+  if (is_array($master_list) && count($master_list) < ASU_ISEARCH_MASTER_SOURCE_LIMIT) {
 
     if (is_array($data)) {
       $master_list = array_merge($master_list, $data);
@@ -309,7 +338,8 @@ function _asu_isearch_append_to_source($data) {
     file_save_data($master_list, ASU_ISEARCH_MASTER_FILE_ENDPOINT, FILE_EXISTS_REPLACE);
 
     return TRUE;
-  } else {
+  }
+  else {
     return FALSE;
   }
 }
@@ -323,7 +353,6 @@ function _asu_isearch_refresh_source($data) {
   $data = json_encode($data);
   file_save_data($data, ASU_ISEARCH_MASTER_FILE_ENDPOINT, FILE_EXISTS_REPLACE);
 }
-
 
 
 /***
@@ -373,6 +402,7 @@ function asu_isearch_remove_from_tracker($dept_nid) {
 
 
 function asu_isearch_get_master_source() {
+
   $master_list = array();
 
   //todo:  check for master list
@@ -399,12 +429,13 @@ function _asu_isearch_reset_migration_sources() {
   $newlist = array();
   $counter = 0;
 
-  foreach($newtracker as $key => $item) {
+  foreach ($newtracker as $key => $item) {
     // we're likely to timeout if we're doing a ton of requests to the
     // endpoint, so we need to cap this at a reasonable number
     if ($counter > 24) {
       break;
-    } else {
+    }
+    else {
       $newdept = asu_isearch_get_department($item, $key);
 
       if ($newdept) {
