@@ -492,7 +492,9 @@ function asu_isearch_preprocess_panels_pane(&$variables) {
 
     // hide configuration
     unset($content['field_isearch_config']);
+
   }
+
 }
 
 
@@ -839,12 +841,12 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       '#collapsible' => TRUE,
       '#group' => 'appearance_tabs',
     );
-
+    /* Deprecate this field
     $form['horizontal_tabs']['appearance']['appearance_tabs']['sorting']['show_managers'] = array(
       '#type' => 'checkbox',
       '#title' => 'Show managers at top',
       '#default_value' => $config->show_managers,
-    );
+    );*/
 
     $default_sort_by_options = array(
       'field_isearch_affil_rank_weight_value' => 'Rank',
@@ -1099,7 +1101,8 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     'filter_title' => $values['horizontal_tabs']['content']['content_tabs']['otherfilters']['filter_title'],
 
     // Appearance -> Sorting
-    'show_managers' => $values['horizontal_tabs']['appearance']['appearance_tabs']['sorting']['show_managers'],
+    // deprecated show managers field
+    //'show_managers' => $values['horizontal_tabs']['appearance']['appearance_tabs']['sorting']['show_managers'],
     'default_sort_by' => $values['horizontal_tabs']['appearance']['appearance_tabs']['sorting']['default_sort_by'],
 
     // Appearance -> Exposed Filters

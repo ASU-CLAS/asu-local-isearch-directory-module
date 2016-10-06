@@ -1,3 +1,8 @@
+
+.isearch-directory-filters {
+    margin: 0 7px 0 7px;
+}
+
 .isearch-directory-filters .form-item {
     /*max-width: 250px;*/
     display: inline-block;
@@ -41,6 +46,7 @@
 #edit-isearch-omni-search {
     max-width: 250px;
 }
+
 
 #edit-field-isearch-affil-title-value {
     max-width: 250px;

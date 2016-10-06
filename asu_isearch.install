@@ -248,7 +248,6 @@ function asu_isearch_update_7150() {
  * so that we're not trying to run multiple migrations per cron run
  */
 function asu_isearch_update_7152() {
-  // this update requires the asu_dept_picker module to be enabled and installed
   features_revert_module('asu_isearch');
   $queue = DrupalQueue::get('isearch_fetch_department');
   $queue->deleteQueue();
