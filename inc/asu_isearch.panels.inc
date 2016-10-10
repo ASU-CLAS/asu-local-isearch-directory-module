@@ -13,27 +13,31 @@ function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts
 
   if ($pane->subtype == 'node:field_isearch_rsrch_website') {
     $website = $content->content['#items'][0]['value'];
-    $content->content[0]['#markup'] = l($website, $website, array('attributes' => array(
-      'target' => '_blank',
-    )));
+    $content->content[0]['#markup'] = l($website, $website, array(
+      'attributes' => array(
+        'target' => '_blank',
+      )
+    ));
   }
 
   if ($pane->subtype == 'node:field_isearch_tch_website') {
     $website = $content->content['#items'][0]['value'];
-    $content->content[0]['#markup'] = l($website, $website, array('attributes' => array(
-      'target' => '_blank',
-    )));
+    $content->content[0]['#markup'] = l($website, $website, array(
+      'attributes' => array(
+        'target' => '_blank',
+      )
+    ));
   }
 
   // Get permission to display profile image
   if ($pane->subtype == 'node:field_isearch_photo_url') {
-  	// check and see if we have uploaded a local image
-  	// if so, display it vs whatever settings they currently have
-  	if (isset($content->content['#object']->field_isearch_local_photo_url) && !empty($content->content['#object']->field_isearch_local_photo_url)) {
-  		$content->content[0]['#item'] = (array) $content->content['#object']->field_isearch_local_photo_url[LANGUAGE_NONE][0];
-  	}
-  	else {
-  		$photo_preference = $content->content['#object']->field_isearch_photo_preference[LANGUAGE_NONE][0]['value'];
+    // check and see if we have uploaded a local image
+    // if so, display it vs whatever settings they currently have
+    if (isset($content->content['#object']->field_isearch_local_photo_url) && !empty($content->content['#object']->field_isearch_local_photo_url)) {
+      $content->content[0]['#item'] = (array) $content->content['#object']->field_isearch_local_photo_url[LANGUAGE_NONE][0];
+    }
+    else {
+      $photo_preference = $content->content['#object']->field_isearch_photo_preference[LANGUAGE_NONE][0]['value'];
       $photo_permission = $content->content['#object']->field_isearch_photo_permission[LANGUAGE_NONE][0]['value'];
 
       if ($photo_preference == 'none' || $photo_permission != 'public') {
@@ -48,22 +52,22 @@ function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts
           $content->content['#access'] = FALSE;
         }
       }
-  	}
+    }
 
-  	$content->content[0]['#image_style'] = 'asu_isearch_profile';
+    $content->content[0]['#image_style'] = 'asu_isearch_profile';
   }
 
   // Add email icon to email address
   if ($pane->subtype == 'node:field_isearch_email') {
     $email = $content->content['#items'][0]['email'];
-    $content->content[0]['#markup'] = l('<i class="fa fa-envelope"></i> ' . $email, 'mailto:'.$email, array('html' => TRUE));
+    $content->content[0]['#markup'] = l('<i class="fa fa-envelope"></i> ' . $email, 'mailto:' . $email, array('html' => TRUE));
   }
 
   // Add email icon to phone number
   if ($pane->subtype == 'node:field_isearch_phone') {
     $phone = $content->content['#items'][0]['value'];
     $link = preg_replace('/[^\d]/', '', $phone);
-    $content->content[0]['#markup'] = l('<i class="fa fa-phone"></i> ' . $phone, 'tel:'.$link, array('html' => TRUE));
+    $content->content[0]['#markup'] = l('<i class="fa fa-phone"></i> ' . $phone, 'tel:' . $link, array('html' => TRUE));
   }
 
   // Add file icon to CV url
@@ -72,10 +76,10 @@ function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts
     $link = ASU_ISEARCH_DIRECTORY_URL . '/sites/default/files/' . $cvurl;
     $cvinfo = pathinfo($link);
     $content->content[0]['#markup'] = '<i class="fa fa-file"></i> ' . l($cvinfo['basename'], $link, array(
-      'attributes' => array(
-        'target' => '_blank',
-      ),
-    ));
+        'attributes' => array(
+          'target' => '_blank',
+        ),
+      ));
   }
 
   // @TODO: There could possibly be a small bug here if there isn't a building but a room is present
@@ -126,7 +130,7 @@ function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts
 
   if (array_key_exists($pane->subtype, $social_fields_icons)) {
     $value = $content->content[0]['#markup'];
-    $content->content[0]['#markup'] = l('<i class="fa '.$social_fields_icons[$pane->subtype].'"></i>', $value, array(
+    $content->content[0]['#markup'] = l('<i class="fa ' . $social_fields_icons[$pane->subtype] . '"></i>', $value, array(
       'attributes' => array(
         'target' => '_blank',
       ),
@@ -142,12 +146,12 @@ function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts
 
     // initial settings
     $settings = array(
-      'ajax'          => 0,
+      'ajax' => 0,
       'hide_if_empty' => 1,
-      'default_tab'   => 0,
-      'title'         => 'My custom quicktab',
-      'renderer'      => 'quicktabs',
-      'style'         => 'isearch',
+      'default_tab' => 0,
+      'title' => 'My custom quicktab',
+      'renderer' => 'quicktabs',
+      'style' => 'isearch',
     );
 
     $tabs = array();
@@ -160,7 +164,7 @@ function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts
       $tab_html = drupal_render($content->content[$key]);
 
       $tabs[] = array(
-        'type'  => 'prerendered',
+        'type' => 'prerendered',
         'title' => $title,
         'weight' => $weight,
         'contents' => $tab_html,
@@ -180,7 +184,7 @@ function asu_isearch_panels_pane_content_alter($content, $pane, $args, $contexts
 /**
  * Implements hook_preprocess_panels_pane().
  */
-function asu_isearch_preprocess_panels_pane(&$variables){
+function asu_isearch_preprocess_panels_pane(&$variables) {
 
   if (isset($variables['content']['#bundle']) && $variables['content']['#bundle'] === 'isearch_directory') {
 
@@ -191,8 +195,15 @@ function asu_isearch_preprocess_panels_pane(&$variables){
     $content['title'] = '';
     $directory = new IsearchProfileDirectory();
 
+    //dpm($variables, 'THE VARIABLES ARRAY');
+    //dpm($_GET, 'the get args');
+
     // fixes a bug with pagination when sort order field is exposed in view
-    if (isset($_GET['sort_by']) && in_array(strtoupper($_GET['sort_by']), array('DESC', 'ASC'))) {
+    if (isset($_GET['sort_by']) && in_array(strtoupper($_GET['sort_by']), array(
+        'DESC',
+        'ASC'
+      ))
+    ) {
       unset($_GET['sort_by']);
     }
 
@@ -229,15 +240,15 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       unset($view->sort['field_isearch_affil_manager_value']);
     }
 
-    $contextual_last_name       = 'all';
-    $contextual_employee_types  = 'all';
-    $contextual_departments     = 'all';
-    $contextual_tenure_display  = 'all';
+    $contextual_last_name = 'all';
+    $contextual_employee_types = 'all';
+    $contextual_departments = 'all';
+    $contextual_tenure_display = 'all';
     $contextual_expertise_areas = 'all';
-    $contextual_local_tags      = 'all';
+    $contextual_local_tags = 'all';
 
 
-    if (count($view_config->depts->items) && $view_config->depts->items[0] != null) {
+    if (count($view_config->depts->items) && $view_config->depts->items[0] != NULL) {
       $contextual_departments = array();
       $department_options = (object) $view_config->depts->options;
 
@@ -266,9 +277,15 @@ function asu_isearch_preprocess_panels_pane(&$variables){
     if (!empty($view_config->tenure_display)) {
       // backwards compatible code
       switch (asu_isearch_get_tenure_config($view_config->tenure_display)) {
-        case 'Tenure'    : $tenure_display = '1';   break;
-        case 'Non-Tenure': $tenure_display = '0';   break;
-        default          : $tenure_display = 'all'; break;
+        case 'Tenure'    :
+          $tenure_display = '1';
+          break;
+        case 'Non-Tenure':
+          $tenure_display = '0';
+          break;
+        default          :
+          $tenure_display = 'all';
+          break;
       }
 
       $contextual_tenure_display = $tenure_display;
@@ -286,10 +303,10 @@ function asu_isearch_preprocess_panels_pane(&$variables){
 
     // set other display options
     if (asu_isearch_is_isearch_view($view)) {
-      $display_header    = TRUE;
-      $display_photo     = TRUE;
-      $display_name      = TRUE;
-      $display_contact   = TRUE;
+      $display_header = TRUE;
+      $display_photo = TRUE;
+      $display_name = TRUE;
+      $display_contact = TRUE;
       $display_expertise = TRUE;
 
       if (isset($view_config->display_header) && (bool) $view_config->display_header == FALSE) {
@@ -317,10 +334,10 @@ function asu_isearch_preprocess_panels_pane(&$variables){
       }
 
       $display_options = (object) array(
-        'display_header'    => $display_header,
-        'display_photo'     => $display_photo,
-        'display_name'      => $display_name,
-        'display_contact'   => $display_contact,
+        'display_header' => $display_header,
+        'display_photo' => $display_photo,
+        'display_name' => $display_name,
+        'display_contact' => $display_contact,
         'display_expertise' => $display_expertise,
       );
 
@@ -356,12 +373,12 @@ function asu_isearch_preprocess_panels_pane(&$variables){
     // FIXME: Can this be dynamic somehow so we do not break views unintentionally (those that are missing a contextual filter
     // or are in a different order
     $contextual_filter_map = array(
-      'field_isearch_lastname_value'          => $contextual_last_name,
-      'field_isearch_affil_empl_key_value'    => $contextual_employee_types,
-      'field_isearch_affil_dept_id_value_1'   => $contextual_departments,
+      'field_isearch_lastname_value' => $contextual_last_name,
+      'field_isearch_affil_empl_key_value' => $contextual_employee_types,
+      'field_isearch_affil_dept_id_value_1' => $contextual_departments,
       'field_isearch_affil_rank_tenure_value' => $contextual_tenure_display,
-      'tid'                                   => $contextual_expertise_areas,
-      'tid_1'                                 => $contextual_local_tags,
+      'tid' => $contextual_expertise_areas,
+      'tid_1' => $contextual_local_tags,
     );
 
     $contextual_filters = array();
@@ -466,7 +483,7 @@ function asu_isearch_preprocess_panels_pane(&$variables){
 
         if (isset($params['sort_order'])) {
           // Forcing ascending sort order for now
-          $form['sort_order']['#value'] =  'ASC';
+          $form['sort_order']['#value'] = 'ASC';
         }
       }
 
@@ -475,7 +492,9 @@ function asu_isearch_preprocess_panels_pane(&$variables){
 
     // hide configuration
     unset($content['field_isearch_config']);
+
   }
+
 }
 
 
@@ -491,8 +510,8 @@ function _asu_isearch_update_view_form_filters($view, &$form, $directory) {
 /**
  * Implements hook_preprocess_fieldable_panels_pane().
  */
-function asu_isearch_preprocess_fieldable_panels_pane(&$variables){
-  if ($variables['elements']['#bundle'] === 'isearch_directory'){
+function asu_isearch_preprocess_fieldable_panels_pane(&$variables) {
+  if ($variables['elements']['#bundle'] === 'isearch_directory') {
     $title = $variables['elements']['#fieldable_panels_pane']->title;
     $variables['elements']['title'] = array(
       '#theme' => 'html_tag',
@@ -503,7 +522,6 @@ function asu_isearch_preprocess_fieldable_panels_pane(&$variables){
 }
 
 
-
 /**
  * Implementation of hook_form_FORM_ID_alter()
  */
@@ -511,7 +529,7 @@ function asu_isearch_form_ctools_entity_field_content_type_formatter_options_alt
 
   $content_type = isset($form_state['display']->context['panelizer']->data->type)
     ? $form_state['display']->context['panelizer']->data->type
-    : false;
+    : FALSE;
 
   if ($content_type == 'asu_isearch_profile' && asu_isearch_devmode() == FALSE) {
     $isearch_field = str_replace('node:', '', $form_state['subtype_name']);
@@ -544,9 +562,9 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     $form['#attached']['css'][] = drupal_get_path('module', 'asu_isearch') . '/css/asu_isearch.panelizer.css';
     asu_isearch_load_js();
     $form['#attached']['css'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/asu_isearch_config.css';
-    $form['#attached']['js'][]  = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/bootstrap.js';
-    $form['#attached']['js'][]  = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/asu_isearch_config.js';
-    $form['#attached']['js'][]  = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_pane_config.js';
+    $form['#attached']['js'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/bootstrap.js';
+    $form['#attached']['js'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/asu_isearch_config.js';
+    $form['#attached']['js'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_pane_config.js';
 
     $config = asu_isearch_get_default_view_config();
 
@@ -602,32 +620,21 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       '#access' => FALSE,
     );
 
-    /** start department picker **/
-    // Load the departments from our global configuration
-    // to use in our dept tree widget
-    $feed_depts = variable_get('isearch_admin_feed_dept', null);
+    // get list of imported departments
+    $dept_picker_items = array();
+    $feed_depts = json_decode(asu_isearch_get_dept_config(), TRUE);
+    $feed_items = $feed_depts['items'];
 
-    if (!is_null($feed_depts)) {
-      $feed_depts = json_decode($feed_depts);
+    foreach ($feed_items as $dept) {
+      $id = $dept['dept_id'];
+
+      if ($feed_depts['options'][$id]['subdepts']) {
+        $dept_picker_items = array_merge($dept_picker_items, $dept['tree_nids']);
+      }
+      else {
+        array_push($dept_picker_items, $dept['dept_nid']);
+      }
     }
-    else {
-      $item = new stdclass();
-      $item->dept_nid  = 'ASU';
-      $item->dept_id   = 'ASU';
-      $item->tree_nids = array();
-
-      $feed_depts = array($item);
-    }
-
-    $query = db_select('field_data_field_isearch_affil_dept_id', 'd');
-    $query->join('field_data_field_isearch_affil_primary', 'p', 'd.entity_id = p.entity_id');
-    $query->leftJoin('field_data_field_isearch_local_primary_aff', 'l', '(d.entity_id = l.entity_id)');
-    $query->addExpression('COALESCE(l.field_isearch_local_primary_aff_target_id, d.field_isearch_affil_dept_id_value)', 'dept_id');
-    $result = $query->condition('p.field_isearch_affil_primary_value', 1, '=')
-      ->distinct()
-      ->execute();
-
-    $dept_picker_items = array_keys($result->fetchAllAssoc('dept_id'));
 
     $form['horizontal_tabs']['content']['content_tabs']['department']['isearch_dept_tree'] = array(
       '#type' => 'asu_dept_picker',
@@ -704,7 +711,10 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
         '#collapsible' => FALSE,
         '#options' => array(),
         '#attributes' => array(
-          'class' => array('employee-types-group', 'employee-types-group-'.$group_key ),
+          'class' => array(
+            'employee-types-group',
+            'employee-types-group-' . $group_key
+          ),
         ),
       );
       $form['horizontal_tabs']['content']['content_tabs']['employeetypes'][$group_key]['options'] = array(
@@ -733,7 +743,7 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
 
       // add checkbox option to appropriate field group
       $form['horizontal_tabs']['content']['content_tabs']['employeetypes'][$group]['options']
-        ['#options'][$employee_type] = $employee_type;
+      ['#options'][$employee_type] = $employee_type;
     }
 
     // tenure control will be added to faculty employee types group for now
@@ -783,7 +793,7 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     $form['horizontal_tabs']['content']['content_tabs']['otherfilters']['filter_title'] = array(
       '#type' => 'textfield',
       '#title' => 'Filter Title',
-      '#description' => t('Limit results by the affiliation title. Regular expression allowed.'),
+      '#description' => t('Limit results by the affiliation title. Regular expression allowed.  Do not use any spaces between text and regex operators.'),
       '#default_value' => $config->filter_title,
     );
 
@@ -831,12 +841,12 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
       '#collapsible' => TRUE,
       '#group' => 'appearance_tabs',
     );
-
+    /* Deprecate this field
     $form['horizontal_tabs']['appearance']['appearance_tabs']['sorting']['show_managers'] = array(
       '#type' => 'checkbox',
       '#title' => 'Show managers at top',
       '#default_value' => $config->show_managers,
-    );
+    );*/
 
     $default_sort_by_options = array(
       'field_isearch_affil_rank_weight_value' => 'Rank',
@@ -912,7 +922,11 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
 
     $form['horizontal_tabs']['appearance']['appearance_tabs']['paging']['pager_display'] = array(
       '#type' => 'select',
-      '#options' => array('paged' => 'Paged output', 'all' => 'Display all items', 'fixed' => 'Display a specified number of items'),
+      '#options' => array(
+        'paged' => 'Paged output',
+        'all' => 'Display all items',
+        'fixed' => 'Display a specified number of items'
+      ),
       '#title' => 'Display pagination',
       '#default_value' => $config->pager_display,
     );
@@ -1073,49 +1087,50 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
 
     // Content -> Department
     // TODO: Set correct array index for 'depts'... ['horizontal_tabs']['content']['content_tabs']['department']
-    'include_subdepts'      => $values['horizontal_tabs']['content']['content_tabs']['department']['include_subdepts'],
-    'depts'                 => json_decode($values['horizontal_tabs']['content']['content_tabs']['department']['isearch_dept_tree']),
+    'include_subdepts' => $values['horizontal_tabs']['content']['content_tabs']['department']['include_subdepts'],
+    'depts' => json_decode($values['horizontal_tabs']['content']['content_tabs']['department']['isearch_dept_tree']),
 
     // Content -> Employee types
-    'employee_types'        => $employee_types,
+    'employee_types' => $employee_types,
     'employee_type_exclude' => $values['horizontal_tabs']['content']['content_tabs']['employeetypes']['employee_type_exclude'],
-    'tenure_display'        => $values['horizontal_tabs']['content']['content_tabs']['employeetypes']['faculty']['tenure_display'],
+    'tenure_display' => $values['horizontal_tabs']['content']['content_tabs']['employeetypes']['faculty']['tenure_display'],
 
     // Content -> Other filters
-    'expertise_areas'       => $values['horizontal_tabs']['content']['content_tabs']['otherfilters']['isearch_expertise_areas'],
-    'local_tags'            => $values['horizontal_tabs']['content']['content_tabs']['otherfilters']['isearch_local_tags'],
-    'filter_title'          => $values['horizontal_tabs']['content']['content_tabs']['otherfilters']['filter_title'],
+    'expertise_areas' => $values['horizontal_tabs']['content']['content_tabs']['otherfilters']['isearch_expertise_areas'],
+    'local_tags' => $values['horizontal_tabs']['content']['content_tabs']['otherfilters']['isearch_local_tags'],
+    'filter_title' => $values['horizontal_tabs']['content']['content_tabs']['otherfilters']['filter_title'],
 
     // Appearance -> Sorting
-    'show_managers'         => $values['horizontal_tabs']['appearance']['appearance_tabs']['sorting']['show_managers'],
-    'default_sort_by'       => $values['horizontal_tabs']['appearance']['appearance_tabs']['sorting']['default_sort_by'],
+    // deprecated show managers field
+    //'show_managers' => $values['horizontal_tabs']['appearance']['appearance_tabs']['sorting']['show_managers'],
+    'default_sort_by' => $values['horizontal_tabs']['appearance']['appearance_tabs']['sorting']['default_sort_by'],
 
     // Appearance -> Exposed Filters
-    'show_filters'          => $values['horizontal_tabs']['appearance']['appearance_tabs']['exposed']['show_filters'],
-    'show_filter_omni'      => $values['horizontal_tabs']['appearance']['appearance_tabs']['exposed']['show_filter_omni'],
+    'show_filters' => $values['horizontal_tabs']['appearance']['appearance_tabs']['exposed']['show_filters'],
+    'show_filter_omni' => $values['horizontal_tabs']['appearance']['appearance_tabs']['exposed']['show_filter_omni'],
     'show_filter_expertise' => $values['horizontal_tabs']['appearance']['appearance_tabs']['exposed']['show_filter_expertise'],
-    'show_filter_titles'    => $values['horizontal_tabs']['appearance']['appearance_tabs']['exposed']['show_filter_titles'],
-    'show_filter_sort'      => $values['horizontal_tabs']['appearance']['appearance_tabs']['exposed']['show_filter_sort'],
-    'show_az_index'      => $values['horizontal_tabs']['appearance']['appearance_tabs']['exposed']['show_az_index'],
+    'show_filter_titles' => $values['horizontal_tabs']['appearance']['appearance_tabs']['exposed']['show_filter_titles'],
+    'show_filter_sort' => $values['horizontal_tabs']['appearance']['appearance_tabs']['exposed']['show_filter_sort'],
+    'show_az_index' => $values['horizontal_tabs']['appearance']['appearance_tabs']['exposed']['show_az_index'],
 
     // Appearance -> Paging
-    'pager_display'         => $values['horizontal_tabs']['appearance']['appearance_tabs']['paging']['pager_display'],
-    'pager_items_per_page'  => $values['horizontal_tabs']['appearance']['appearance_tabs']['paging']['pager_items_per_page'],
-    'pager_offset'          => $values['horizontal_tabs']['appearance']['appearance_tabs']['paging']['pager_offset'],
+    'pager_display' => $values['horizontal_tabs']['appearance']['appearance_tabs']['paging']['pager_display'],
+    'pager_items_per_page' => $values['horizontal_tabs']['appearance']['appearance_tabs']['paging']['pager_items_per_page'],
+    'pager_offset' => $values['horizontal_tabs']['appearance']['appearance_tabs']['paging']['pager_offset'],
 
     // Appearance -> Columns
-    'display_header'        => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_header'],
-    'display_photo'         => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_photo'],
-    'display_name'          => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_name'],
-    'display_contact'       => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_contact'],
-    'display_expertise'     => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_expertise'],
-    'display_building'      => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_building'],
-    'display_room'          => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_room'],
-    'link_building_codes'   => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['link_building_codes'],
-    'display_short_bio'     => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_short_bio'],
+    'display_header' => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_header'],
+    'display_photo' => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_photo'],
+    'display_name' => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_name'],
+    'display_contact' => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_contact'],
+    'display_expertise' => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_expertise'],
+    'display_building' => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_building'],
+    'display_room' => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_room'],
+    'link_building_codes' => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['link_building_codes'],
+    'display_short_bio' => $values['horizontal_tabs']['appearance']['appearance_tabs']['columns']['display_short_bio'],
 
     // Advanced
-    'view_display'          => $values['horizontal_tabs']['advanced']['isearch_view_display'],
+    'view_display' => $values['horizontal_tabs']['advanced']['isearch_view_display'],
   );
 
   //$form_state['entity']->field_isearch_config[LANGUAGE_NONE][0]['value'] = json_encode($config);

@@ -24,7 +24,7 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
       $prefix = "<div class='asu-isearch-e-type-select'>" .
         "<select>";
       $prefix .= "<option>Select Employee Type to Autofill</option>";
-      foreach($employee_types['nodes'] as $emp) {
+      foreach ($employee_types['nodes'] as $emp) {
         $prefix .= "<option>" . $emp['node']['name'] . "</option>";
       }
 
@@ -39,8 +39,8 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
 
       $locations = array();
 
-      foreach($configs->items as $conf) {
-       $root = asu_isearch_dept_find_root($dept_tree, $conf->dept_nid);
+      foreach ($configs->items as $conf) {
+        $root = asu_isearch_dept_find_root($dept_tree, $conf->dept_nid);
         $nid = $conf->dept_nid;
 
         if ($configs->options->$nid->subdepts === FALSE) {
@@ -49,7 +49,8 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
           $newItem->dept_nid = $root->dept_nid;
 
           $locations[] = $newItem;
-        } else {
+        }
+        else {
           $locations = array_merge($locations, asu_isearch_dept_get_tree_data($root));
         }
       }
@@ -87,9 +88,9 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
 
             //dropdown widget to select employee type
             $prefx = "<div class='asu-isearch-empl-type-select'>" .
-                         "<select>";
+              "<select>";
             $prefx .= "<option>Select Employee Type to Autofill</option>";
-            foreach($employee_types['nodes'] as $emp) {
+            foreach ($employee_types['nodes'] as $emp) {
               $prefx .= "<option>" . $emp['node']['name'] . "</option>";
             }
 
@@ -100,7 +101,8 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
           }
         }
       }
-    } else {
+    }
+    else {
 
       $form['field_isearch_profile_tabs']['#access'] = FALSE;
 //     $form['field_isearch_hash']['#access'] = FALSE;
@@ -129,7 +131,7 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
         if (!$is_local_field && preg_match('/^field_isearch_/', $form_field) && !in_array($form_field, $field_exception_manifest)) {
           if (asu_isearch_devmode() === FALSE) {
             $form[$form_field]['#disabled'] = TRUE;
-            $form[$form_field]['#access']   = FALSE;
+            $form[$form_field]['#access'] = FALSE;
           }
         }
       }
@@ -261,7 +263,13 @@ function asu_isearch_directory_list_form_alter(&$form, &$form_state, $form_id) {
   $form['sort_order']['#type'] = 'hidden';
 
   // tag and hide fields so we can manipulate them with attached javascript
-  $hidden_fields = array('omni_displayname', 'omni_firstname', 'omni_lastname', 'omni_shortbio', 'omni_expertise');
+  $hidden_fields = array(
+    'omni_displayname',
+    'omni_firstname',
+    'omni_lastname',
+    'omni_shortbio',
+    'omni_expertise'
+  );
   foreach ($hidden_fields as $fieldname) {
     $form[$fieldname]['#type'] = 'hidden';
     $form[$fieldname]['#attributes']['class'] = array('omni-search-field');

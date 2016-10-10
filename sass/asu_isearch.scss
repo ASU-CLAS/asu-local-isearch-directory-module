@@ -1,14 +1,18 @@
-div.krumo-element { color: #000; }
-div.krumo-preview { color: #000; }
+div.krumo-element {
+  color: #000;
+}
+
+div.krumo-preview {
+  color: #000;
+}
 
 @mixin inlineblock() {
   display: -moz-inline-stack;
   display: inline-block;
   vertical-align: top;
   zoom: 1;
-  *display: inline;  
+  *display: inline;
 }
-  
 
 // iSearch 2col layout
 .isearch-profile-2col {
@@ -70,7 +74,6 @@ div.krumo-preview { color: #000; }
     }
   }
 }
-
 
 // iSearch Profile Expertise panel
 .pane-node-field-isearch-expertise-areas {
@@ -137,7 +140,7 @@ div.krumo-preview { color: #000; }
   .quicktabs-style-isearch {
     border: none;
     padding: 0;
-    
+
     ul.quicktabs-tabs.quicktabs-style-isearch {
       border: none;
       // Active tabs
@@ -167,12 +170,11 @@ div.krumo-preview { color: #000; }
             font-weight: bold;
           }
         }
-        &:last-of-type>a {
+        &:last-of-type > a {
           border: none;
         }
       }
     }
-    
 
     &.quicktabs_main {
       border: none;
@@ -215,7 +217,7 @@ div.krumo-preview { color: #000; }
           }
         }
       }
-    } 
+    }
   }
 }
 
@@ -262,7 +264,7 @@ div.krumo-preview { color: #000; }
 
   .views-row-odd {
     background: #FAFAFA;
-  }  
+  }
 
   .item-list .pager {
     margin: 20px 0;
@@ -299,7 +301,6 @@ div.krumo-preview { color: #000; }
     }
   }
 }
-
 
 // Tabs
 .ui-tabs .ui-tabs-panel {
@@ -357,7 +358,7 @@ div.krumo-preview { color: #000; }
             font-weight: bold;
           }
         }
-        &:last-of-type>a {
+        &:last-of-type > a {
           border: none;
         }
       }
@@ -394,7 +395,6 @@ div.krumo-preview { color: #000; }
     }
   }
 }
-
 
 // Responsive mobile
 @media (max-width: 600px) {

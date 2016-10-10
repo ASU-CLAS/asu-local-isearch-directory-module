@@ -18,14 +18,16 @@ function asu_isearch_entity_presave($entity, $type) {
 
     $affiliation = entity_metadata_wrapper($type, $entity);
 
-    $affiliation_rank_weight = 1000;
+    $affiliation_rank_weight = 999;
 
+    //TODO: might need to change this to reflect iSearch
     $is_faculty_ranked = (!empty($entity->field_isearch_affil_rank[LANGUAGE_NONE]) && !is_null($entity->field_isearch_affil_rank[LANGUAGE_NONE][0]['tid']));
     if ($is_faculty_ranked) {
       $affiliation_rank_weight = $affiliation->field_isearch_affil_rank->field_isearch_rank_weight->value();
     }
 
     $has_local_weight = (!empty($entity->field_isearch_affil_local_weight[LANGUAGE_NONE]));
+
     if ($has_local_weight) {
       $affiliation_rank_weight = $affiliation->field_isearch_affil_local_weight->value();
     }

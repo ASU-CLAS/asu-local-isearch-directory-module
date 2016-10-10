@@ -10,20 +10,37 @@
 function asu_isearch_cron() {
 
   // Cache data from configuration
-  //CACHE THE FEED AND BUILD THE SOURCE
-  _asu_isearch_cache_dept_feed(TRUE);
-
-  // Cache dept tree and employee types data
+  // CACHE THE FEED AND BUILD THE SOURCE
   _asu_isearch_cache_dept_tree_data();
 
-  // Begin profile migrations
-  _asu_isearch_begin_migrate(FALSE);
+  // it takes too much time to do both of these actions every cron run.
+  // so switch between caching depts and migrating departments.
+  $last_action = variable_get('asu_isearch_cron_action', 'import_depts');
+
+  if ($last_action == 'import_depts') {
+    // Cache dept tree and employee types data
+    variable_set('asu_isearch_cron_action', 'cache_depts');
+    _asu_isearch_cache_dept_feed(TRUE);
+  } else {
+    // Begin profile migrations
+    variable_set('asu_isearch_cron_action', 'import_depts');
+    _asu_isearch_begin_migrate(FALSE);
+  }
 
   // Cleanup the profiles which are no longer associated with
   // unit depts in iSearch.  Only run once per day.
   $last_clean = variable_get('last_profile_cleanup', NULL);
 
   if ($last_clean != date('ymd', time())) {
+
+    // flush the image styles cache, so that updated photos show up
+    $styles = array('asu_isearch_profile_list', 'asu_isearch_profile');
+
+    foreach ($styles as $style) {
+      $the_style = image_style_load($style);
+      image_style_flush($the_style);
+    }
+
     _asu_isearch_cleanup();
     variable_set('last_profile_cleanup', date('ymd', time()));
   }
@@ -69,7 +86,6 @@ function asu_isearch_fetch_departments($data) {
 }
 
 
-
 /**
  * Cron queue worker callback for fetching profile photos
  */
@@ -93,13 +109,13 @@ function asu_isearch_fetch_profile_photo($data) {
     // does the file already exist on the server?
     // if yes, associate it
     if ($photo_exists) {
-      $file = current(entity_load('file', array(), array('uri' => $destination.'')));
+      $file = current(entity_load('file', array(), array('uri' => $destination . '')));
     }
 
     if (!$photo_exists || filesize($destination) != $response->headers['content-length']) {
       $file = system_retrieve_file($photo_url, $destination, TRUE, $replace = FILE_EXISTS_REPLACE);
     }
-    
+
     if ($file) {
       // Load the node so we can set
       $entity->field_isearch_photo_url[LANGUAGE_NONE][0]['fid'] = $file->fid;
@@ -162,7 +178,7 @@ function _asu_isearch_cleanup() {
   $nodes = node_load_multiple(array(), array('type' => $type));
   $queue = DrupalQueue::get("isearch_clean_profiles");
 
-  foreach($nodes as $key => $profile) {
+  foreach ($nodes as $key => $profile) {
 
     //we only cleanup profiles which have been imported from iSearch
     if ($profile->field_isearch_eid['und'][0]['value'] != -1) {
@@ -184,38 +200,42 @@ function asu_isearch_cleanup_profile($profile) {
 
   // load each affiliation, and check the profile against the listings from
   // isearch
-  foreach($profile->field_isearch_affiliations['und'] as $item) {
+  foreach ($profile->field_isearch_affiliations['und'] as $item) {
     $affil = entity_load('field_collection_item', array($item['value']));
 
     foreach ($affil as $af) {
       $feed = array();
       $nid = $af->field_isearch_affil_dept_id['und'][0]['value'];
 
-      $locache = ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT.$nid;
-      $idir = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT.$nid;
+      $locache = ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT . $nid;
+      $idir = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT . $nid;
 
       if (in_array($locache, $sources)) {
 
         $feed = drupal_json_decode(file_get_contents($locache));
 
-      } else if (in_array($idir, $sources)) {
+      }
+      else {
+        if (in_array($idir, $sources)) {
 
-        $request = drupal_http_request($idir);
+          $request = drupal_http_request($idir);
 
-        if ($request->code == 200) {
-          $feed = drupal_json_decode($request->data);
+          if ($request->code == 200) {
+            $feed = drupal_json_decode($request->data);
 
-        // if there was a bad request, then set the $pfound var to true, so that
-        // we don't delete an entire dept
-        } else {
-          $pfound = TRUE;
+            // if there was a bad request, then set the $pfound var to true, so that
+            // we don't delete an entire dept
+          }
+          else {
+            $pfound = TRUE;
+          }
         }
       }
 
       //check the asurite value of the profile agains the asurites in the feed,
       // and set the $pfound flag to true if found
       if (!empty($feed)) {
-        foreach($feed as $fitem) {
+        foreach ($feed as $fitem) {
           if ($fitem['asuriteId'] == $asurite) {
             $pfound = TRUE;
             break;
@@ -228,15 +248,18 @@ function asu_isearch_cleanup_profile($profile) {
   //if the profile wasn't found, then unpublish
   if ($pfound == FALSE) {
     $title = $profile->title;
-    watchdog('asu_isearch',"Profile'[@id]'unpublishedviacroncleanup",array('@id'=>$title));
+    watchdog('asu_isearch', "Profile'[@id]'unpublishedviacroncleanup", array('@id' => $title));
     $profile->status = 0;
     node_save($profile);
 
-  //if node was unpublished, but was found on iSearch, republish the node
-  } else if ($pfound == TRUE && $profile->status == 0) {
-    $profile->status = 1;
-    $title = $profile->title;
-    watchdog('asu_isearch',"Profile'[@id]'REpublishedviacroncleanup",array('@id'=>$title));
-    node_save($profile);
+    //if node was unpublished, but was found on iSearch, republish the node
+  }
+  else {
+    if ($pfound == TRUE && $profile->status == 0) {
+      $profile->status = 1;
+      $title = $profile->title;
+      watchdog('asu_isearch', "Profile'[@id]'REpublishedviacroncleanup", array('@id' => $title));
+      node_save($profile);
+    }
   }
 }

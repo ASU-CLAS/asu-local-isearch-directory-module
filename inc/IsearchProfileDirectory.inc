@@ -8,14 +8,14 @@
  * working code.
  */
 class IsearchProfileDirectory {
-  private $instanceId = null;
+  private $instanceId = NULL;
   private $directoryListView;
   private $directoryGridView;
   private $exposedFilters;
   private $contextualFilters;
   private $sortingOptions;
-  private $view = null;
-  private $viewConfig = null;
+  private $view = NULL;
+  private $viewConfig = NULL;
 
   private static $currentInstance = 1;
 
@@ -65,10 +65,10 @@ class IsearchProfileDirectory {
     foreach ($this->view->result as $key => $result) {
       $index_letter = $result->field_isearch_lastname_value_truncated;
       $items[] = t('<a href="@url">@letter</a>', array(
-        '@url'    => url(current_path(), array(
+        '@url' => url(current_path(), array(
           'query' => array(
             'isrch_index' => $index_letter,
-            'isrch_id'    => $this->instanceId,
+            'isrch_id' => $this->instanceId,
           ),
         )),
         '@letter' => $index_letter,
@@ -76,9 +76,9 @@ class IsearchProfileDirectory {
     }
 
     return theme_item_list(array(
-      'items'      => $items,
-      'title'      => '',
-      'type'       => 'ul',
+      'items' => $items,
+      'title' => '',
+      'type' => 'ul',
       'attributes' => array(
         'class' => 'isearch-a-z-index',
       ),

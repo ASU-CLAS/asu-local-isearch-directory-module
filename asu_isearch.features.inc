@@ -38,31 +38,13 @@ function asu_isearch_image_default_styles() {
   // Exported image style: asu_isearch_profile.
   $styles['asu_isearch_profile'] = array(
     'label' => 'asu_isearch_profile',
-    'effects' => array(
-      5 => array(
-        'name' => 'image_scale_and_crop',
-        'data' => array(
-          'width' => 175,
-          'height' => 175,
-        ),
-        'weight' => 1,
-      ),
-    ),
+    'effects' => array(),
   );
 
   // Exported image style: asu_isearch_profile_list.
   $styles['asu_isearch_profile_list'] = array(
     'label' => 'asu_isearch_profile_list',
-    'effects' => array(
-      2 => array(
-        'name' => 'image_scale_and_crop',
-        'data' => array(
-          'width' => 116,
-          'height' => 116,
-        ),
-        'weight' => 2,
-      ),
-    ),
+    'effects' => array(),
   );
 
   return $styles;

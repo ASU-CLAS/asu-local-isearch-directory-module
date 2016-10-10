@@ -37,6 +37,7 @@ define('ASU_ISEARCH_DIRECTORY_PHOTO_ENDPOINT', 'https://webapp4.asu.edu/photo-ws
 define('ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT', 'private://isearch/feeds/');
 define('ASU_ISEARCH_MASTER_FILE_ENDPOINT', 'private://isearch/feeds/asu_isearch_master.json');
 define('ASU_ISEARCH_DEPARTMENT_IMPORT_TRACKER', variable_get('asu_isearch_dept_tracker', NULL));
+define('ASU_ISEARCH_MASTER_SOURCE_LIMIT', 250);
 
 // Feed URLs
 $asu_isearch_devmode = variable_get('asu_isearch_devmode', FALSE);
@@ -75,7 +76,6 @@ function asu_isearch_menu() {
 
   return $items;
 }
-
 
 
 /**
@@ -184,12 +184,12 @@ function asu_isearch_prepare_quicktabs($node) {
 
     // initial settings
     $settings = array(
-      'ajax'          => 0,
+      'ajax' => 0,
       'hide_if_empty' => 1,
-      'default_tab'   => 0,
-      'title'         => 'My custom quicktab',
-      'renderer'      => 'quicktabs',
-      'style'         => 'isearch',
+      'default_tab' => 0,
+      'title' => 'My custom quicktab',
+      'renderer' => 'quicktabs',
+      'style' => 'isearch',
     );
 
     // build out quicktabs
@@ -197,9 +197,9 @@ function asu_isearch_prepare_quicktabs($node) {
 
     foreach ($tabs as $tab) {
       $custom_tabs[] = array(
-        'type'     => 'prerendered',
-        'title'    => $tab['label'],
-        'weight'   => $tab['weight'],
+        'type' => 'prerendered',
+        'title' => $tab['label'],
+        'weight' => $tab['weight'],
         'contents' => drupal_render($tab['content']),
       );
     }
@@ -209,14 +209,12 @@ function asu_isearch_prepare_quicktabs($node) {
 }
 
 
-
 /**
  * Implementation of hook_ctools_plugin_directory()
  */
 function asu_isearch_ctools_plugin_directory($module, $plugin) {
   return 'plugins/' . $plugin;
 }
-
 
 
 /**
@@ -282,7 +280,6 @@ function asu_isearch_get_dept_tree() {
 }
 
 
-
 /**
  * Returns an array of employee types from iSearch
  */
@@ -332,9 +329,14 @@ function asu_isearch_format_phone($phone) {
   $phone = preg_replace('/[^\d]/', '', $phone);
 
   switch (strlen($phone)) {
-    case 7:  return preg_replace("/([0-9]{3})([0-9]{4})/", "$1-$2", $phone); break;
-    case 11: $phone = substr($phone, 1);
-    case 10: return preg_replace("/([0-9]{3})([0-9]{3})([0-9]{4})/", "$1-$2-$3", $phone); break;
+    case 7:
+      return preg_replace("/([0-9]{3})([0-9]{4})/", "$1-$2", $phone);
+      break;
+    case 11:
+      $phone = substr($phone, 1);
+    case 10:
+      return preg_replace("/([0-9]{3})([0-9]{3})([0-9]{4})/", "$1-$2-$3", $phone);
+      break;
   }
 
   return $phone;
@@ -342,33 +344,33 @@ function asu_isearch_format_phone($phone) {
 
 
 function asu_isearch_panelizer_defaults_alter(&$items) {
-        if (isset($items['node:asu_isearch_profile:default:default'])) {
-          $default_tabs_map = variable_get('asu_isearch_default_tabs', null);
+  if (isset($items['node:asu_isearch_profile:default:default'])) {
+    $default_tabs_map = variable_get('asu_isearch_default_tabs', NULL);
 
-          if (!is_null($default_tabs_map)) {
-            // we already have data, unserialize it
-            $default_tabs_map = unserialize($default_tabs_map);
-          }
-          else {
-            // create the data for the first time
-            $default_tabs_map = array(
-              'bio_tab' => array(
-                'pane_uuid' => 'adfb4591-2608-4c80-a849-1c2924acf758',
-                'fpp_uuid' => '61e05864-8ba7-4858-b9ca-3b9b078b4ca3',
-              ),
-              'teaching_tab' => array(
-                'pane_uuid' => 'bc98b089-23f9-4c8f-b93e-138b7b6083ba',
-                'fpp_uuid' => '2ffb11d5-0954-4090-a05e-d21f61573d13',
-              ),
-              'research_tab' => array(
-                'pane_uuid' => '8be2b6de-7166-4f46-9ad6-6a97b32073f1',
-                'fpp_uuid' => 'b3ac9a14-7900-413f-9c00-336674af69a5',
-              ),
-              'public_works_tab' => array(
-                'pane_uuid' => 'ad7abd4f-b4e2-4c77-902e-75b4e3bf7984',
-                'fpp_uuid' => 'e1993e63-c13a-4429-9787-9948ee480191',
-              ),
-            );
+    if (!is_null($default_tabs_map)) {
+      // we already have data, unserialize it
+      $default_tabs_map = unserialize($default_tabs_map);
+    }
+    else {
+      // create the data for the first time
+      $default_tabs_map = array(
+        'bio_tab' => array(
+          'pane_uuid' => 'adfb4591-2608-4c80-a849-1c2924acf758',
+          'fpp_uuid' => '61e05864-8ba7-4858-b9ca-3b9b078b4ca3',
+        ),
+        'teaching_tab' => array(
+          'pane_uuid' => 'bc98b089-23f9-4c8f-b93e-138b7b6083ba',
+          'fpp_uuid' => '2ffb11d5-0954-4090-a05e-d21f61573d13',
+        ),
+        'research_tab' => array(
+          'pane_uuid' => '8be2b6de-7166-4f46-9ad6-6a97b32073f1',
+          'fpp_uuid' => 'b3ac9a14-7900-413f-9c00-336674af69a5',
+        ),
+        'public_works_tab' => array(
+          'pane_uuid' => 'ad7abd4f-b4e2-4c77-902e-75b4e3bf7984',
+          'fpp_uuid' => 'e1993e63-c13a-4429-9787-9948ee480191',
+        ),
+      );
 
       $update = TRUE;
       foreach ($default_tabs_map as $tab_key => $tab) {
@@ -393,9 +395,80 @@ function asu_isearch_panelizer_defaults_alter(&$items) {
       $uuid = $tab['pane_uuid'];
       $fpid_value = 'fpid:' . $tab['fpid'];
 
-      if (isset($items['node:asu_isearch_profile:default:default']->display->content['new-'.$uuid]->subtype)) {
-        $items['node:asu_isearch_profile:default:default']->display->content['new-'.$uuid]->subtype = $fpid_value;
+      if (isset($items['node:asu_isearch_profile:default:default']->display->content['new-' . $uuid]->subtype)) {
+        $items['node:asu_isearch_profile:default:default']->display->content['new-' . $uuid]->subtype = $fpid_value;
       }
     }
   }
 }
+
+
+/***
+ * Implements hook_entity_load
+ *
+ * Use this for updating the profile upon loading
+ * todo:  set sane intervals for node updating
+ *
+ */
+/*
+function asu_isearch_entity_load($entities, $type) {
+
+
+  if ($type == 'node') {
+    foreach($entities as $key => $item) {
+      if ($item->type == 'asu_isearch_profile') {
+
+        $asurite = $item->field_isearch_asurite_id['und'][0]['value'];
+        $eid = $item->field_isearch_eid['und'][0]['value'];
+        // todo:  replace this with configured value, once we add dir utilities to webspark
+        $isearch_url = 'https://asudir-solr.asu.edu/asudir/directory/select?q=asuriteId:' . $asurite . '&wt=json';
+
+        $request = drupal_http_request($isearch_url);
+
+        if ($request->code == 200) {
+          $data = json_decode($request->data, TRUE);
+          $data = $data['response']['docs'];
+          $photo_url = $data[0]['photoUrl'];
+
+          // ensure the file is truly accessible
+          $response = drupal_http_request($photo_url);
+          $destination = file_build_uri('asu_isearch_photos') . '/'. $data[0]['eid'] .'.jpg';
+
+          dpm($destination);
+
+          if ($response->code == 200) {
+
+            $file = FALSE;
+            $photo_exists = file_exists($destination);
+            dpm($photo_exists, 'THE PHOTO EXISTS');
+
+            // does the file already exist on the server?
+            // if yes, associate it
+            if ($photo_exists) {
+              $file = current(entity_load('file', array(), array('uri' => $destination . '')));
+              dpm($file, 'THE FILE');
+            }
+
+            dpm(filesize($destination), 'THE DESTINATION FILESIZE');
+            dpm($response->headers['content-length'], 'THE CONTENT LENGTH');
+
+            if (TRUE) {//!$photo_exists ) {//|| filesize($destination) != $response->headers['content-length']) {
+              $file = system_retrieve_file($photo_url, $destination, TRUE, FILE_EXISTS_REPLACE);
+              dpm($file, 'THE NEW FILE');
+            }
+
+            if ($file) {
+              // Load the node so we can set
+              $item->field_isearch_photo_url[LANGUAGE_NONE][0]['fid'] = $file->fid;
+              node_save($item);
+            }
+          }
+          dpm($data);
+        }
+
+      }
+    }
+  }
+}*/
+
+

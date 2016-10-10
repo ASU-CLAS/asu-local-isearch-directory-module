@@ -30,8 +30,8 @@ function asu_isearch_install() {
  * Clear iSearch plugin cache so that this plugin shows up.
  */
 function asu_isearch_enable() {
-	drupal_flush_all_caches();
-	asu_isearch_setup_panelizer_defaults();
+  drupal_flush_all_caches();
+  asu_isearch_setup_panelizer_defaults();
 }
 
 /**
@@ -80,9 +80,9 @@ function asu_isearch_setup_panelizer_defaults() {
     $tab_panes_map[$tab_key]['fpid'] = $fpid;
     $uuid = $tab['pane_uuid'];
 
-    if (isset($cache->display->content['new-'.$uuid]->subtype)) {
-      $cache->display->content['new-'.$uuid]->subtype = 'fpid:' . $fpid;
-      $ctools_cache['panelizer_defaults']['node:asu_isearch_profile:default:default']->display->content['new-'.$uuid]->subtype = 'fpid:' . $fpid;
+    if (isset($cache->display->content['new-' . $uuid]->subtype)) {
+      $cache->display->content['new-' . $uuid]->subtype = 'fpid:' . $fpid;
+      $ctools_cache['panelizer_defaults']['node:asu_isearch_profile:default:default']->display->content['new-' . $uuid]->subtype = 'fpid:' . $fpid;
     }
   }
 
@@ -93,7 +93,7 @@ function asu_isearch_setup_panelizer_defaults() {
 
   $results = db_select('cache_form', 'f')
     ->fields('f', array('cid', 'data'))
-    ->condition('data', '%new-'.$pane_uuid.'%', 'LIKE')
+    ->condition('data', '%new-' . $pane_uuid . '%', 'LIKE')
     ->execute()
     ->fetchAllKeyed();
 
@@ -105,12 +105,12 @@ function asu_isearch_setup_panelizer_defaults() {
         $uuid = $tab['pane_uuid'];
         $fpid_value = 'fpid:' . $tab['fpid'];
 
-        if (isset($form_data['#panopoly_magic_preview_info']['display']->content['new-'.$uuid]->subtype)) {
-          $form_data['#panopoly_magic_preview_info']['display']->content['new-'.$uuid]->subtype = $fpid_value;
+        if (isset($form_data['#panopoly_magic_preview_info']['display']->content['new-' . $uuid]->subtype)) {
+          $form_data['#panopoly_magic_preview_info']['display']->content['new-' . $uuid]->subtype = $fpid_value;
         }
 
-        if (isset($form_data['display']->content['new-'.$uuid]->subtype)) {
-          $form_data['display']->content['new-'.$uuid]->subtype = $fpid_value;
+        if (isset($form_data['display']->content['new-' . $uuid]->subtype)) {
+          $form_data['display']->content['new-' . $uuid]->subtype = $fpid_value;
         }
       }
     }
@@ -203,8 +203,7 @@ function _asu_isearch_fix_dept_config($data) {
         }
       }
     }
-  }
-  catch (Exception $e) {
+  } catch (Exception $e) {
     $data = array(
       'items' => array(),
       'options' => new stdclass(),
@@ -216,7 +215,7 @@ function _asu_isearch_fix_dept_config($data) {
     // return data as json encoded string
     $data = json_encode($data);
   }
-  
+
 
   return $data;
 }
@@ -242,4 +241,14 @@ function asu_isearch_update_7140() {
 function asu_isearch_update_7150() {
   // this update requires the asu_dept_picker module to be enabled and installed
   features_revert_module('asu_isearch');
+}
+
+/**
+ * Reverts the module to updated view and image styles.  Also clears the deprecated queue,
+ * so that we're not trying to run multiple migrations per cron run
+ */
+function asu_isearch_update_7152() {
+  features_revert_module('asu_isearch');
+  $queue = DrupalQueue::get('isearch_fetch_department');
+  $queue->deleteQueue();
 }
