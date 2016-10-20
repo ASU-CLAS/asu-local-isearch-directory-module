@@ -1,4 +1,6 @@
-### NOTE! * currently under development *
+### NOTE! * currently under development 
+
+Be sure to run update.php when updating to latest version.
 
 # ASU iSearch Local Directory module
 
