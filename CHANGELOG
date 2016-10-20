@@ -1,0 +1,12 @@
+asu_isearch 7.x-1.7
+-------------------
+- views exposed contextual filters are now using ajax views functionality
+- A to Z index filters are now working
+
+asu_isearch 7.x-1.6
+-------------------
+- Fixed bug where image styles aren't updating
+- Fixed image styles by removing cropping and using CSS similar to iSearch
+- Allows importing of custom sorting from iSearch, this is configurable at /admin/content/isearch/configure
+- Added update hook to clear old queued migrations
+- Added sane constraints to avoid extremely long cron tasks

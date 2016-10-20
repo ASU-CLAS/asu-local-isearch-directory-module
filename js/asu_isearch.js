@@ -18,6 +18,7 @@
                 }
 
                 // fix pagination/exposed filters when isearch found within tabs
+                /*
                 $('.ui-tabs-panel .asu-isearch-directory-pane').each(function () {
 
                     var tab = $(this).closest('.ui-tabs-panel');
@@ -32,7 +33,8 @@
                         });
                     }
 
-                    // detect exposed filters
+                    // detect exposed filter
+                    /*
                     var filters = $(this).find('.isearch-directory-filters');
                     if (filters.length) {
                         var action = filters.attr('action');
@@ -64,7 +66,7 @@
                         }
 
                     }
-                });
+                });*/
 
                 var isearch_index = $('.isearch-a-z-index');
 

@@ -8,7 +8,7 @@
  * Implements hook_field_group_info().
  */
 function asu_isearch_field_group_info() {
-  $export = array();
+  $field_groups = array();
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -36,7 +36,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_advanced|node|asu_isearch_profile|form'] = $field_group;
+  $field_groups['group_advanced|node|asu_isearch_profile|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -84,7 +84,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_basic|node|asu_isearch_profile|form'] = $field_group;
+  $field_groups['group_basic|node|asu_isearch_profile|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -115,7 +115,7 @@ function asu_isearch_field_group_info() {
       'formatter' => 'closed',
     ),
   );
-  $export['group_biography|node|asu_isearch_profile|default'] = $field_group;
+  $field_groups['group_biography|node|asu_isearch_profile|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -145,7 +145,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_biography|node|asu_isearch_profile|isearch_profile_full'] = $field_group;
+  $field_groups['group_biography|node|asu_isearch_profile|isearch_profile_full'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -177,7 +177,7 @@ function asu_isearch_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_details_left|node|asu_isearch_profile|default'] = $field_group;
+  $field_groups['group_details_left|node|asu_isearch_profile|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -209,7 +209,7 @@ function asu_isearch_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_details_right|node|asu_isearch_profile|default'] = $field_group;
+  $field_groups['group_details_right|node|asu_isearch_profile|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -242,7 +242,7 @@ function asu_isearch_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_details|node|asu_isearch_profile|default'] = $field_group;
+  $field_groups['group_details|node|asu_isearch_profile|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -270,7 +270,7 @@ function asu_isearch_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_expertise_area|node|asu_isearch_profile|form'] = $field_group;
+  $field_groups['group_expertise_area|node|asu_isearch_profile|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -301,7 +301,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_links|node|asu_isearch_profile|form'] = $field_group;
+  $field_groups['group_links|node|asu_isearch_profile|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -330,7 +330,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_media|node|asu_isearch_profile|form'] = $field_group;
+  $field_groups['group_media|node|asu_isearch_profile|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -360,7 +360,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_personal|node|asu_isearch_profile|form'] = $field_group;
+  $field_groups['group_personal|node|asu_isearch_profile|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -395,7 +395,7 @@ function asu_isearch_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_portrait_contact|node|asu_isearch_profile|default'] = $field_group;
+  $field_groups['group_portrait_contact|node|asu_isearch_profile|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -427,7 +427,7 @@ function asu_isearch_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_portrait_image|node|asu_isearch_profile|default'] = $field_group;
+  $field_groups['group_portrait_image|node|asu_isearch_profile|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -460,7 +460,7 @@ function asu_isearch_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_portrait_section|node|asu_isearch_profile|default'] = $field_group;
+  $field_groups['group_portrait_section|node|asu_isearch_profile|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -496,7 +496,7 @@ function asu_isearch_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_profile_social|node|asu_isearch_profile|default'] = $field_group;
+  $field_groups['group_profile_social|node|asu_isearch_profile|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -528,7 +528,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_public_work|node|asu_isearch_profile|default'] = $field_group;
+  $field_groups['group_public_work|node|asu_isearch_profile|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -560,7 +560,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_public_work|node|asu_isearch_profile|form'] = $field_group;
+  $field_groups['group_public_work|node|asu_isearch_profile|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -592,7 +592,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_public_work|node|asu_isearch_profile|isearch_profile_full'] = $field_group;
+  $field_groups['group_public_work|node|asu_isearch_profile|isearch_profile_full'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -623,7 +623,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_research|node|asu_isearch_profile|default'] = $field_group;
+  $field_groups['group_research|node|asu_isearch_profile|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -654,7 +654,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_research|node|asu_isearch_profile|form'] = $field_group;
+  $field_groups['group_research|node|asu_isearch_profile|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -685,7 +685,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_research|node|asu_isearch_profile|isearch_profile_full'] = $field_group;
+  $field_groups['group_research|node|asu_isearch_profile|isearch_profile_full'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -713,7 +713,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_tabs|node|asu_isearch_profile|default'] = $field_group;
+  $field_groups['group_tabs|node|asu_isearch_profile|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -741,7 +741,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_tabs|node|asu_isearch_profile|isearch_profile_full'] = $field_group;
+  $field_groups['group_tabs|node|asu_isearch_profile|isearch_profile_full'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -769,7 +769,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_teaching|node|asu_isearch_profile|default'] = $field_group;
+  $field_groups['group_teaching|node|asu_isearch_profile|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -798,7 +798,7 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_teaching|node|asu_isearch_profile|form'] = $field_group;
+  $field_groups['group_teaching|node|asu_isearch_profile|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -826,7 +826,28 @@ function asu_isearch_field_group_info() {
       ),
     ),
   );
-  $export['group_teaching|node|asu_isearch_profile|isearch_profile_full'] = $field_group;
+  $field_groups['group_teaching|node|asu_isearch_profile|isearch_profile_full'] = $field_group;
 
-  return $export;
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Advanced');
+  t('Basic');
+  t('Bio');
+  t('Contact');
+  t('Details');
+  t('Expertise Area');
+  t('Image');
+  t('Left');
+  t('Links');
+  t('Media');
+  t('Personal');
+  t('Portrait Section');
+  t('Public Work');
+  t('Research');
+  t('Right');
+  t('Social');
+  t('Tabs');
+  t('Teaching');
+
+  return $field_groups;
 }

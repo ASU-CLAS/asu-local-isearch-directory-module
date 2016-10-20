@@ -189,233 +189,38 @@ function asu_isearch_preprocess_panels_pane(&$variables) {
   if (isset($variables['content']['#bundle']) && $variables['content']['#bundle'] === 'isearch_directory') {
 
     // shortcut to content render array
-    $content =& $variables['content'];
+    $content = &$variables['content'];
 
     // Setup variables here...
     $content['title'] = '';
     $directory = new IsearchProfileDirectory();
-
-    //dpm($variables, 'THE VARIABLES ARRAY');
-    //dpm($_GET, 'the get args');
-
-    // fixes a bug with pagination when sort order field is exposed in view
-    if (isset($_GET['sort_by']) && in_array(strtoupper($_GET['sort_by']), array(
-        'DESC',
-        'ASC'
-      ))
-    ) {
-      unset($_GET['sort_by']);
-    }
 
     // load the configuration saved for this pane
     $default_view_config = asu_isearch_get_default_view_config();
     $view_config = json_decode($content['field_isearch_config']['#object']->field_isearch_config[LANGUAGE_NONE][0]['value']);
     $view_config = (object) array_merge($default_view_config, (array) $view_config);
 
+    //set the view display option if there is none
     if (!isset($view_config->view_display)) {
       $view_config->view_display = 'isearch_directory:directory_list';
     }
+
     list($view_name, $view_display_id) = explode(':', $view_config->view_display);
 
     // build out the view
     $view = views_get_view($view_name);
-    $display_id = $view_display_id;
-
-    $view->set_display($display_id);
+    $view->view_config = $view_config;
+    $view->set_display($view_display_id);
     $view->init_handlers();
 
-    // filter content by:
-    // affiliation title
-    if (isset($view->filter['field_isearch_affil_title_value_1'])) {
-      if (trim($view_config->filter_title) == '') {
-        unset($view->filter['field_isearch_affil_title_value_1']);
-      }
-      else {
-        $view->filter['field_isearch_affil_title_value_1']->value = $view_config->filter_title;
-      }
-    }
-
-    // display managers - We will unset the value from the sort array if we don't want them at the top.
-    if ($view_config->show_managers === 0) {
-      unset($view->sort['field_isearch_affil_manager_value']);
-    }
-
-    $contextual_last_name = 'all';
-    $contextual_employee_types = 'all';
-    $contextual_departments = 'all';
-    $contextual_tenure_display = 'all';
-    $contextual_expertise_areas = 'all';
-    $contextual_local_tags = 'all';
-
-
-    if (count($view_config->depts->items) && $view_config->depts->items[0] != NULL) {
-      $contextual_departments = array();
-      $department_options = (object) $view_config->depts->options;
-
-      foreach ($view_config->depts->items as $dept_item) {
-        $contextual_departments[] = $dept_item->dept_nid;
-        $dept_id = $dept_item->dept_id;
-
-        // should we include all subdepartments?
-        if ($department_options->$dept_id->subdepts) {
-          $contextual_departments = array_merge($contextual_departments, $dept_item->tree_nids);
-        }
-      }
-      $contextual_departments = implode(',', array_unique($contextual_departments));
-    }
-
-    // display only certain employee types?
-    if (is_array($view_config->employee_types) && !empty($view_config->employee_types) && $view_config->employee_types[0] != 'All') {
-      $employee_type_keys = array();
-      foreach ($view_config->employee_types as $type) {
-        $employee_type_keys[] = preg_replace('/[^a-zA-Z]/', '_', trim($type));
-      }
-      $contextual_employee_types = implode(',', $employee_type_keys);
-    }
-
-    // limit display to tenure type?
-    if (!empty($view_config->tenure_display)) {
-      // backwards compatible code
-      switch (asu_isearch_get_tenure_config($view_config->tenure_display)) {
-        case 'Tenure'    :
-          $tenure_display = '1';
-          break;
-        case 'Non-Tenure':
-          $tenure_display = '0';
-          break;
-        default          :
-          $tenure_display = 'all';
-          break;
-      }
-
-      $contextual_tenure_display = $tenure_display;
-    }
-
-    // display only certain employee types?
-    if ($view_config->expertise_areas) {
-      $contextual_expertise_areas = implode('+', (array) $view_config->expertise_areas);
-    }
-
-    // display only certain tags?
-    if (!empty($view_config->local_tags)) {
-      $contextual_local_tags = implode('+', (array) $view_config->local_tags);
-    }
-
-    // set other display options
-    if (asu_isearch_is_isearch_view($view)) {
-      $display_header = TRUE;
-      $display_photo = TRUE;
-      $display_name = TRUE;
-      $display_contact = TRUE;
-      $display_expertise = TRUE;
-
-      if (isset($view_config->display_header) && (bool) $view_config->display_header == FALSE) {
-        $display_header = FALSE;
-      }
-
-      if (isset($view_config->display_photo) && (bool) $view_config->display_photo == FALSE) {
-        $view->field['field_isearch_local_photo_url']->options['exclude'] = TRUE;
-        $display_photo = FALSE;
-      }
-
-      if (isset($view_config->display_name) && (bool) $view_config->display_name == FALSE) {
-        $view->field['nothing_1']->options['exclude'] = TRUE;
-        $display_name = FALSE;
-      }
-
-      if (isset($view_config->display_contact) && (bool) $view_config->display_contact == FALSE) {
-        $view->field['nothing']->options['exclude'] = TRUE;
-        $display_contact = FALSE;
-      }
-
-      if (isset($view_config->display_expertise) && (bool) $view_config->display_expertise == FALSE) {
-        $view->field['field_isearch_expertise_areas']->options['exclude'] = TRUE;
-        $display_expertise = FALSE;
-      }
-
-      $display_options = (object) array(
-        'display_header' => $display_header,
-        'display_photo' => $display_photo,
-        'display_name' => $display_name,
-        'display_contact' => $display_contact,
-        'display_expertise' => $display_expertise,
-      );
-
-      $directory_header = theme_render_template(drupal_get_path('module', 'asu_isearch') . '/theme/asu_isearch_view_header.tpl.php', array(
-        'display_options' => $display_options,
-      ));
-
-      $view->display_handler->handlers['header']['area_text_custom']->options['content'] = $directory_header;
-
-    }
-
-    if (isset($view_config->display_short_bio) && !$view_config->display_short_bio) {
-      $view->display_handler->handlers['field']['field_isearch_short_bio']->options['alter']['alter_text'] = TRUE;
-      $view->display_handler->handlers['field']['field_isearch_short_bio']->options['alter']['text'] = '&nbsp;';
-    }
-
-    if (isset($view_config->display_building) && !$view_config->display_building) {
-      $view->display_handler->handlers['field']['field_isearch_campus_building']->options['alter']['alter_text'] = TRUE;
-      $view->display_handler->handlers['field']['field_isearch_campus_building']->options['alter']['text'] = '&nbsp;';
-    }
-
-    if (isset($view_config->display_room) && !$view_config->display_room) {
-      $view->display_handler->handlers['field']['field_isearch_campus_room']->options['alter']['alter_text'] = TRUE;
-      $view->display_handler->handlers['field']['field_isearch_campus_room']->options['alter']['text'] = '&nbsp;';
-    }
-
-    if (isset($_GET['isrch_index']) && isset($_GET['isrch_id'])) {
-      if (intval($_GET['isrch_id']) == $directory->getInstanceId()) {
-        $contextual_last_name = check_plain($_GET['isrch_index']{0});
-      }
-    }
-
-    // FIXME: Can this be dynamic somehow so we do not break views unintentionally (those that are missing a contextual filter
-    // or are in a different order
-    $contextual_filter_map = array(
-      'field_isearch_lastname_value' => $contextual_last_name,
-      'field_isearch_affil_empl_key_value' => $contextual_employee_types,
-      'field_isearch_affil_dept_id_value_1' => $contextual_departments,
-      'field_isearch_affil_rank_tenure_value' => $contextual_tenure_display,
-      'tid' => $contextual_expertise_areas,
-      'tid_1' => $contextual_local_tags,
-    );
-
-    $contextual_filters = array();
-    if (isset($view->display_handler->default_display)) {
-      foreach ($view->display_handler->default_display->options['arguments'] as $contextual_field_key => $data) {
-        $value = 'all';
-        if (array_key_exists($contextual_field_key, $contextual_filter_map)) {
-          $value = $contextual_filter_map[$contextual_field_key];
-        }
-
-        $contextual_filters[] = $value;
-      }
-    }
+    $contextual_filters = asu_isearch_get_filters($view_config, $view);
 
     // set the contextual filters arguments
-    $view->set_arguments($contextual_filters);
+    $view_display = asu_isearch_get_rendered_view($view_config, $view);
 
-    // pagination options
-    $view->set_items_per_page($view_config->pager_items_per_page);
-    $view->set_offset($view_config->pager_offset);
-
-    if ($view_config->pager_display != 'paged') {
-      $pager = $view->display_handler->get_option('pager');
-      $pager['type'] = 'none';
-
-      if ($view_config->pager_display == 'fixed') {
-        $pager['type'] = 'some';
-      }
-
-      $pager['options']['items_per_page'] = $view_config->pager_items_per_page;
-      $view->display_handler->set_option('pager', $pager);
-    }
-
-    $view->view_config = $view_config;
-    $view->pre_execute();
-
+    // end edit
     $directory->setViewConfig($view_config);
+
     $directory->setContextualFilters($contextual_filters);
 
     if ($view_config->show_az_index) {
@@ -426,7 +231,7 @@ function asu_isearch_preprocess_panels_pane(&$variables) {
     }
 
     $content['isearch_view'] = array(
-      '#markup' => $view->render($display_id),
+      '#markup' => $view_display,
     );
 
     if (!$view_config->show_filter_titles
@@ -438,6 +243,7 @@ function asu_isearch_preprocess_panels_pane(&$variables) {
     }
 
     // display filters? - Should we display or hide the filters
+
     if ($view_config->show_filters) {
       // build the exposed form fields
       $form_state = array(
@@ -446,10 +252,20 @@ function asu_isearch_preprocess_panels_pane(&$variables) {
         'exposed_form_plugin' => $view->display_handler->get_plugin('exposed_form'),
         'method' => 'get',
         'rerender' => TRUE,
-        'no_redirect' => TRUE,
+        'no_redirect' => TRUE
+        //'ajax' => TRUE
       );
 
       $form = drupal_build_form('views_exposed_form', $form_state);
+
+      // Attach our custom ajax handling script, if ajax is enabled
+      if ($view->use_ajax) {
+        $form['#attached']['js'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_omni.js';
+      }
+
+      $form['keys']['#weight'] = -100;
+      $form['keys']['#attributes']['placeholder'] =  t('Name or Keyword');
+
 
       // update search filters
       $view->set_items_per_page(0);
@@ -466,13 +282,14 @@ function asu_isearch_preprocess_panels_pane(&$variables) {
       $form['field_isearch_affil_title_value']['#access'] = (bool) $view_config->show_filter_titles;
       $form['field_isearch_expertise_areas_tid']['#access'] = (bool) $view_config->show_filter_expertise;
       $form['sort_by']['#access'] = (bool) $view_config->show_filter_sort;
-      $form['isearch_omni_search']['#access'] = (bool) $view_config->show_filter_omni;
+      $form['keys']['#access'] = (bool) $view_config->show_filter_omni;
 
       // set the default sort by
       $form['sort_by']['#value'] = $view_config->default_sort_by;
 
       // set some form defaults when submitted ...
       $params = drupal_get_query_parameters();
+
       if (isset($params['field_isearch_expertise_areas_tid'])) {
         $form['field_isearch_expertise_areas_tid']['#value'] = intval($params['field_isearch_expertise_areas_tid']);
 
@@ -487,21 +304,243 @@ function asu_isearch_preprocess_panels_pane(&$variables) {
         }
       }
 
+      // Add our configs to the exposed form, so that they are resubmitted as
+      // part of the ajax process
+      $form['omni_configs']['#value'] = drupal_json_encode($view_config);
+
+      //$form['submit']['#ajax_processed'] = TRUE;
       $content['isearch_view_exposed_form'] = $form;
     }
 
     // hide configuration
     unset($content['field_isearch_config']);
+  }
+}
+
+
+/***
+ * Function to render the custom view
+ *
+ * @param $view_config
+ * @return mixed
+ */
+function asu_isearch_get_rendered_view($view_config, &$view) {
+
+  list($view_name, $view_display_id) = explode(':', $view_config->view_display);
+
+  // set other display options
+
+  if (asu_isearch_is_isearch_view($view)) {
+    $display_header = TRUE;
+    $display_photo = TRUE;
+    $display_name = TRUE;
+    $display_contact = TRUE;
+    $display_expertise = TRUE;
+
+    if (isset($view_config->display_header) && (bool) $view_config->display_header == FALSE) {
+      $display_header = FALSE;
+    }
+
+    if (isset($view_config->display_photo) && (bool) $view_config->display_photo == FALSE) {
+      $view->field['field_isearch_local_photo_url']->options['exclude'] = TRUE;
+      $display_photo = FALSE;
+    }
+
+    if (isset($view_config->display_name) && (bool) $view_config->display_name == FALSE) {
+      $view->field['nothing_1']->options['exclude'] = TRUE;
+      $display_name = FALSE;
+    }
+
+    if (isset($view_config->display_contact) && (bool) $view_config->display_contact == FALSE) {
+      $view->field['nothing']->options['exclude'] = TRUE;
+      $display_contact = FALSE;
+    }
+
+    if (isset($view_config->display_expertise) && (bool) $view_config->display_expertise == FALSE) {
+      $view->field['field_isearch_expertise_areas']->options['exclude'] = TRUE;
+      $display_expertise = FALSE;
+    }
+
+    $display_options = (object) array(
+      'display_header' => $display_header,
+      'display_photo' => $display_photo,
+      'display_name' => $display_name,
+      'display_contact' => $display_contact,
+      'display_expertise' => $display_expertise,
+    );
+
+    $directory_header = theme_render_template(drupal_get_path('module', 'asu_isearch') . '/theme/asu_isearch_view_header.tpl.php', array(
+      'display_options' => $display_options,
+    ));
+
+    $view->display_handler->handlers['header']['area_text_custom']->options['content'] = $directory_header;
 
   }
 
+  if (isset($view_config->display_short_bio) && !$view_config->display_short_bio) {
+    $view->display_handler->handlers['field']['field_isearch_short_bio']->options['alter']['alter_text'] = TRUE;
+    $view->display_handler->handlers['field']['field_isearch_short_bio']->options['alter']['text'] = '&nbsp;';
+  }
+
+  if (isset($view_config->display_building) && !$view_config->display_building) {
+    $view->display_handler->handlers['field']['field_isearch_campus_building']->options['alter']['alter_text'] = TRUE;
+    $view->display_handler->handlers['field']['field_isearch_campus_building']->options['alter']['text'] = '&nbsp;';
+  }
+
+  if (isset($view_config->display_room) && !$view_config->display_room) {
+    $view->display_handler->handlers['field']['field_isearch_campus_room']->options['alter']['alter_text'] = TRUE;
+    $view->display_handler->handlers['field']['field_isearch_campus_room']->options['alter']['text'] = '&nbsp;';
+  }
+
+  // pagination options
+  $view->set_items_per_page($view_config->pager_items_per_page);
+  $view->set_offset($view_config->pager_offset);
+
+  if ($view_config->pager_display != 'paged') {
+    $pager = $view->display_handler->get_option('pager');
+    $pager['type'] = 'none';
+
+    if ($view_config->pager_display == 'fixed') {
+      $pager['type'] = 'some';
+    }
+
+    $pager['options']['items_per_page'] = $view_config->pager_items_per_page;
+    $view->display_handler->set_option('pager', $pager);
+  }
+
+  // Add the title filter
+  if (isset($view_config->filter_title)) {
+    if (trim($view_config->filter_title) != '') {
+      $view->filter['field_isearch_affil_title_value_1']->value = $view_config->filter_title;
+      $view->filter['field_isearch_affil_title_value_1']->options['value'] = $view_config->filter_title;
+    }
+  }
+
+  $view->pre_execute();
+
+  $view_display =  $view->render($view_display_id);
+
+  $view->post_execute();
+
+  return $view_display;
+
 }
 
+/****
+ * Add the filters to the view
+ *
+ *
+ * @param $view_config
+ * @param $view
+ * @return array
+ */
+function asu_isearch_get_filters($view_config, &$view) {
+
+  //list($view_name, $view_display_id) = explode(':', $view_config->view_display);
+  //$view->set_display($view_display_id);
+  //$view->init_handlers();
+
+  $contextual_last_name = 'all';
+  $contextual_employee_types = 'all';
+  $contextual_departments = 'all';
+  $contextual_tenure_display = 'all';
+  $contextual_expertise_areas = 'all';
+  $contextual_local_tags = 'all';
+
+  // display only certain employee types?
+  if ($view_config->expertise_areas) {
+    $contextual_expertise_areas = implode('+', (array) $view_config->expertise_areas);
+  }
+
+  // display only certain tags?
+  if (!empty($view_config->local_tags)) {
+    $contextual_local_tags = implode('+', (array) $view_config->local_tags);
+  }
+
+  if (count($view_config->depts->items) && $view_config->depts->items[0] != NULL) {
+    $contextual_departments = array();
+    $department_options = (object) $view_config->depts->options;
+
+    foreach ($view_config->depts->items as $dept_item) {
+      $contextual_departments[] = $dept_item->dept_nid;
+      $dept_id = $dept_item->dept_id;
+
+      // should we include all subdepartments?
+      if ($department_options->$dept_id->subdepts) {
+        $contextual_departments = array_merge($contextual_departments, $dept_item->tree_nids);
+      }
+    }
+    $contextual_departments = implode(',', array_unique($contextual_departments));
+  }
+
+  // display only certain employee types?
+  if (is_array($view_config->employee_types) && !empty($view_config->employee_types) && $view_config->employee_types[0] != 'All') {
+    $employee_type_keys = array();
+    foreach ($view_config->employee_types as $type) {
+      $employee_type_keys[] = preg_replace('/[^a-zA-Z]/', '_', trim($type));
+    }
+    $contextual_employee_types = implode(',', $employee_type_keys);
+  }
+
+  // limit display to tenure type?
+  if (!empty($view_config->tenure_display)) {
+    // backwards compatible code
+    switch (asu_isearch_get_tenure_config($view_config->tenure_display)) {
+      case 'Tenure'    :
+        $tenure_display = '1';
+        break;
+      case 'Non-Tenure':
+        $tenure_display = '0';
+        break;
+      default          :
+        $tenure_display = 'all';
+        break;
+    }
+
+    $contextual_tenure_display = $tenure_display;
+  }
+
+  // check against the argument list for the view, before settings filter vals
+  $contextual_filter_map = array(
+    'field_isearch_lastname_value' => $contextual_last_name,
+    'field_isearch_affil_empl_key_value' => $contextual_employee_types,
+    'field_isearch_affil_dept_id_value_1' => $contextual_departments,
+    'field_isearch_affil_rank_tenure_value' => $contextual_tenure_display,
+    'tid' => $contextual_expertise_areas,
+    'tid_1' => $contextual_local_tags,
+  );
+
+  $contextual_filters = array();
+
+  $arglist = $view->argument;
+
+  foreach ($arglist as $key => $obj) {
+
+    $value = 'all';
+
+    if (array_key_exists($key, $contextual_filter_map)) {
+      $value = $contextual_filter_map[$key];
+    }
+
+    $contextual_filters[] = $value;
+
+  }
+
+  $view->set_arguments($contextual_filters);
+
+  return $contextual_filters;
+}
+/* Todo:  remove if unnecessary
+function asu_isearch_ajax_process_form(&$form, &$form_state, $form_id) {
+
+}*/
 
 function _asu_isearch_update_view_form_filters($view, &$form, $directory) {
   if (isset($form['field_isearch_affil_title_value']) && $form['field_isearch_affil_title_value']['#type'] == 'select') {
     $default = array('' => $form['field_isearch_affil_title_value']['#options']['']);
-    $title_options = array_merge($default, $directory->getTitleOptions());
+    $title_options = $directory->getTitleOptions();
+    $title_options = array_merge($default, $title_options);
+
     $form['field_isearch_affil_title_value']['#options'] = $title_options;
   }
 }
@@ -1202,8 +1241,6 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
   // theoretically happen in a non-Panels use case. Not that anybody uses this
   // outside of Panels.
   $form_state['pane']->subtype = $subtype;
-
-  //entity_save('fieldable_panels_pane', $form_state['entity']);
 }
 
 /*

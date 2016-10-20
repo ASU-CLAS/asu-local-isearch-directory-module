@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Implements hook_views_pre_render()
  */
@@ -14,6 +15,8 @@ function asu_isearch_views_pre_render(&$view) {
   }
 
   if (asu_isearch_is_isearch_view($view) && isset($view->view_config)) {
+
+    $view->exposed_data[] = drupal_json_encode($view->view_config);
 
     $display_options = array(
       'display_header' => $view->view_config->display_header,
@@ -147,25 +150,12 @@ function asu_isearch_get_views() {
   return $views;
 }
 
-/**
- * Implements hook_query_TAG_alter()
- */
-function asu_isearch_query_asu_isearch_list_alter(QueryAlterableInterface $query) {
-  $query->groupBy('nid');
-}
-
 
 /**
  * Implements hook_views_query_alter()
  */
 function asu_isearch_views_query_alter(&$view, &$query) {
   if (asu_isearch_is_isearch_view($view) && isset($view->view_config)) {
-
-
-    // ensure tenure sort order is always descending
-    if (isset($view->sort['field_isearch_affil_rank_tenure_value'])) {
-      $view->sort['field_isearch_affil_rank_tenure_value']->options['order'] = 'DESC';
-    }
 
     // reset the sort when passed in
     if (isset($_GET['sort_by'])) {
@@ -182,18 +172,13 @@ function asu_isearch_views_query_alter(&$view, &$query) {
         if (isset($view->sort['field_isearch_affil_rank_weight_value'])) {
           unset($view->sort['field_isearch_affil_rank_weight_value']);
         }
-        if (isset($view->sort['field_isearch_affil_rank_tenure_value'])) {
-          unset($view->sort['field_isearch_affil_rank_tenure_value']);
-        }
+
         break;
 
       case 'field_isearch_affil_rank_weight_value':
       default:
         if (isset($view->sort['field_isearch_affil_rank_weight_value'])) {
           $view->sort['field_isearch_affil_rank_weight_value']->options['order'] = 'ASC';
-        }
-        if (isset($view->sort['field_isearch_affil_rank_tenure_value'])) {
-          unset($view->sort['field_isearch_affil_rank_tenure_value']);
         }
 
         break;
@@ -202,12 +187,12 @@ function asu_isearch_views_query_alter(&$view, &$query) {
     $query->orderby = array();
 
     foreach ($view->sort as $field => $sort) {
+
       $query->orderby[] = array(
         'field' => $sort->field,
         'direction' => $sort->options['order'],
       );
     }
-
 
     if ($view->view_config->employee_type_exclude == 1) {
       $dept_id_field = 'field_collection_item_field_data_field_isearch_affiliations__field_data_field_isearch_affil_empl_key.field_isearch_affil_empl_key_value';
@@ -239,6 +224,153 @@ function asu_isearch_views_query_alter(&$view, &$query) {
       }
     }
 
-    //dpm($query, 'THE QUERY');
+
+    // Set the lastname filter if a letter is selected
+    if (isset($view->view_config->index_letter) && $view->view_config->index_letter != 'ALL') {
+      $letter = $view->view_config->index_letter;
+
+      $query->where[] = array(
+        'conditions' => array(
+          0 => array(
+            'field' => ' field_data_field_isearch_lastname.field_isearch_lastname_value',
+            'operator' => 'RLIKE',
+            'value' => '^' . $letter . '.*'
+          )
+        ),
+        'args' => array(),
+        'type' => 'AND'
+      );
+    }
+  }
+}
+
+/***
+ * Implements hook_js_alter
+ *
+ * We replace the ajax_view js with a custom solution, which will allow multiple
+ * exposed filters on the same page.
+ *
+ * @param $javascript
+ */
+function asu_isearch_js_alter(&$javascript) {
+
+  $asu_isearch_js = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_omni.js';
+
+  if (isset($javascript[$asu_isearch_js])) {
+
+    $views_ajax_path = drupal_get_path('module', 'views') . '/js/ajax_view.js';
+
+    unset($javascript[$views_ajax_path]);
+  }
+}
+
+/**
+ * Modified menu callback to load a view via AJAX, based on asu_isearch configs
+ */
+function asu_isearch_views_ajax() {
+
+  // load the views ajax functions
+  require_once drupal_get_path('module', 'views') . '/includes/ajax.inc';
+
+  if (isset($_REQUEST['view_name']) && isset($_REQUEST['view_display_id'])) {
+    $name = $_REQUEST['view_name'];
+    $display_id = $_REQUEST['view_display_id'];
+    $args = isset($_REQUEST['view_args']) && $_REQUEST['view_args'] !== '' ? explode('/', $_REQUEST['view_args']) : array();
+    $path = isset($_REQUEST['view_path']) ? rawurldecode($_REQUEST['view_path']) : NULL;
+    $dom_id = isset($_REQUEST['view_dom_id']) ? preg_replace('/[^a-zA-Z0-9_-]+/', '-', $_REQUEST['view_dom_id']) : NULL;
+    $pager_element = isset($_REQUEST['pager_element']) ? intval($_REQUEST['pager_element']) : NULL;
+
+    // if the omni configs are not set, then return the regular views ajax processing
+    if (!isset($_REQUEST['omni_configs'])) {
+      return views_ajax();
+    }
+
+    $view_config = json_decode($_REQUEST['omni_configs']);
+    $index_letter = isset($_REQUEST['isearch_index']) ? $_REQUEST['isearch_index'] : NULL;
+
+    if ($index_letter != NULL) {
+      $view_config->index_letter = $index_letter;
+    }
+
+    $commands = array();
+
+    // Remove all of this stuff from $_GET so it doesn't end up in pagers and tablesort URLs.
+    foreach (array(
+               'view_name',
+               'view_display_id',
+               'view_args',
+               'view_path',
+               'view_dom_id',
+               'pager_element',
+               'view_base_path',
+               'ajax_html_ids',
+               'ajax_page_state'
+             ) as $key) {
+      if (isset($_GET[$key])) {
+        unset($_GET[$key]);
+      }
+      if (isset($_REQUEST[$key])) {
+        unset($_REQUEST[$key]);
+      }
+      if (isset($_POST[$key])) {
+        unset($_POST[$key]);
+      }
+    }
+
+    if (!isset($view_config->view_display)) {
+      $view_config->view_display = 'isearch_directory:directory_list';
+    }
+
+    list($view_name, $display_id) = explode(':', $view_config->view_display);
+
+    $view = views_get_view($view_name);
+    $view->view_config = $view_config;
+    $view->set_display($display_id);
+    $view->init_handlers();
+
+    if ($view && $view->access($display_id)) {
+      // Fix 'q' for paging.
+      if (!empty($path)) {
+        $_GET['q'] = $path;
+      }
+
+      // Add all $_POST data, because AJAX is always a post and many things,
+      // such as tablesorts, exposed filters and paging assume $_GET.
+      $_GET = $_POST + drupal_get_query_parameters($_GET, array('page'));
+
+      // Overwrite the destination.
+      // @see drupal_get_destination()
+      $origin_destination = $path;
+      $query = drupal_http_build_query(drupal_get_query_parameters());
+      if ($query != '') {
+        $origin_destination .= '?' . $query;
+      }
+      $destination = &drupal_static('drupal_get_destination');
+      $destination = array('destination' => $origin_destination);
+
+      // Override the display's pager_element with the one actually used.
+      if (isset($pager_element)) {
+        $commands[] = views_ajax_command_scroll_top('.view-dom-id-' . $dom_id);
+        $view->display[$display_id]->handler->set_option('pager_element', $pager_element);
+      }
+      // Reuse the same DOM id so it matches that in Drupal.settings.
+      $view->dom_id = $dom_id;
+
+      // Attach asu_isearch customized contextual filters
+      $contextual_filters = asu_isearch_get_filters($view_config, $view);
+
+
+      if (isset($_REQUEST['field_isearch_affil_title_value'])) {
+        $view_config->current_title = $_REQUEST['field_isearch_affil_title_value'];
+      }
+
+      // set the contextual filters arguments
+      $view_display = asu_isearch_get_rendered_view($view_config, $view);
+
+      $commands[] = ajax_command_replace('.view-dom-id-' . $dom_id, $view_display);
+    }
+
+    //drupal_alter('views_ajax_data', $commands, $view);
+    return array('#type' => 'ajax', '#commands' => $commands);
   }
 }

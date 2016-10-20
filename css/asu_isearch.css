@@ -435,3 +435,54 @@ div.krumo-preview {
     max-height:155px;
     overflow:hidden;
 }
+
+
+/* Alpha bar new */
+
+.asu-isearch-alpha-bar .col-md-12 {
+    margin-bottom: 10px;
+}
+
+body .field-type-asu-directory .asu-isearch-alpha-bar.row {
+    margin-top: 10px;
+}
+
+.alphabet {
+    list-style-type: none;
+    padding: 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
+.alphabet li {
+    float: left;
+    margin: 0;
+    padding-top: 5px;
+    padding-right: 0;
+    padding-left: 0;
+    padding-bottom: 25px;
+    font-size: 16px;
+    -moz-box-sizing: border-box;
+    color: #a90044;
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 3.70%;
+    font-weight: 400;
+}
+
+.alphabet li:last-child {
+    border-right: none;
+}
+
+.alphabet li:hover {
+    color: white;
+    background-color: #a90044;
+}
+
+.alphabet li.active-letter {
+    color: white;
+    background-color: #a90044;
+}

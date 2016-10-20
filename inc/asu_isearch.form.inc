@@ -214,6 +214,7 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
 
 
 function asu_isearch_directory_list_form_alter(&$form, &$form_state, $form_id) {
+  /*** TODO:  DOES this need more work? **/
 
   $form['#attributes'] = array(
     'class' => array('isearch-directory-filters'),
@@ -233,22 +234,9 @@ function asu_isearch_directory_list_form_alter(&$form, &$form_state, $form_id) {
   // reset label for expertise field
   $form['field_isearch_expertise_areas_tid']['#options']['All'] = t('Select Expertise');
 
-  // create omni search field and hide fields that are unecessary
-  $form['isearch_omni_search'] = array(
-    '#type' => 'textfield',
-    '#weight' => -100,
-    '#attributes' => array(
-      'placeholder' => t('Name or Keyword'),
-    ),
-    '#attached' => array(
-      'js' => array(
-        drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_omni.js',
-      ),
-      'css' => array(
-        drupal_get_path('module', 'asu_isearch') . '/css/asu_isearch_omni.css',
-      ),
-    ),
-  );
+
+  $form['#attached']['css'][] = drupal_get_path('module', 'asu_isearch') . '/css/asu_isearch_omni.css';
+
 
   // Reset exposed form theme so we can set weights on fields
   $form['#theme'] = '';
@@ -259,20 +247,25 @@ function asu_isearch_directory_list_form_alter(&$form, &$form_state, $form_id) {
     }
   }
 
+  $form['submit']['#weight'] = 9;
+
   // Hide sort order field
   $form['sort_order']['#type'] = 'hidden';
 
   // tag and hide fields so we can manipulate them with attached javascript
   $hidden_fields = array(
-    'omni_displayname',
-    'omni_firstname',
-    'omni_lastname',
-    'omni_shortbio',
-    'omni_expertise'
+    //'omni_displayname',
+    //'omni_firstname',
+    //'omni_lastname',
+    //'omni_shortbio',
+    //'omni_expertise',
+    // todo:  experimental
+    'omni_configs'
   );
+
   foreach ($hidden_fields as $fieldname) {
     $form[$fieldname]['#type'] = 'hidden';
-    $form[$fieldname]['#attributes']['class'] = array('omni-search-field');
+    //$form[$fieldname]['#attributes']['class'] = array('omni-search-field');
   }
 
   // hide some filters if they do not have any options
