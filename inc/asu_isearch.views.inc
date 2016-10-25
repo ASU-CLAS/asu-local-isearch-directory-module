@@ -179,6 +179,7 @@ function asu_isearch_views_query_alter(&$view, &$query) {
       default:
         if (isset($view->sort['field_isearch_affil_rank_weight_value'])) {
           $view->sort['field_isearch_affil_rank_weight_value']->options['order'] = 'ASC';
+          unset($view->sort['field_isearch_firstname_value']);
         }
 
         break;
@@ -187,7 +188,6 @@ function asu_isearch_views_query_alter(&$view, &$query) {
     $query->orderby = array();
 
     foreach ($view->sort as $field => $sort) {
-
       $query->orderby[] = array(
         'field' => $sort->field,
         'direction' => $sort->options['order'],

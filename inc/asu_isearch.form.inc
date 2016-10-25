@@ -8,6 +8,8 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
   // hide the profile tabs placeholder field that can be rendered on a node display
   if ($form_id == 'asu_isearch_profile_node_form') {
 
+    // If we are adding a new custon node, or are editing a custom node, then display all fields
+    // for editing
     if (arg(1) == 'add' || $form['#node']->field_isearch_eid['und'][0]['value'] == -1) {
 
       $form['field_isearch_local_photo_url']['#access'] = FALSE;
@@ -117,10 +119,18 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
         'field_isearch_local_photo_url',
         'field_isearch_local_office_hours',
         'field_isearch_local_primary_aff',
-
         'field_isearch_affiliations',
         'field_isearch_affil_local_weight',
         'field_isearch_link_building_code',
+      );
+
+      // also exclude the new fields,
+      // since they don't follow naming convention
+      $also_excluded = array(
+        'field_consulting',
+        'field_board',
+        'field_industry_positions',
+        'field_pro_bono'
       );
 
       // Hide the rest of the fields
@@ -128,7 +138,9 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
       foreach ($form as $form_field => $value) {
         $is_local_field = (bool) preg_match('/^field_isearch_local_/', $form_field);
 
-        if (!$is_local_field && preg_match('/^field_isearch_/', $form_field) && !in_array($form_field, $field_exception_manifest)) {
+        if ((!$is_local_field && preg_match('/^field_isearch_/', $form_field) && !in_array($form_field, $field_exception_manifest)) ||
+        in_array($form_field, $also_excluded)) {
+
           if (asu_isearch_devmode() === FALSE) {
             $form[$form_field]['#disabled'] = TRUE;
             $form[$form_field]['#access'] = FALSE;
@@ -212,9 +224,16 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
   }
 }
 
-
+/****
+ * Implements hook_form_alter
+ *
+ * Modify the directory listing views exposed form
+ *
+ * @param $form
+ * @param $form_state
+ * @param $form_id
+ */
 function asu_isearch_directory_list_form_alter(&$form, &$form_state, $form_id) {
-  /*** TODO:  DOES this need more work? **/
 
   $form['#attributes'] = array(
     'class' => array('isearch-directory-filters'),
@@ -254,12 +273,6 @@ function asu_isearch_directory_list_form_alter(&$form, &$form_state, $form_id) {
 
   // tag and hide fields so we can manipulate them with attached javascript
   $hidden_fields = array(
-    //'omni_displayname',
-    //'omni_firstname',
-    //'omni_lastname',
-    //'omni_shortbio',
-    //'omni_expertise',
-    // todo:  experimental
     'omni_configs'
   );
 

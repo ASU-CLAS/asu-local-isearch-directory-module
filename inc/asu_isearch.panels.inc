@@ -436,10 +436,6 @@ function asu_isearch_get_rendered_view($view_config, &$view) {
  */
 function asu_isearch_get_filters($view_config, &$view) {
 
-  //list($view_name, $view_display_id) = explode(':', $view_config->view_display);
-  //$view->set_display($view_display_id);
-  //$view->init_handlers();
-
   $contextual_last_name = 'all';
   $contextual_employee_types = 'all';
   $contextual_departments = 'all';
@@ -492,7 +488,7 @@ function asu_isearch_get_filters($view_config, &$view) {
       case 'Non-Tenure':
         $tenure_display = '0';
         break;
-      default          :
+      default:
         $tenure_display = 'all';
         break;
     }
@@ -530,10 +526,6 @@ function asu_isearch_get_filters($view_config, &$view) {
 
   return $contextual_filters;
 }
-/* Todo:  remove if unnecessary
-function asu_isearch_ajax_process_form(&$form, &$form_state, $form_id) {
-
-}*/
 
 function _asu_isearch_update_view_form_filters($view, &$form, $directory) {
   if (isset($form['field_isearch_affil_title_value']) && $form['field_isearch_affil_title_value']['#type'] == 'select') {
@@ -1199,10 +1191,8 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     drupal_set_message(t('The entity has been saved.'));
   }
 
-
   /*** FROM fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form_submit   **/
   // Determine how to handle revision locking.
-
   $revision_context_aware = fieldable_panels_panes_revision_is_lockable($entity);
 
   // If this is a new entity entity, or revision locking is enabled, look for a

@@ -45,6 +45,23 @@ function asu_isearch_uuid_features_default_fpps() {
     'language' => 'und',
   );
   $fpps[] = array(
+    'timestamp' => 1477426920,
+    'title' => 'Industry Experience',
+    'log' => '',
+    'bundle' => 'panel_tabs_extended_tab',
+    'link' => 0,
+    'path' => '',
+    'reusable' => 1,
+    'admin_title' => 'Industry Experience',
+    'admin_description' => '',
+    'category' => 'Tab Panes',
+    'view_access' => NULL,
+    'edit_access' => NULL,
+    'created' => 1477426784,
+    'uuid' => '76ebd555-a0f4-4e91-bc2c-fe5c9ba1502c',
+    'language' => 'und',
+  );
+  $fpps[] = array(
     'timestamp' => 1449595909,
     'title' => 'Research',
     'log' => '',

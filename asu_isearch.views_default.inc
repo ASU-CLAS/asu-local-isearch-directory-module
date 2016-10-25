@@ -1000,6 +1000,16 @@ function asu_isearch_views_default_views() {
     'thousand_separator' => '',
     'prefix_suffix' => 1,
   );
+  /* Field: Field collection item: Rank Local Weight */
+  $handler->display->display_options['fields']['field_isearch_affil_local_weight']['id'] = 'field_isearch_affil_local_weight';
+  $handler->display->display_options['fields']['field_isearch_affil_local_weight']['table'] = 'field_data_field_isearch_affil_local_weight';
+  $handler->display->display_options['fields']['field_isearch_affil_local_weight']['field'] = 'field_isearch_affil_local_weight';
+  $handler->display->display_options['fields']['field_isearch_affil_local_weight']['relationship'] = 'field_isearch_affiliations_value';
+  $handler->display->display_options['fields']['field_isearch_affil_local_weight']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_isearch_affil_local_weight']['settings'] = array(
+    'thousand_separator' => '',
+    'prefix_suffix' => 1,
+  );
   $handler->display->display_options['defaults']['sorts'] = FALSE;
   /* Sort criterion: Field collection item: Rank Weight (field_isearch_affil_rank_weight) */
   $handler->display->display_options['sorts']['field_isearch_affil_rank_weight_value']['id'] = 'field_isearch_affil_rank_weight_value';

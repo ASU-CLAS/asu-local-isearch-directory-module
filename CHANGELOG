@@ -2,6 +2,7 @@ asu_isearch 7.x-1.7
 -------------------
 - views exposed contextual filters are now using ajax views functionality
 - A to Z index filters are now working
+- Added support for industry experience fields
 
 asu_isearch 7.x-1.6
 -------------------

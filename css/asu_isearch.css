@@ -10,22 +10,27 @@ div.krumo-preview {
     margin-bottom: 25px;
 }
 
-.isearch-profile-2col .ui-tabs-nav > li > a {
-    margin-right: 0;
-    border-radius: 0;
-    font-size: 18px;
-    color: #a9a9a9;
-    border: none;
-    border-left: thin solid #d7d7d7;
-    border-top: thin solid #d7d7d7;
-}
+
 
 .isearch-profile-2col .ui-tabs .ui-tabs-nav li:last-of-type a {
     border-right: thin solid #d7d7d7;
 }
 
-.isearch-profile-2col .ui-tabs .ui-tabs-nav li a {
-    padding: 10px 35px;
+/*** need this to make sure all tabs stay on same line **/
+.isearch-profile-2col .ui-tabs {
+    margin-right: -15px;
+}
+
+.isearch-profile-2col .ui-tabs .ui-tabs-nav>li>a {
+
+    margin-right: 0;
+    border-radius: 0;
+    font-size: 18px;
+    color: #a9a9a9;
+    border: none;
+    border-left: thin solid #a9a9a9;
+    border-top: thin solid #a9a9a9;
+    padding: 10px 30px;
     border-right: none;
 }
 
@@ -486,3 +491,10 @@ body .field-type-asu-directory .asu-isearch-alpha-bar.row {
     color: white;
     background-color: #a90044;
 }
+
+.isearch-profile-content .pane-content {
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    font-weight: normal;
+}
+

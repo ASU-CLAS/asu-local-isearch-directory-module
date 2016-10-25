@@ -43,6 +43,12 @@ function asu_isearch_strongarm() {
       'isearch_profile_list' => array(
         'custom_settings' => TRUE,
       ),
+      'program_table' => array(
+        'custom_settings' => TRUE,
+      ),
+      'diff_standard' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
     'extra_fields' => array(
       'form' => array(
@@ -53,10 +59,10 @@ function asu_isearch_strongarm() {
           'weight' => '1',
         ),
         'metatags' => array(
-          'weight' => '14',
+          'weight' => '13',
         ),
         'redirect' => array(
-          'weight' => '13',
+          'weight' => '12',
         ),
       ),
       'display' => array(),

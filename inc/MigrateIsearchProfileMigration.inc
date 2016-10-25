@@ -137,6 +137,15 @@ class MigrateIsearchProfileMigration extends Migration {
     $this->addFieldMapping('field_isearch_graduate_faculties', 'graduateFaculties');
     $this->addFieldMapping('field_isearch_work_history', 'workHistory');
     $this->addFieldMapping('field_isearch_service', 'service');
+    $this->addFieldMapping('field_consulting', 'consulting');
+    $this->addFieldMapping('field_board', 'board');
+    $this->addFieldMapping('field_industry_positions', 'industryPositions');
+    $this->addFieldMapping('field_pro_bono', 'probono');
+
+    $this->addFieldMapping('field_consulting:format', 'htmlFormat');
+    $this->addFieldMapping('field_board:format', 'htmlFormat');
+    $this->addFieldMapping('field_industry_positions:format', 'htmlFormat');
+    $this->addFieldMapping('field_pro_bono:format', 'htmlFormat');
     $this->addFieldMapping('field_isearch_bio:format', 'htmlFormat');
     $this->addFieldMapping('field_isearch_editorships:format', 'htmlFormat');
     $this->addFieldMapping('field_isearch_education:format', 'htmlFormat');
@@ -208,6 +217,10 @@ class MigrateIsearchProfileMigration extends Migration {
       'mailCodes' => 'Mail codes',
       'employeeTypes' => 'Employee types',
       'personalWebsite' => 'Personal website',
+      'consulting' => 'Consulting',
+      'board' => 'Board',
+      'industryPositions' => 'Industry Positions',
+      'probono' => 'Pro Bono',
       'htmlFormat' => 'Placeholder source field used for setting HTML format on text fields',
       'migrateHash' => 'Migrate hash used to determine if the entity should be updated or skipped on import',
     );
