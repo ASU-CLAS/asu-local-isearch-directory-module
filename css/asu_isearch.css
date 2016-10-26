@@ -10,22 +10,27 @@ div.krumo-preview {
     margin-bottom: 25px;
 }
 
-.isearch-profile-2col .ui-tabs-nav > li > a {
-    margin-right: 0;
-    border-radius: 0;
-    font-size: 18px;
-    color: #a9a9a9;
-    border: none;
-    border-left: thin solid #d7d7d7;
-    border-top: thin solid #d7d7d7;
-}
+
 
 .isearch-profile-2col .ui-tabs .ui-tabs-nav li:last-of-type a {
     border-right: thin solid #d7d7d7;
 }
 
-.isearch-profile-2col .ui-tabs .ui-tabs-nav li a {
-    padding: 10px 35px;
+/*** need this to make sure all tabs stay on same line **/
+.isearch-profile-2col .ui-tabs {
+    margin-right: -15px;
+}
+
+.isearch-profile-2col .ui-tabs .ui-tabs-nav>li>a {
+
+    margin-right: 0;
+    border-radius: 0;
+    font-size: 18px;
+    color: #a9a9a9;
+    border: none;
+    border-left: thin solid #a9a9a9;
+    border-top: thin solid #a9a9a9;
+    padding: 10px 30px;
     border-right: none;
 }
 
@@ -435,3 +440,61 @@ div.krumo-preview {
     max-height:155px;
     overflow:hidden;
 }
+
+
+/* Alpha bar new */
+
+.asu-isearch-alpha-bar .col-md-12 {
+    margin-bottom: 10px;
+}
+
+body .field-type-asu-directory .asu-isearch-alpha-bar.row {
+    margin-top: 10px;
+}
+
+.alphabet {
+    list-style-type: none;
+    padding: 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
+.alphabet li {
+    float: left;
+    margin: 0;
+    padding-top: 5px;
+    padding-right: 0;
+    padding-left: 0;
+    padding-bottom: 25px;
+    font-size: 16px;
+    -moz-box-sizing: border-box;
+    color: #a90044;
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 3.70%;
+    font-weight: 400;
+}
+
+.alphabet li:last-child {
+    border-right: none;
+}
+
+.alphabet li:hover {
+    color: white;
+    background-color: #a90044;
+}
+
+.alphabet li.active-letter {
+    color: white;
+    background-color: #a90044;
+}
+
+.isearch-profile-content .pane-content {
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    font-weight: normal;
+}
+

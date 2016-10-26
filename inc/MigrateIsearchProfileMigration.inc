@@ -137,6 +137,15 @@ class MigrateIsearchProfileMigration extends Migration {
     $this->addFieldMapping('field_isearch_graduate_faculties', 'graduateFaculties');
     $this->addFieldMapping('field_isearch_work_history', 'workHistory');
     $this->addFieldMapping('field_isearch_service', 'service');
+    $this->addFieldMapping('field_consulting', 'consulting');
+    $this->addFieldMapping('field_board', 'board');
+    $this->addFieldMapping('field_industry_positions', 'industryPositions');
+    $this->addFieldMapping('field_pro_bono', 'probono');
+
+    $this->addFieldMapping('field_consulting:format', 'htmlFormat');
+    $this->addFieldMapping('field_board:format', 'htmlFormat');
+    $this->addFieldMapping('field_industry_positions:format', 'htmlFormat');
+    $this->addFieldMapping('field_pro_bono:format', 'htmlFormat');
     $this->addFieldMapping('field_isearch_bio:format', 'htmlFormat');
     $this->addFieldMapping('field_isearch_editorships:format', 'htmlFormat');
     $this->addFieldMapping('field_isearch_education:format', 'htmlFormat');
@@ -208,6 +217,10 @@ class MigrateIsearchProfileMigration extends Migration {
       'mailCodes' => 'Mail codes',
       'employeeTypes' => 'Employee types',
       'personalWebsite' => 'Personal website',
+      'consulting' => 'Consulting',
+      'board' => 'Board',
+      'industryPositions' => 'Industry Positions',
+      'probono' => 'Pro Bono',
       'htmlFormat' => 'Placeholder source field used for setting HTML format on text fields',
       'migrateHash' => 'Migrate hash used to determine if the entity should be updated or skipped on import',
     );
@@ -288,12 +301,21 @@ class MigrateIsearchProfileMigration extends Migration {
         $affiliation->isManager = $row->managers[$index];
         $affiliation->isRankTenure = $row->departmentTitleRanksTenure[$index];
         $affiliation->ranksTid = $row->departmentTitleRanksTids[$index];
+        $affiliation->ranksWeight = $row->departmentTitleRanksWeight[$index];
 
-        if ($pull_weights && !empty($row->employeeWeight)) {
-          $affiliation->employeeWeight = $row->employeeWeight[$index];
+        // Only add the employeeweight to the local weight field if it has been configured
+        // to do so, it has been set in iSearch, it is less than rank weight,
+        // and it less than the 999 placeholder
+        if ($pull_weights && !empty($row->employeeWeight) && is_numeric($row->employeeWeight[$index])) {
+
+          $weight = $affiliation->ranksWeight;
+          $eweight = intval($row->employeeWeight[$index]);
+
+          if ( ( !is_numeric($weight) || $eweight < intval($weight) ) && $eweight < 999) {
+            $affiliation->employeeWeight = $eweight;
+          }
         }
 
-        $affiliation->ranksWeight = $row->departmentTitleRanksWeight[$index];
         $affiliation->isPrimary = ($row->deptids[$index] == $row->primaryDeptid);
 
         $row->affiliations_info[$affiliation->id] = $affiliation;

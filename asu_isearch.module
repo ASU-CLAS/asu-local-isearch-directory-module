@@ -74,6 +74,17 @@ function asu_isearch_menu() {
     'weight' => 10,
   );
 
+  $items['isearch/views/ajax'] = array(
+    'title' => 'Views',
+    'page callback' => 'asu_isearch_views_ajax',
+    'theme callback' => 'ajax_base_page_theme',
+    'delivery callback' => 'ajax_deliver',
+    'access callback' => TRUE,
+    'description' => 'Ajax callback for view loading.',
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/asu_isearch.views.inc',
+  );
+
   return $items;
 }
 

@@ -252,3 +252,10 @@ function asu_isearch_update_7152() {
   $queue = DrupalQueue::get('isearch_fetch_department');
   $queue->deleteQueue();
 }
+
+/****
+ * Revert the moduel to put in place the new changes
+ */
+function asu_isearch_update_7170() {
+  features_revert_module('asu_isearch');
+}

@@ -35,6 +35,8 @@ class IsearchProfileDirectory {
   }
 
   public function renderIndex() {
+
+    /*
     $display_id = 'isearch_a_z';
     $this->view->set_display($display_id);
     $this->view->init_display(TRUE);
@@ -50,7 +52,8 @@ class IsearchProfileDirectory {
     $contextual_filters[0] = NULL;
     $this->view->set_arguments($contextual_filters);
 
-    if (isset($this->view->filter['field_isearch_affil_title_value_1'])) {
+
+    if (isset($this->viewConfig->filter_title)) {
       if ($this->viewConfig->filter_title == '') {
         $this->viewConfig->filter_title = '.*';
       }
@@ -60,10 +63,14 @@ class IsearchProfileDirectory {
     $this->view->pre_execute();
     $this->view->execute();
 
-    $items = array();
+    $lastname = $result->field_data_field_isearch_lastname_field_isearch_lastname_val;
 
+    $items = array();*/
+
+
+    /*
     foreach ($this->view->result as $key => $result) {
-      $index_letter = $result->field_isearch_lastname_value_truncated;
+
       $items[] = t('<a href="@url">@letter</a>', array(
         '@url' => url(current_path(), array(
           'query' => array(
@@ -82,7 +89,40 @@ class IsearchProfileDirectory {
       'attributes' => array(
         'class' => 'isearch-a-z-index',
       ),
-    ));
+    ));*/
+
+    return "<div id=\"asu-isearch-alpha-bar\">
+              <div class=\"asu-isearch-alpha-bar row\">
+            <ul class=\"alphabet\">
+              <li>A</li>
+              <li>B</li>
+              <li>C</li>
+              <li>D</li>
+              <li>E</li>
+              <li>F</li>
+              <li>G</li>
+              <li>H</li>
+              <li>I</li>
+              <li>J</li>
+              <li>K</li>
+              <li>L</li>
+              <li>M</li>
+              <li>N</li>
+              <li>O</li>
+              <li>P</li>
+              <li>Q</li>
+              <li>R</li>
+              <li>S</li>
+              <li>T</li>
+              <li>U</li>
+              <li>V</li>
+              <li>W</li>
+              <li>X</li>
+              <li>Y</li>
+              <li>Z</li>
+              <li>ALL</li>
+            </ul>
+          </div>";
   }
 
   public function getInstanceId() {
@@ -103,6 +143,7 @@ class IsearchProfileDirectory {
       $view->set_display($display_id);
       $view->init_handlers();
       $view->set_arguments($contextual_filters);
+
       $view->execute();
 
       foreach ($view->result as $item) {
