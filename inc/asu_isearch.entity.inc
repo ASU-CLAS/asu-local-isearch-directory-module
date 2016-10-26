@@ -27,7 +27,7 @@ function asu_isearch_entity_presave($entity, $type) {
 
     $has_local_weight = (!empty($entity->field_isearch_affil_local_weight[LANGUAGE_NONE]));
 
-    if ($has_local_weight) {
+    if ($has_local_weight)  {
       $affiliation_rank_weight = $affiliation->field_isearch_affil_local_weight->value();
     }
 

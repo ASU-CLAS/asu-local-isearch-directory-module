@@ -1030,6 +1030,10 @@ function asu_isearch_views_default_views() {
   $handler->display->display_options['sorts']['field_isearch_firstname_value']['field'] = 'field_isearch_firstname_value';
   $handler->display->display_options['sorts']['field_isearch_firstname_value']['exposed'] = TRUE;
   $handler->display->display_options['sorts']['field_isearch_firstname_value']['expose']['label'] = 'First Name';
+  /* Sort criterion: Content: Last Name (field_isearch_lastname) */
+  $handler->display->display_options['sorts']['field_isearch_lastname_value_1']['id'] = 'field_isearch_lastname_value_1';
+  $handler->display->display_options['sorts']['field_isearch_lastname_value_1']['table'] = 'field_data_field_isearch_lastname';
+  $handler->display->display_options['sorts']['field_isearch_lastname_value_1']['field'] = 'field_isearch_lastname_value';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Last Name (field_isearch_lastname) */
   $handler->display->display_options['arguments']['field_isearch_lastname_value']['id'] = 'field_isearch_lastname_value';

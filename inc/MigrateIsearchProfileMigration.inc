@@ -301,12 +301,21 @@ class MigrateIsearchProfileMigration extends Migration {
         $affiliation->isManager = $row->managers[$index];
         $affiliation->isRankTenure = $row->departmentTitleRanksTenure[$index];
         $affiliation->ranksTid = $row->departmentTitleRanksTids[$index];
+        $affiliation->ranksWeight = $row->departmentTitleRanksWeight[$index];
 
-        if ($pull_weights && !empty($row->employeeWeight)) {
-          $affiliation->employeeWeight = $row->employeeWeight[$index];
+        // Only add the employeeweight to the local weight field if it has been configured
+        // to do so, it has been set in iSearch, it is less than rank weight,
+        // and it less than the 999 placeholder
+        if ($pull_weights && !empty($row->employeeWeight) && is_numeric($row->employeeWeight[$index])) {
+
+          $weight = $affiliation->ranksWeight;
+          $eweight = intval($row->employeeWeight[$index]);
+
+          if ( ( !is_numeric($weight) || $eweight < intval($weight) ) && $eweight < 999) {
+            $affiliation->employeeWeight = $eweight;
+          }
         }
 
-        $affiliation->ranksWeight = $row->departmentTitleRanksWeight[$index];
         $affiliation->isPrimary = ($row->deptids[$index] == $row->primaryDeptid);
 
         $row->affiliations_info[$affiliation->id] = $affiliation;
