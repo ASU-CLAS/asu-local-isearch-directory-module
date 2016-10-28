@@ -159,6 +159,7 @@ function _asu_isearch_cache_dept_tree_data() {
     $types = $request->data;
     $employee_types = drupal_json_decode($types);
   }
+
   // Create cache, set to hold cache for number of hours specified
   if ($employee_types != NULL) {
 
@@ -168,23 +169,51 @@ function _asu_isearch_cache_dept_tree_data() {
 }
 
 /**
- * Iterate over all imported iSearch profiles,
- * cleaning up the profiles which are no longer associated with the dept
- * in iSearch
+ * Iterate over a number of profiles to check whether to unpublish or not
  *
  */
 function _asu_isearch_cleanup() {
-  $type = "asu_isearch_profile";
-  $nodes = node_load_multiple(array(), array('type' => $type));
+
+  // get the cleanup list, remove 25 items, reset list,
+  // and queue those to be checked
+  $clean_list = _asu_isearch_get_cleanup_list();
+  $to_process = array_slice($clean_list, 0, ASU_ISEARCH_PROFILE_CLEANUP_LIMIT);
+  $clean_list = array_slice($clean_list, ASU_ISEARCH_PROFILE_CLEANUP_LIMIT);
+  variable_set('asu_isearch_cleanup_list', json_encode($clean_list));
+
+  $nodes = node_load_multiple($to_process, array('type' => 'asu_isearch_profile'));
+
   $queue = DrupalQueue::get("isearch_clean_profiles");
 
   foreach ($nodes as $key => $profile) {
-
     //we only cleanup profiles which have been imported from iSearch
     if ($profile->field_isearch_eid['und'][0]['value'] != -1) {
       $queue->createItem($profile);
     }
   }
+}
+
+/***
+ * Keep track of which nids need to be checked
+ *
+ * @return array|mixed
+ */
+function _asu_isearch_get_cleanup_list() {
+  $nid_list = drupal_json_decode(variable_get('asu_isearch_cleanup_list', '[]'));
+
+  if (empty($nid_list)) {
+    $node_type = "asu_isearch_profile";
+
+    $result = db_query("SELECT nid FROM node WHERE type = :nodeType ", array(':nodeType'=>$node_type)); //<-- change 1
+
+    foreach ($result as $obj) {  //<-- change 2
+      $nid_list[] = $obj->nid;
+    }
+
+    variable_set('asu_isearch_cleanup_list', drupal_json_encode($nid_list));
+  }
+
+  return $nid_list;
 }
 
 /**
@@ -211,9 +240,7 @@ function asu_isearch_cleanup_profile($profile) {
       $idir = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT . $nid;
 
       if (in_array($locache, $sources)) {
-
         $feed = drupal_json_decode(file_get_contents($locache));
-
       }
       else {
         if (in_array($idir, $sources)) {

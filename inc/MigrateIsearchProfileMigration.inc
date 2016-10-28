@@ -77,14 +77,17 @@ class MigrateIsearchProfileMigration extends Migration {
 
     // Create a MigrateSource object, which manages retrieving the input data.
     global $base_url;
-    $source_urls = $base_url . url(drupal_get_path('module', 'asu_isearch')) . '/inc/asu_isearch.migrate.json';
+
+
+    /*$source_urls = $base_url . url(drupal_get_path('module', 'asu_isearch')) . '/inc/asu_isearch.migrate.json';
 
     $config_source_urls = asu_isearch_get_migrate_source_urls(TRUE);
+
     if (count($config_source_urls)) {
       $source_urls = $config_source_urls;
-    }
+    }*/
 
-    $test_sources = ASU_ISEARCH_MASTER_FILE_ENDPOINT;
+    $source = ASU_ISEARCH_MASTER_FILE_ENDPOINT;
 
     $master = asu_isearch_get_master_source();
 
@@ -93,7 +96,7 @@ class MigrateIsearchProfileMigration extends Migration {
       _asu_isearch_build_migrate_master($tracker);
     }
 
-    $this->setMigrateSource($test_sources);
+    $this->setMigrateSource($source);
     $this->destination = new MigrateDestinationNode('asu_isearch_profile');
 
     // Setup profile photo directory
@@ -349,13 +352,16 @@ class MigrateIsearchProfileMigration extends Migration {
 
     if (isset($row->departmentTitleRanksTids)) {
       foreach ($row->departmentTitleRanksTids as $index => $rank_key) {
-        $titleRank = new stdclass();
-        $titleRank->name = $row->departmentTitleRanks[$index];
-        $titleRank->id = $rank_key;
-        $titleRank->tid = $row->departmentTitleRanksTids[$index];
-        $titleRank->weight = $row->departmentTitleRanksWeight[$index];
-        $titleRank->tenure = $row->departmentTitleRanksTenure[$index];
-        if (!empty($titleRank->id)) {
+
+        $name = $row->departmentTitleRanks[$index];
+
+        if (!empty($rank_key)  && is_numeric($rank_key) && $name != NULL) {
+          $titleRank = new stdclass();
+          $titleRank->name = $row->departmentTitleRanks[$index];
+          $titleRank->id = $rank_key;
+          $titleRank->tid = $row->departmentTitleRanksTids[$index];
+          $titleRank->weight = $row->departmentTitleRanksWeight[$index];
+          $titleRank->tenure = $row->departmentTitleRanksTenure[$index];
           $row->titleranks[$titleRank->id] = $titleRank;
         }
       }

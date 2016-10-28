@@ -244,6 +244,13 @@ function asu_isearch_views_query_alter(&$view, &$query) {
   }
 }
 
+/**
+ * Implements hook_query_TAG_alter()
+ */
+function asu_isearch_query_asu_isearch_list_alter(QueryAlterableInterface $query) {
+  $query->groupBy('nid');
+}
+
 /***
  * Implements hook_js_alter
  *
