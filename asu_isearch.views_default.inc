@@ -861,6 +861,29 @@ function asu_isearch_views_default_views() {
   /* Display: Directory - List */
   $handler = $view->new_display('panel_pane', 'Directory - List', 'isearch_directory_list');
   $handler->display->display_options['display_description'] = 'Displays a directory in list format';
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  /* Relationship: Content: Affiliations (field_isearch_affiliations) */
+  $handler->display->display_options['relationships']['field_isearch_affiliations_value']['id'] = 'field_isearch_affiliations_value';
+  $handler->display->display_options['relationships']['field_isearch_affiliations_value']['table'] = 'field_data_field_isearch_affiliations';
+  $handler->display->display_options['relationships']['field_isearch_affiliations_value']['field'] = 'field_isearch_affiliations_value';
+  $handler->display->display_options['relationships']['field_isearch_affiliations_value']['label'] = 'Affiliation';
+  $handler->display->display_options['relationships']['field_isearch_affiliations_value']['required'] = TRUE;
+  $handler->display->display_options['relationships']['field_isearch_affiliations_value']['delta'] = '0';
+  /* Relationship: Content: Taxonomy terms on node */
+  $handler->display->display_options['relationships']['term_node_tid']['id'] = 'term_node_tid';
+  $handler->display->display_options['relationships']['term_node_tid']['table'] = 'node';
+  $handler->display->display_options['relationships']['term_node_tid']['field'] = 'term_node_tid';
+  $handler->display->display_options['relationships']['term_node_tid']['label'] = 'Expertise';
+  $handler->display->display_options['relationships']['term_node_tid']['vocabularies'] = array(
+    'isearch_expertise' => 'isearch_expertise',
+    'asu_events_audience' => 0,
+    'asu_events_category' => 0,
+    'asu_events_type' => 0,
+    'asu_news' => 0,
+    'panopoly_categories' => 0,
+    'isearch_departments' => 0,
+    'isearch_ranks' => 0,
+  );
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: Content: Path */
   $handler->display->display_options['fields']['path']['id'] = 'path';
@@ -1222,14 +1245,6 @@ function asu_isearch_views_default_views() {
     5 => 0,
   );
   $handler->display->display_options['filters']['field_isearch_local_tags_tid']['vocabulary'] = 'isearch_local_tags';
-  /* Filter criterion: Field collection item: Primary Affiliation (field_isearch_affil_primary) */
-  $handler->display->display_options['filters']['field_isearch_affil_primary_value']['id'] = 'field_isearch_affil_primary_value';
-  $handler->display->display_options['filters']['field_isearch_affil_primary_value']['table'] = 'field_data_field_isearch_affil_primary';
-  $handler->display->display_options['filters']['field_isearch_affil_primary_value']['field'] = 'field_isearch_affil_primary_value';
-  $handler->display->display_options['filters']['field_isearch_affil_primary_value']['relationship'] = 'field_isearch_affiliations_value';
-  $handler->display->display_options['filters']['field_isearch_affil_primary_value']['value'] = array(
-    1 => '1',
-  );
   /* Filter criterion: Search: Search Terms */
   $handler->display->display_options['filters']['keys']['id'] = 'keys';
   $handler->display->display_options['filters']['keys']['table'] = 'search_index';

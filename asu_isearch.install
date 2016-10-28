@@ -254,8 +254,15 @@ function asu_isearch_update_7152() {
 }
 
 /****
- * Revert the moduel to put in place the new changes
+ * Revert the module to put in place the new changes
  */
 function asu_isearch_update_7170() {
+  features_revert_module('asu_isearch');
+}
+
+/***
+ * Revert the view
+ */
+function asu_isearch_update_7171() {
   features_revert_module('asu_isearch');
 }

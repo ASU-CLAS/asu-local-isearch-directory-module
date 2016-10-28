@@ -1,3 +1,9 @@
+asu_isearch 7.x-1.7.1
+---------------------
+- Added entity load hook to update profile image intermittently on load
+- Added limit to number of profiles checked for cleanup daily
+- Hotfix for non-primary affiliations being filtered from views
+
 asu_isearch 7.x-1.7
 -------------------
 - Views exposed contextual filters are now using ajax views functionality
