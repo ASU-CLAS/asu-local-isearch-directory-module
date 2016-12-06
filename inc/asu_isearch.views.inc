@@ -48,6 +48,7 @@ function asu_isearch_views_pre_render(&$view) {
       $wrapper = entity_metadata_wrapper('node', $entity);
 
       // building code link
+
       if ($view_link_building && $global_link_buildings) {
         // TODO: Logic for linking building in view listing
         if (!empty($view->result[$key]->field_field_isearch_campus_building)) {
@@ -155,6 +156,7 @@ function asu_isearch_get_views() {
  * Implements hook_views_query_alter()
  */
 function asu_isearch_views_query_alter(&$view, &$query) {
+
   if (asu_isearch_is_isearch_view($view) && isset($view->view_config)) {
 
     // reset the sort when passed in
@@ -194,6 +196,7 @@ function asu_isearch_views_query_alter(&$view, &$query) {
       );
     }
 
+    /* deprecated
     if ($view->view_config->employee_type_exclude == 1) {
       $dept_id_field = 'field_collection_item_field_data_field_isearch_affiliations__field_data_field_isearch_affil_empl_key.field_isearch_affil_empl_key_value';
       $found_employee_type_filter = FALSE;
@@ -222,7 +225,7 @@ function asu_isearch_views_query_alter(&$view, &$query) {
           'value' => 'unknown',
         );
       }
-    }
+    }*/
 
 
     // Set the lastname filter if a letter is selected
@@ -331,6 +334,7 @@ function asu_isearch_views_ajax() {
     list($view_name, $display_id) = explode(':', $view_config->view_display);
 
     $view = views_get_view($view_name);
+
     $view->view_config = $view_config;
     $view->set_display($display_id);
     $view->init_handlers();

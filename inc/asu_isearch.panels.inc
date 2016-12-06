@@ -196,7 +196,7 @@ function asu_isearch_preprocess_panels_pane(&$variables) {
     $directory = new IsearchProfileDirectory();
 
     // load the configuration saved for this pane
-    $default_view_config = asu_isearch_get_default_view_config();
+    $default_view_config = asu_dir_utilities_get_default_config('asu_isearch');
     $view_config = json_decode($content['field_isearch_config']['#object']->field_isearch_config[LANGUAGE_NONE][0]['value']);
     $view_config = (object) array_merge($default_view_config, (array) $view_config);
 
@@ -259,12 +259,12 @@ function asu_isearch_preprocess_panels_pane(&$variables) {
       $form = drupal_build_form('views_exposed_form', $form_state);
 
       // Attach our custom ajax handling script, if ajax is enabled
-      if ($view->use_ajax) {
-        $form['#attached']['js'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_omni.js';
-      }
+      //if ($view->use_ajax) {
+      $form['#attached']['js'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_omni.js';
+      //}
 
       $form['keys']['#weight'] = -100;
-      $form['keys']['#attributes']['placeholder'] =  t('Name or Keyword');
+      $form['keys']['#attributes']['placeholder'] = t('Name or Keyword');
 
 
       // update search filters
@@ -394,7 +394,7 @@ function asu_isearch_get_rendered_view($view_config, &$view) {
 
   // pagination options
   $view->set_items_per_page($view_config->pager_items_per_page);
-  $view->set_offset($view_config->pager_offset);
+  //$view->set_offset($view_config->pager_offset);
 
   if ($view_config->pager_display != 'paged') {
     $pager = $view->display_handler->get_option('pager');
@@ -418,7 +418,7 @@ function asu_isearch_get_rendered_view($view_config, &$view) {
 
   $view->pre_execute();
 
-  $view_display =  $view->render($view_display_id);
+  $view_display = $view->render($view_display_id);
 
   $view->post_execute();
 
@@ -597,7 +597,7 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     $form['#attached']['js'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/asu_isearch_config.js';
     $form['#attached']['js'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_pane_config.js';
 
-    $config = asu_isearch_get_default_view_config();
+    $config = asu_dir_utilities_get_default_config('asu_isearch');
 
     // we are setting this up for the first time...
     if (!isset($form['#entity']->is_new) || !$form['#entity']->is_new) {
@@ -756,7 +756,7 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
     }
 
     // fetch employee types
-    $employee_types = asu_isearch_get_employee_types();
+    $employee_types = asu_dir_utilities_get_isearch_data(ASU_DIR_UTILITIES_EMPLOYEE_TYPES_ENDPOINT); //asu_dir_utilities_get_employee_types();
 
     // employee type options array
     $employee_types_options = array();

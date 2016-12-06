@@ -9,10 +9,6 @@
  */
 function asu_isearch_cron() {
 
-  // Cache data from configuration
-  // CACHE THE FEED AND BUILD THE SOURCE
-  _asu_isearch_cache_dept_tree_data();
-
   // it takes too much time to do both of these actions every cron run.
   // so switch between caching depts and migrating departments.
   $last_action = variable_get('asu_isearch_cron_action', 'import_depts');
@@ -21,7 +17,8 @@ function asu_isearch_cron() {
     // Cache dept tree and employee types data
     variable_set('asu_isearch_cron_action', 'cache_depts');
     _asu_isearch_cache_dept_feed(TRUE);
-  } else {
+  }
+  else {
     // Begin profile migrations
     variable_set('asu_isearch_cron_action', 'import_depts');
     _asu_isearch_begin_migrate(FALSE);
@@ -38,12 +35,44 @@ function asu_isearch_cron() {
 
     foreach ($styles as $style) {
       $the_style = image_style_load($style);
-      image_style_flush($the_style);
+      asu_isearch_image_style_flush($the_style);
     }
 
     _asu_isearch_cleanup();
     variable_set('last_profile_cleanup', date('ymd', time()));
   }
+}
+
+/**
+ * Flushes cached media for a style.
+ *
+ * @param $style
+ *   An image style array.
+ */
+function asu_isearch_image_style_flush($style) {
+  // Delete the style directory in each registered wrapper.
+  $wrappers = file_get_stream_wrappers(STREAM_WRAPPERS_WRITE_VISIBLE);
+  foreach ($wrappers as $wrapper => $wrapper_data) {
+    if (file_exists($directory = $wrapper . '://styles/' . $style['name'])) {
+      file_unmanaged_delete_recursive($directory);
+    }
+  }
+
+  // Clear image style and effect caches.
+  cache_clear_all('image_styles', 'cache');
+  cache_clear_all('image_effects:', 'cache', TRUE);
+  drupal_static_reset('image_styles');
+  drupal_static_reset('image_effects');
+
+  // Clear field caches so that formatters may be added for this style.
+  field_info_cache_clear();
+  drupal_theme_rebuild();
+
+  // Clear page caches when flushing.
+  if (module_exists('block')) {
+    cache_clear_all('*', 'cache_block', TRUE);
+  }
+  cache_clear_all('*', 'cache_page', TRUE);
 }
 
 /**
@@ -124,50 +153,6 @@ function asu_isearch_fetch_profile_photo($data) {
   }
 }
 
-
-/**
- * Caches the isearch department tree and employee types
- */
-function _asu_isearch_cache_dept_tree_data() {
-  // set timeout of request to 60 seconds
-  $options = array(
-    'timeout' => 60,
-  );
-
-  //Refresh and cache the Tree
-  $tree = NULL;
-
-  $tree_endpoint = ASU_ISEARCH_DIRECTORY_TREE_ENDPOINT;
-  $request = drupal_http_request($tree_endpoint, $options);
-
-  if ($request->code == 200) {
-    $tree = $request->data;
-  }
-  // Create cache, set to hold cache for number of hours specified
-  if ($tree != NULL) {
-    $expire_date = time() + 3600 * ASU_ISEARCH_DIRECTORY_FORM_CACHE_DURATION;
-    cache_set('asu_directory_tree', $tree, 'cache', $expire_date);
-  }
-
-  //Refresh and cache the employee types
-  $employee_types = NULL;
-
-  $endpoint = ASU_ISEARCH_EMPLOYEE_TYPES_ENDPOINT;
-  $request = drupal_http_request($endpoint, $options);
-
-  if ($request->code == 200) {
-    $types = $request->data;
-    $employee_types = drupal_json_decode($types);
-  }
-
-  // Create cache, set to hold cache for number of hours specified
-  if ($employee_types != NULL) {
-
-    $expire_date = time() + 3600 * ASU_ISEARCH_DIRECTORY_FORM_CACHE_DURATION;
-    cache_set('asu_employee_types', $employee_types, 'cache', $expire_date);
-  }
-}
-
 /**
  * Iterate over a number of profiles to check whether to unpublish or not
  *
@@ -188,7 +173,67 @@ function _asu_isearch_cleanup() {
   foreach ($nodes as $key => $profile) {
     //we only cleanup profiles which have been imported from iSearch
     if ($profile->field_isearch_eid['und'][0]['value'] != -1) {
+
+      // for debugging purposes
+      //asu_isearch_cleanup_profile($profile);
+
       $queue->createItem($profile);
+    }
+  }
+}
+
+/**
+ * @param $profile
+ *
+ * Worker callback for cleaning up dept profiles
+ */
+function asu_isearch_cleanup_profile($profile) {
+
+  $asurite = $profile->field_isearch_asurite_id['und'][0]['value'];
+  $health = asu_dir_utilities_solr_health_check();
+  $configs = drupal_json_decode(asu_isearch_get_dept_config());
+
+  //check Solr department
+  if ($health && $profile != NULL) {
+    $pfound = FALSE;
+    $person = asu_dir_utilities_get_solr_person($asurite);
+
+
+    if ($person != NULL) {
+      foreach ($configs['items'] as $item) {
+        if (in_array($item['dept_nid'], $person['deptids'])) {
+          $pfound = TRUE;
+        }
+
+        if (!$pfound && isset($configs['options'][$item['dept_id']]) &&
+          $configs['options'][$item['dept_id']]['subdepts']
+        ) {
+
+          foreach ($item['tree_nids'] as $tree_item) {
+            if (in_array($tree_item, $person['deptids'])) {
+              $pfound = TRUE;
+            }
+          }
+        }
+      }
+    }
+
+    //if the profile wasn't found, then unpublish
+    if ($pfound == FALSE) {
+      $title = $profile->title;
+      watchdog('asu_isearch', "Profile'[@id]'unpublishedviacroncleanup", array('@id' => $title));
+      $profile->status = 0;
+      node_save($profile);
+
+      //if node was unpublished, but was found on iSearch, republish the node
+    }
+    else {
+      if ($pfound == TRUE && $profile->status == 0) {
+        $profile->status = 1;
+        $title = $profile->title;
+        watchdog('asu_isearch', "Profile'[@id]'REpublishedviacroncleanup", array('@id' => $title));
+        node_save($profile);
+      }
     }
   }
 }
@@ -204,9 +249,8 @@ function _asu_isearch_get_cleanup_list() {
   if (empty($nid_list)) {
     $node_type = "asu_isearch_profile";
 
-    $result = db_query("SELECT nid FROM node WHERE type = :nodeType ", array(':nodeType'=>$node_type)); //<-- change 1
-
-    foreach ($result as $obj) {  //<-- change 2
+    $result = db_query("SELECT nid FROM node WHERE type = :nodeType ", array(':nodeType' => $node_type));
+    foreach ($result as $obj) {
       $nid_list[] = $obj->nid;
     }
 
@@ -216,77 +260,3 @@ function _asu_isearch_get_cleanup_list() {
   return $nid_list;
 }
 
-/**
- * @param $profile
- *
- * Worker callback for cleaning up dept profiles
- */
-function asu_isearch_cleanup_profile($profile) {
-
-  $sources = asu_isearch_get_migrate_source_urls(TRUE);
-  $asurite = $profile->field_isearch_asurite_id['und'][0]['value'];
-  $pfound = FALSE;
-
-  // load each affiliation, and check the profile against the listings from
-  // isearch
-  foreach ($profile->field_isearch_affiliations['und'] as $item) {
-    $affil = entity_load('field_collection_item', array($item['value']));
-
-    foreach ($affil as $af) {
-      $feed = array();
-      $nid = $af->field_isearch_affil_dept_id['und'][0]['value'];
-
-      $locache = ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT . $nid;
-      $idir = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT . $nid;
-
-      if (in_array($locache, $sources)) {
-        $feed = drupal_json_decode(file_get_contents($locache));
-      }
-      else {
-        if (in_array($idir, $sources)) {
-
-          $request = drupal_http_request($idir);
-
-          if ($request->code == 200) {
-            $feed = drupal_json_decode($request->data);
-
-            // if there was a bad request, then set the $pfound var to true, so that
-            // we don't delete an entire dept
-          }
-          else {
-            $pfound = TRUE;
-          }
-        }
-      }
-
-      //check the asurite value of the profile agains the asurites in the feed,
-      // and set the $pfound flag to true if found
-      if (!empty($feed)) {
-        foreach ($feed as $fitem) {
-          if ($fitem['asuriteId'] == $asurite) {
-            $pfound = TRUE;
-            break;
-          }
-        }
-      }
-    }
-  }
-
-  //if the profile wasn't found, then unpublish
-  if ($pfound == FALSE) {
-    $title = $profile->title;
-    watchdog('asu_isearch', "Profile'[@id]'unpublishedviacroncleanup", array('@id' => $title));
-    $profile->status = 0;
-    node_save($profile);
-
-    //if node was unpublished, but was found on iSearch, republish the node
-  }
-  else {
-    if ($pfound == TRUE && $profile->status == 0) {
-      $profile->status = 1;
-      $title = $profile->title;
-      watchdog('asu_isearch', "Profile'[@id]'REpublishedviacroncleanup", array('@id' => $title));
-      node_save($profile);
-    }
-  }
-}

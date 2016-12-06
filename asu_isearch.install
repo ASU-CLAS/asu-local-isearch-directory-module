@@ -254,15 +254,21 @@ function asu_isearch_update_7152() {
 }
 
 /****
- * Revert the module to put in place the new changes
+ * Revert the moduel to put in place the new changes
  */
 function asu_isearch_update_7170() {
   features_revert_module('asu_isearch');
 }
 
-/***
- * Revert the view
+/**
+ * Cleanup variables
  */
-function asu_isearch_update_7171() {
+function asu_isearch_update_7181() {
+  variable_del('asu_dir_solr_endpoint');
+
+  if (drupal_get_path('module', 'asu_dir_utilities') != '' && !module_exists('asu_dir_utilities')) {
+    module_enable(array('asu_dir_utilities'));
+  }
+
   features_revert_module('asu_isearch');
 }

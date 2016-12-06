@@ -224,7 +224,7 @@
              */
             function isKeypressCommand(nativeEvent) {
                 return (nativeEvent.ctrlKey || nativeEvent.altKey || nativeEvent.metaKey) &&
-                        // ctrlKey && altKey is equivalent to AltGr, and is not a command.
+                    // ctrlKey && altKey is equivalent to AltGr, and is not a command.
                     !(nativeEvent.ctrlKey && nativeEvent.altKey);
             }
 
@@ -17002,8 +17002,8 @@
             var useHasFeature;
             if (ExecutionEnvironment.canUseDOM) {
                 useHasFeature = document.implementation && document.implementation.hasFeature &&
-                        // always returns true in newer browsers as per the standard.
-                        // @see http://dom.spec.whatwg.org/#dom-domimplementation-hasfeature
+                    // always returns true in newer browsers as per the standard.
+                    // @see http://dom.spec.whatwg.org/#dom-domimplementation-hasfeature
                     document.implementation.hasFeature('', '') !== true;
             }
 
@@ -18199,18 +18199,18 @@
                     !!obj && (
                         // arrays are objects, NodeLists are functions in Safari
                     typeof obj == 'object' || typeof obj == 'function') &&
-                        // quacks like an array
+                    // quacks like an array
                     'length' in obj &&
-                        // not window
+                    // not window
                     !('setInterval' in obj) &&
-                        // no DOM node should be considered an array-like
-                        // a 'select' element has 'length' and 'item' properties on IE8
+                    // no DOM node should be considered an array-like
+                    // a 'select' element has 'length' and 'item' properties on IE8
                     typeof obj.nodeType != 'number' && (
                         // a real array
                     Array.isArray(obj) ||
-                        // arguments
+                    // arguments
                     'callee' in obj ||
-                        // HTMLCollection/NodeList
+                    // HTMLCollection/NodeList
                     'item' in obj)
                 );
             }

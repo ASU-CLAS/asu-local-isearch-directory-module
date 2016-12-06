@@ -36,50 +36,6 @@ function asu_isearch_get_view_column_widths(stdClass $display_options) {
   return $columns;
 }
 
-/**
- * Helper function to get the default view configuration
- * used on the iSearch directory list view.
- *
- * This will help avoid undefined warnings when new options added
- */
-function asu_isearch_get_default_view_config() {
-  $depts = new stdClass();
-  $depts->items = array();
-  $depts->options = new stdClass();
-
-  return array(
-    'employee_types' => array('All'),
-    'employee_type_exclude' => 0,
-    'tenure_display' => 0,
-    'show_managers' => 0,
-    'show_filters' => 1,
-    'include_subdepts' => 0,
-    'view_display' => 'isearch_directory:isearch_directory_list',
-    'pager_display' => 'paged',
-    'pager_items_per_page' => 10,
-    'pager_offset' => 0,
-    'expertise_areas' => array(),
-    'local_tags' => array(),
-    'display_short_bio' => TRUE,
-    'display_header' => TRUE,
-    'display_photo' => TRUE,
-    'display_name' => TRUE,
-    'display_contact' => TRUE,
-    'display_expertise' => TRUE,
-    'display_building' => TRUE,
-    'display_room' => TRUE,
-    'default_sort_by' => 'field_isearch_affil_rank_weight_value',
-    'filter_title' => '',
-    'show_filter_titles' => TRUE,
-    'show_filter_omni' => TRUE,
-    'show_filter_expertise' => TRUE,
-    'show_filter_sort' => TRUE,
-    'show_az_index' => FALSE,
-    'link_building_codes' => variable_get('isearch_link_buildings', FALSE),
-    'depts' => $depts,
-  );
-}
-
 
 /**
  * Helper function to determine if the passed view is an isearch configured view
@@ -181,7 +137,7 @@ function asu_isearch_get_migrate_source_urls($from_cache = FALSE) {
             $endpoint = ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT;
           }
           else {
-            $endpoint = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT;
+            $endpoint = ASU_DIR_UTILITIES_FEED_ENDPOINT;
           }
 
           $source_urls[$department_nid] = $endpoint . $department_nid;
@@ -193,7 +149,7 @@ function asu_isearch_get_migrate_source_urls($from_cache = FALSE) {
           $endpoint = ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT;
         }
         else {
-          $endpoint = ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT;
+          $endpoint = ASU_DIR_UTILITIES_FEED_ENDPOINT;
         }
 
         $source_urls[$migrate_item->dept_nid] = $endpoint . $migrate_item->dept_nid;
@@ -239,27 +195,6 @@ function asu_isearch_dept_find_root($data, $dept_id, $lookup = 'dept_nid') {
   }
   return $success;
 }
-
-/**
- * Saves the ids of all departments under currently selected tree on #people's data object
- * @param {object}
- *  Nested JSON object with department data
- */
-function asu_isearch_dept_get_tree_data($tree, $tree_ids = array()) {
-
-  $newItem = new stdClass();
-  $newItem->name = $tree->name;
-  $newItem->dept_nid = $tree->dept_nid;
-
-  $tree_ids[] = $newItem;
-
-  for ($i = 0; $i < count($tree->children); $i++) {
-    $tree_ids = asu_isearch_dept_get_tree_data($tree->children[$i], $tree_ids);
-  }
-
-  return $tree_ids;
-}
-
 
 /****
  * Function to update profile from Solr

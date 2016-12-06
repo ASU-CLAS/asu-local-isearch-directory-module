@@ -61,7 +61,7 @@ function theme_asu_isearch_dept_tree(&$vars) {
     $config_target = $vars['settings']['config_target'];
   }
 
-  $tree = asu_isearch_get_dept_tree();
+  $tree = asu_dir_utilities_get_isearch_data(ASU_DIR_UTILITIES_TREE_ENDPOINT, FALSE); //asu_dir_utilities_get_dept_tree();
 
   // jqTree (http://mbraak.github.com/jqTree)
   libraries_load('jqtree');
@@ -148,38 +148,4 @@ function theme_asu_isearch_dept_tree(&$vars) {
     </div>
   </div>';
 
-}
-
-
-/**
- * Implements hook_libraries_info
- *
- * Adds the JQtree library
- * Documentation for the library can be found here http://mbraak.github.io/jqTree/
- *
- * @return mixed
- *
- */
-function asu_isearch_libraries_info() {
-  // Expected to be extracted into 'sites/all/libraries/jqtree'.
-  $libraries['jqtree'] = array(
-    'name' => 'jQTree Library',
-    'vendor url' => 'http://mbraak.github.io/jqTree/',
-    'download url' => 'https://github.com/mbraak/jqTree/archive/0.22.0.zip',
-    'version callback' => 'asu_isearch_short_circuit_version',
-    'files' => array(
-      'js' => array('tree.jquery.js'),
-      'css' => array('jqtree.css'),
-    ),
-  );
-
-  return $libraries;
-}
-
-
-/**
- * Short-circuit the version argument.
- */
-function asu_isearch_short_circuit_version() {
-  return TRUE;
 }

@@ -8,9 +8,9 @@
      * Attaches the AJAX behavior to Views exposed filter forms and key View links.
      */
     Drupal.behaviors.ViewsAjaxView = {};
-    Drupal.behaviors.ViewsAjaxView.attach = function() {
+    Drupal.behaviors.ViewsAjaxView.attach = function () {
         if (Drupal.settings && Drupal.settings.views && Drupal.settings.views.ajaxViews) {
-            $.each(Drupal.settings.views.ajaxViews, function(i, settings) {
+            $.each(Drupal.settings.views.ajaxViews, function (i, settings) {
                 Drupal.views.instances[i] = new Drupal.views.ajaxView(settings);
             });
         }
@@ -22,7 +22,7 @@
     /**
      * Javascript object for a certain view.
      */
-    Drupal.views.ajaxView = function(settings) {
+    Drupal.views.ajaxView = function (settings) {
         var selector = '.view-dom-id-' + settings.view_dom_id;
         this.$view = $(selector);
 
@@ -54,21 +54,21 @@
             setClick: true,
             event: 'click',
             selector: selector,
-            progress: { type: 'throbber' }
+            progress: {type: 'throbber'}
         };
 
         this.settings = settings;
 
         // Add the ajax to exposed forms.
         // modified so that we bind to multiple forms on the same page
-        this.$exposed_form = $(selector).parent().find('#views-exposed-form-'+ settings.view_name.replace(/_/g, '-') + '-' + settings.view_display_id.replace(/_/g, '-'));
+        this.$exposed_form = $(selector).parent().find('#views-exposed-form-' + settings.view_name.replace(/_/g, '-') + '-' + settings.view_display_id.replace(/_/g, '-'));
 
         this.$exposed_form.once(jQuery.proxy(this.attachExposedFormAjax, this));
 
         // Add the ajax to pagers.
         this.$view
-            // Don't attach to nested views. Doing so would attach multiple behaviors
-            // to a given element.
+        // Don't attach to nested views. Doing so would attach multiple behaviors
+        // to a given element.
             .filter(jQuery.proxy(this.filterNestedViews, this))
             .once(jQuery.proxy(this.attachPagerAjax, this));
 
@@ -86,7 +86,7 @@
         this.refreshViewAjax = new Drupal.ajax(this.selector, this.$view, self_settings);
     };
 
-    Drupal.views.ajaxView.prototype.attachExposedFormAjax = function() {
+    Drupal.views.ajaxView.prototype.attachExposedFormAjax = function () {
         var button = $('input[type=submit], button[type=submit], input[type=image]', this.$exposed_form);
 
         button = button[0];
@@ -94,7 +94,7 @@
         this.exposedFormAjax = new Drupal.ajax($(button).attr('id'), button, this.element_settings);
     };
 
-    Drupal.views.ajaxView.prototype.filterNestedViews= function() {
+    Drupal.views.ajaxView.prototype.filterNestedViews = function () {
         // If there is at least one parent with a view class, this view
         // is nested (e.g., an attachment). Bail.
         return !this.$view.parents('.view').size();
@@ -103,7 +103,7 @@
     /**
      * Attach the ajax behavior to each link.
      */
-    Drupal.views.ajaxView.prototype.attachPagerAjax = function() {
+    Drupal.views.ajaxView.prototype.attachPagerAjax = function () {
         this.$view.find('ul.pager > li > a, th.views-field a, .attachment .views-summary a')
             .each(jQuery.proxy(this.attachPagerLinkAjax, this));
 
@@ -114,7 +114,7 @@
     /**
      * Attach the ajax behavior to a singe link.
      */
-    Drupal.views.ajaxView.prototype.attachPagerLinkAjax = function(id, link) {
+    Drupal.views.ajaxView.prototype.attachPagerLinkAjax = function (id, link) {
         var $link = $(link);
         var viewData = {};
         var href = $link.attr('href');
@@ -138,6 +138,10 @@
         var asu_isearch_configs = $(select).parents('.pane-bundle-isearch-directory').find('[name="omni_configs"]').val();
         var thesort = $(select).parents('.pane-bundle-isearch-directory').find('[name="sort_by"]').val();
 
+        if (asu_isearch_configs == null) {
+            asu_isearch_configs = $(select).parents('.pane-bundle-asu-dir').find('[name="omni_configs"]').val();
+        }
+
         // Attach our custom asu_isearch configs, and also the proper sort value, to the request
         viewData.omni_configs = asu_isearch_configs;
         viewData.sort_by = thesort;
@@ -148,7 +152,7 @@
     };
 
 
-    Drupal.views.ajaxView.prototype.attachAZIndexAjax = function(id, link) {
+    Drupal.views.ajaxView.prototype.attachAZIndexAjax = function (id, link) {
         var $link = $(link);
         var viewData = {};
         var letter = $link.html();
@@ -165,6 +169,10 @@
         var asu_isearch_configs = $(select).parents('.pane-bundle-isearch-directory').find('[name="omni_configs"]').val();
         var thesort = $(select).parents('.pane-bundle-isearch-directory').find('[name="sort_by"]').val();
 
+        if (asu_isearch_configs == null) {
+            asu_isearch_configs = $(select).parents('.pane-bundle-asu-dir').find('[name="omni_configs"]').val();
+        }
+
         // Attach our custom asu_isearch configs, and also the proper sort value, to the request
         viewData.omni_configs = asu_isearch_configs;
         viewData.sort_by = thesort;
@@ -175,7 +183,7 @@
         // don't bother with progress circle
         this.element_settings.progress = 'none';
 
-        $link.click(function(event) {
+        $link.click(function (event) {
             $(this).parent().find('li').removeClass('active-letter');
             $(this).addClass('active-letter');
         });
