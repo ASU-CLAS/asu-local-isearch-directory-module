@@ -20,7 +20,7 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
       $form['field_isearch_photo_permission']['#access'] = FALSE;
 
       //get the employee types and populate a helper widget
-      $employee_types = asu_isearch_get_employee_types();
+      $employee_types = asu_dir_utilities_get_isearch_data(ASU_DIR_UTILITIES_EMPLOYEE_TYPES_ENDPOINT);
 
       //dropdown widget to select employee type
       $prefix = "<div class='asu-isearch-e-type-select'>" .
@@ -37,7 +37,7 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
 
       $settings = array();
       $configs = json_decode(asu_isearch_get_dept_config());
-      $dept_tree = json_decode(asu_isearch_get_dept_tree());
+      $dept_tree = asu_dir_utilities_get_isearch_data(ASU_DIR_UTILITIES_TREE_ENDPOINT); //json_decode(asu_dir_utilities_get_dept_tree());
 
       $locations = array();
 
@@ -53,7 +53,7 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
           $locations[] = $newItem;
         }
         else {
-          $locations = array_merge($locations, asu_isearch_dept_get_tree_data($root));
+          $locations = array_merge($locations, asu_dir_utilities_dept_get_tree_data($root));
         }
       }
 
@@ -139,7 +139,8 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
         $is_local_field = (bool) preg_match('/^field_isearch_local_/', $form_field);
 
         if ((!$is_local_field && preg_match('/^field_isearch_/', $form_field) && !in_array($form_field, $field_exception_manifest)) ||
-        in_array($form_field, $also_excluded)) {
+          in_array($form_field, $also_excluded)
+        ) {
 
           if (asu_isearch_devmode() === FALSE) {
             $form[$form_field]['#disabled'] = TRUE;

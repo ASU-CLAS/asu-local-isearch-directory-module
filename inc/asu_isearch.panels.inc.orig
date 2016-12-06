@@ -661,8 +661,12 @@ function asu_isearch_form_fieldable_panels_panes_fieldable_panels_pane_content_t
 
       if ($feed_depts['options'][$id]['subdepts']) {
         $dept_picker_items = array_merge($dept_picker_items, $dept['tree_nids']);
+<<<<<<< HEAD
+      } else {
+=======
       }
       else {
+>>>>>>> colton
         array_push($dept_picker_items, $dept['dept_nid']);
       }
     }

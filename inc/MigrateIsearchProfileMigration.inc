@@ -91,6 +91,7 @@ class MigrateIsearchProfileMigration extends Migration {
 
     $master = asu_isearch_get_master_source();
 
+    // check the local source -- if empty, fill it
     if (empty($master)) {
       $tracker = asu_isearch_get_dept_tracker();
       _asu_isearch_build_migrate_master($tracker);
@@ -295,7 +296,36 @@ class MigrateIsearchProfileMigration extends Migration {
         $affiliation->id = $department_id;
         $affiliation->deptId = $department_id;
         $affiliation->deptName = $row->departments[$index];
-        $affiliation->title = $row->titles[$index];
+
+
+        $titlesource = 'workingTitle';
+
+        if (isset($row->titleSource)) {
+          $titlesource = $row->titleSource[$index];
+        }
+
+        $custom_title = $row->titles[$index];
+
+        if ($titlesource == 'titles') {
+          $affiliation->title = $custom_title;
+        }
+        else {
+          if (isset($row->workingTitle) && !empty($row->workingTitle)) {
+            $affiliation->title = $row->workingTitle;
+          }
+          else {
+            if (isset($row->primaryTitle) && !empty($row->primaryTitle)) {
+              $affiliation->title = $row->primaryTitle;
+            }
+            else {
+
+              // it's possible that courtesy affiliates might not have any titlesource value,
+              // but have a titles array value, so we use the custom title as a final fallback
+              $affiliation->title = $custom_title;
+            }
+          }
+        }
+
         $affiliation->vpArea = $row->vpAreas[$index];
         $affiliation->campus = $row->jobCampuses[$index];
         $affiliation->mailCode = $row->mailCodes[$index];
@@ -314,7 +344,7 @@ class MigrateIsearchProfileMigration extends Migration {
           $weight = $affiliation->ranksWeight;
           $eweight = intval($row->employeeWeight[$index]);
 
-          if ( ( !is_numeric($weight) || $eweight < intval($weight) ) && $eweight < 999) {
+          if ((!is_numeric($weight) || $eweight < intval($weight)) && $eweight < 999) {
             $affiliation->employeeWeight = $eweight;
           }
         }
@@ -355,7 +385,7 @@ class MigrateIsearchProfileMigration extends Migration {
 
         $name = $row->departmentTitleRanks[$index];
 
-        if (!empty($rank_key)  && is_numeric($rank_key) && $name != NULL) {
+        if (!empty($rank_key) && is_numeric($rank_key) && $name != NULL) {
           $titleRank = new stdclass();
           $titleRank->name = $row->departmentTitleRanks[$index];
           $titleRank->id = $rank_key;
@@ -446,6 +476,7 @@ class MigrateIsearchProfileMigration extends Migration {
 
     // keeps track of existing expertise values
     $existing_expertise = array();
+    //watchdog('migrate_debug','<pre>'.print_r(self::$expertiseAreasCache,TRUE).'</pre>');
 
     // Loop through the expertise areas we received from $row and add if necessary
     foreach ($row->expertise as $expertise_key => $item) {
@@ -456,7 +487,7 @@ class MigrateIsearchProfileMigration extends Migration {
 
       // this wasn't an existing expertise, but we already are aware of the term
       // add it to existing_expertise and continue
-      if (isset(self::$expertiseAreasCache[$expertise_key])) {
+      if (isset(self::$expertiseAreasCache[$expertise_key]) && is_object(self::$expertiseAreasCache[$expertise_key])) {
         $existing_expertise[$expertise_key] = self::$expertiseAreasCache[$expertise_key]->tid;
         if ($item->name != self::$expertiseAreasCache[$expertise_key]->name) {
           self::$expertiseAreasCache[$expertise_key]->name = $item->name;
@@ -473,6 +504,8 @@ class MigrateIsearchProfileMigration extends Migration {
       $term->name = $item->name;
       taxonomy_term_save($term);
 
+      watchdog('migrate_debugterm', '<pre>' . print_r($term, TRUE) . '</pre>');
+
       // add to list of expertise we will save on entity
       $existing_expertise[$expertise_key] = $term->tid;
 
@@ -482,7 +515,10 @@ class MigrateIsearchProfileMigration extends Migration {
 
     $expertise_areas = array();
     foreach ($existing_expertise as $term_id) {
-      $expertise_areas[] = array('tid' => $term_id);
+
+      if ($term_id !== NULL) {
+        $expertise_areas[] = array('tid' => $term_id);
+      }
     }
 
     $entity->field_isearch_expertise_areas[LANGUAGE_NONE] = $expertise_areas;
@@ -532,7 +568,8 @@ class MigrateIsearchProfileMigration extends Migration {
       $existing_ranks[$rank_key] = $term->tid;
 
       // store these values in our cache
-      self::$titleRanksCache[$rank_key] = $term->tid;
+      // TODO:  make sure this works
+      self::$titleRanksCache[$rank_key] = $term;
     }
 
     $row->existing_ranks = $existing_ranks;

@@ -113,7 +113,7 @@ function asu_isearch_admin_settings_form() {
 
 function asu_isearch_remove_local_weights() {
 
-  $items = entity_load('field_collection_item', FALSE,  'field_isearch_affiliations' );
+  $items = entity_load('field_collection_item', FALSE, 'field_isearch_affiliations');
   /*
   foreach( $items as $item ) {
    $item->field_isearch_affil_local_weight = array();

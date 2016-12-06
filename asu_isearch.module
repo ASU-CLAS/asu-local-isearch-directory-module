@@ -27,11 +27,9 @@ define('ASU_ISEARCH_DIRECTORY_TOP_LEVEL_PS_ID', 'ASU');
 define('ASU_ISEARCH_DIRECTORY_TOP_LEVEL_DEPT_NID', 1342);
 define('ASU_ISEARCH_DIRECTORY_FORM_CACHE_DURATION', 24); // set to 24 hours
 define('ASU_ISEARCH_DIRECTORY_IMPORT_INTERVAL', 24); // set to 24 hours
-define('ASU_ISEARCH_DIRECTORY_MODULE_NAME', 'asu_dir');
+define('ASU_ISEARCH_DIRECTORY_MODULE_NAME', 'asu_isearch');
 define('ASU_ISEARCH_DIRECTORY_URL', 'https://isearch.asu.edu');
-define('ASU_ISEARCH_DIRECTORY_SOLR_ENV', variable_get('asu_dir_solr_endpoint', 'https://asudir-solr.asu.edu/asudir/directory/select'));
-define('ASU_ISEARCH_DIRECTORY_TREE_ENDPOINT', variable_get('asu_dir_tree_endpoint', 'https://isearch.asu.edu/endpoints/dept_tree/json'));
-define('ASU_ISEARCH_EMPLOYEE_TYPES_ENDPOINT', variable_get('asu_dir_employee_types_endpoint', 'https://isearch.asu.edu/endpoints/employee-types'));
+//define('ASU_ISEARCH_DIRECTORY_SOLR_ENV', variable_get('asu_dir_solr_endpoint', 'https://asudir-solr.asu.edu/asudir/directory/select'));
 define('ASU_ISEARCH_DIRECTORY_PHOTO_ENDPOINT', 'https://webapp4.asu.edu/photo-ws/directory_photo/');
 define('ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT', 'private://isearch/feeds/');
 define('ASU_ISEARCH_MASTER_FILE_ENDPOINT', 'private://isearch/feeds/asu_isearch_master.json');
@@ -43,14 +41,17 @@ define('ASU_ISEARCH_DEPT_CACHING_LIMIT', 10);
 
 // Feed URLs
 $asu_isearch_devmode = variable_get('asu_isearch_devmode', FALSE);
-$feed_endpoint = 'https://isearch.asu.edu/endpoints/dept-profiles/json/';
+
+
+/*
+$feed_endpoint = variable_get('asu_dir_utilities_feed_endpoint', 'https://isearch.asu.edu/endpoints/dept-profiles/json/');
 
 if ($asu_isearch_devmode) {
   $feed_endpoint = variable_get('asu_isearch_devmode_endpoint', $feed_endpoint);
 }
 
 define('ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT', $feed_endpoint);
-
+*/
 
 /**
  * Implements hook_menu()
@@ -234,102 +235,22 @@ function asu_isearch_ctools_plugin_directory($module, $plugin) {
  * Implementation of hook_entity_info_alter().
  */
 function asu_isearch_entity_info_alter(&$entity_info) {
-
-  // Add panel pane for iSearch directory
-  $entity_info['fieldable_panels_pane']['bundles']['isearch_directory'] = array(
-    'label' => t('Add iSearch directory'),
-    'description' => t('Add an iSearch Directory that is configurable.'),
-    'pane category' => t('Custom'),
-    'pane top level' => TRUE,
-    'pane icon' => drupal_get_path('module', 'asu_isearch') . '/images/icon_isearch_directory.png',
-    'admin' => array(
-      'path' => 'admin/structure/fieldable-panels-panes/manage/%fieldable_panels_panes_type',
-      'bundle argument' => 4,
-      'real path' => 'admin/structure/fieldable-panels-panes/manage/isearch-directory',
-      'access arguments' => array('administer fieldable panels panes'),
-    ),
-  );
-}
-
-
-/**
- * Get the department hierarchy tree
- */
-function asu_isearch_get_dept_tree() {
-
-  $tree = &drupal_static(__FUNCTION__);
-
-  if (!isset($tree) || $tree == "") {
-    // Check for cache
-    if ($cache = cache_get('asu_isearch_directory_tree')) {
-      $tree = $cache->data;
-    }
-    // Create content and cache if no cache available
-    else {
-
-      //set timeout of request to 60 seconds
-      $options = array(
-        'timeout' => 60,
-      );
-
-      //Get the tree and cache
-      $tree_endpoint = ASU_ISEARCH_DIRECTORY_TREE_ENDPOINT;
-      $request = drupal_http_request($tree_endpoint, $options);
-
-      if ($request->code == 200) {
-        $tree = $request->data;
-      }
-
-      // Create cache, set to hold cache for number of hours specified
-      if ($tree != NULL) {
-        $set_date = time();
-        $expire_date = time() + 3600 * ASU_ISEARCH_DIRECTORY_FORM_CACHE_DURATION;
-        cache_set('asu_isearch_directory_tree', $tree, 'cache', $expire_date);
-      }
-    }
-  }
-
-  return $tree;
-}
-
-
-/**
- * Returns an array of employee types from iSearch
- */
-function asu_isearch_get_employee_types() {
-  $employee_types = &drupal_static(__FUNCTION__);
-
-  if (!isset($employee_types) || $employee_types == "") {
-    // Check for cache
-    if ($cache = cache_get('asu_employee_types')) {
-      $employee_types = $cache->data;
-    }
-    // Create content and cache if no cache available
-    else {
-
-      //set timeout of request to 60 seconds
-      $options = array(
-        'timeout' => 60,
-      );
-
-      $endpoint = ASU_ISEARCH_EMPLOYEE_TYPES_ENDPOINT;
-      $request = drupal_http_request($endpoint, $options);
-
-      if ($request->code == 200) {
-        $types = $request->data;
-        $employee_types = drupal_json_decode($types);
-      }
-
-      // Cache employee types for number of hours specified
-      if ($employee_types != NULL) {
-
-        $expire_date = time() + 3600 * ASU_ISEARCH_DIRECTORY_FORM_CACHE_DURATION;
-        cache_set('asu_employee_types', $employee_types, 'cache', $expire_date);
-      }
-    }
-  }
-
-  return $employee_types;
+  //if (variable_get('asu_isearch_overrride_panel', FALSE)) {
+    // Add panel pane for iSearch directory
+    $entity_info['fieldable_panels_pane']['bundles']['isearch_directory'] = array(
+      'label' => t('Add iSearch directory'),
+      'description' => t('Add an iSearch Directory that is configurable.'),
+      'pane category' => t('Custom'),
+      'pane top level' => TRUE,
+      'pane icon' => drupal_get_path('module', 'asu_isearch') . '/images/icon_isearch_directory.png',
+      'admin' => array(
+        'path' => 'admin/structure/fieldable-panels-panes/manage/%fieldable_panels_panes_type',
+        'bundle argument' => 4,
+        'real path' => 'admin/structure/fieldable-panels-panes/manage/isearch-directory',
+        'access arguments' => array('administer fieldable panels panes'),
+      ),
+    );
+  //}
 }
 
 function asu_isearch_get_default_photo() {
@@ -416,78 +337,4 @@ function asu_isearch_panelizer_defaults_alter(&$items) {
 }
 
 
-/***
- * Implements hook_entity_load
- *
- * Use this for updating the profile upon loading
- * todo:  set sane intervals for node updating
- *
- */
-function asu_isearch_entity_load($entities, $type) {
-
-  if ($type == 'node') {
-    foreach($entities as $key => $item) {
-      if ($item->type == 'asu_isearch_profile') {
-
-        $prev_update = NULL;
-        $current_time = time();
-        $interval = 60 * 60 * ASU_ISEARCH_PROFILE_ONLOAD_UPDATE_INTERVAL;
-
-        if (isset($item->field_previous_isearch_update['und'][0]['value'])) {
-          $prev_update = $item->field_previous_isearch_update['und'][0]['value'];
-        }
-
-        // if it's been longer than the update interval, then update from Solr
-        // todo:  isearch fields also?
-        if ($prev_update == NULL || ($current_time - $interval) > $prev_update) {
-
-          $asurite = $item->field_isearch_asurite_id['und'][0]['value'];
-
-          // todo:  replace this with configured value, once we add dir utilities to webspark
-          $isearch_url = 'https://asudir-solr.asu.edu/asudir/directory/select?q=asuriteId:' . $asurite . '&wt=json';
-
-          $request = drupal_http_request($isearch_url);
-
-          if ($request->code == 200) {
-            $data = json_decode($request->data, TRUE);
-            $data = $data['response']['docs'];
-            $photo_url = $data[0]['photoUrl'];
-
-            // ensure the file is truly accessible
-            $response = drupal_http_request($photo_url);
-            $destination = file_build_uri('asu_isearch_photos') . '/'. $data[0]['eid'] .'.jpg';
-
-            if ($response->code == 200) {
-
-              $file = FALSE;
-              $newfile = FALSE;
-
-              $photo_exists = file_exists($destination);
-
-              // does the file already exist on the server?
-              // if yes, associate it
-              if ($photo_exists) {
-                $file = current(entity_load('file', array(), array('uri' => $destination . '')));
-              }
-
-              if (!$photo_exists || filesize($destination) != $response->headers['content-length']) {
-                $newfile = system_retrieve_file($photo_url, $destination, TRUE, FILE_EXISTS_REPLACE);
-              }
-
-              if ($newfile) {
-                $item->field_isearch_photo_url[LANGUAGE_NONE][0]['fid'] = $file->fid;
-              }
-            }
-          }
-
-          $item->field_previous_isearch_update['und'][0]['value'] = time();
-          field_attach_update('node', $item);
-        }
-
-        //only update 1
-        return FALSE;
-      }
-    }
-  }
-}
 
