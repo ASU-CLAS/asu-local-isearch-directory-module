@@ -4,83 +4,40 @@
  * Custom behavior for iSearch admin
  *
  * @author Sebastian Nievas ( snievas@asu.edu )
+ * @author Colton Testamarck ( colt@asu.edu )
  */
 
 (function ($) {
-  Drupal.behaviors.asu_isearch = {
-    attach: function (context, settings) {
+    Drupal.behaviors.asu_isearch = {
+        attach: function (context, settings) {
 
-      $(document).ready(function() {
-        var profile_photo_pane = $(".node-asu-isearch-profile .profile-header .isearch-profile-photo");
+            $(document).ready(function () {
+                var profile_photo_pane = $(".node-asu-isearch-profile .profile-header .isearch-profile-photo");
+                var first_affil = $(".view-isearch-affiliations .accordion-toggle").get(0);
+                var acts = $(".field-name-field-isearch-rsrch-activity a");
 
-        if (profile_photo_pane.length && $.trim(profile_photo_pane.html()) == '') {
-          profile_photo_pane.hide();
-        }
+                if (profile_photo_pane.length && $.trim(profile_photo_pane.html()) == '') {
+                    profile_photo_pane.hide();
+                }
 
-        // fix pagination/exposed filters when isearch found within tabs
-        $('.ui-tabs-panel .asu-isearch-directory-pane').each(function() {
+                // open first affiliation
+                // todo: look into doing this from the views side
+                if (first_affil != null) {
+                    first_affil.click();
+                }
 
-          var tab = $(this).closest('.ui-tabs-panel');
-          var tab_hash = '#' + tab.attr('id');
+                // add the complete/absolute url for the people links
+                $.each(acts, function (index, value) {
+                    var href = $(this).attr('href');
+                    var isearch = href.indexOf("isearch.asu.edu");
 
-          // detect pagination
-          var pager = $(this).find('.item-list .pager');
-          if (pager.length) {
-            pager.find('li a').each(function(){
-              var href = $(this).attr('href');
-              $(this).attr('href', href + tab_hash);
-            });
-          }
-
-          // detect exposed filters
-          var filters = $(this).find('.isearch-directory-filters');
-          if (filters.length) {
-            var action = filters.attr('action');
-            filters.attr('action', action + tab_hash);
-
-            if (settings.chosen) {
-              // taken from chosen module
-              filters.find('select')
-                .not('#field-ui-field-overview-form select, #field-ui-display-overview-form select, .wysiwyg, .draggable select[name$="[weight]"], .draggable select[name$="[position]"], .chosen-disable, .chosen-processed')
-                .filter(function() {
-                  // Filter out select widgets that do not meet the minimum number of
-                  // options.
-                  var minOptions = $(this).attr('multiple') ? settings.chosen.minimum_multiple : settings.chosen.minimum_single;
-                  if (!minOptions) {
-                    // Zero value means no minimum.
-                    return true;
-                  }
-                  else {
-                    return $(this).find('option').length >= minOptions;
-                  }
-                })
-                .once('chosen', function() {
-                  if (typeof $(this).chosen === 'function') {
-                    var chosen_options = Drupal.settings.chosen.options;
-                    chosen_options.width = '100%';
-                    $(this).chosen(chosen_options);
-                  }
+                    if (isearch == -1) {
+                        href = 'https://isearch.asu.edu' + href;
+                        $(this).attr('href', href);
+                    }
                 });
-            }
-            
-          }
-        });
 
-        var isearch_index = $('.isearch-a-z-index');
-
-        $('.isearch-a-z-index').each(function() {
-          if ($(this).parents('div.ui-tabs-panel').length) {
-            var tab_id = $(this).parents('div.ui-tabs-panel').attr('id');
-
-            $(this).find('li a').each(function(){
-              var href = $(this).attr('href');
-              if (href.search('#') == -1) {
-                $(this).attr('href', href + '#' + tab_id);
-              }
             });
-          }
-        });
-      });
+        }
     }
-  }
 })(jQuery);

@@ -22,32 +22,36 @@ include_once 'inc/IsearchProfileDirectory.inc';
 define('ASU_ISEARCH_DIRECTORY_ADMIN_CONFIG_SETTINGS', 'Administer ASU Directory Configuration');
 define('ASU_ISEARCH_DIRECTORY_PAGE_ACCESS', 'access asu directory');
 
-// Form Field Variable Constants
+// Various constants
 define('ASU_ISEARCH_DIRECTORY_TOP_LEVEL_PS_ID', 'ASU');
 define('ASU_ISEARCH_DIRECTORY_TOP_LEVEL_DEPT_NID', 1342);
 define('ASU_ISEARCH_DIRECTORY_FORM_CACHE_DURATION', 24); // set to 24 hours
 define('ASU_ISEARCH_DIRECTORY_IMPORT_INTERVAL', 24); // set to 24 hours
-define('ASU_ISEARCH_DIRECTORY_MODULE_NAME', 'asu_dir');
-
+define('ASU_ISEARCH_DIRECTORY_MODULE_NAME', 'asu_isearch');
 define('ASU_ISEARCH_DIRECTORY_URL', 'https://isearch.asu.edu');
-define('ASU_ISEARCH_DIRECTORY_SOLR_ENV', variable_get('asu_dir_solr_endpoint', 'https://asudir-solr.asu.edu/asudir/directory/select'));
-define('ASU_ISEARCH_DIRECTORY_TREE_ENDPOINT', variable_get('asu_dir_tree_endpoint', 'https://isearch.asu.edu/endpoints/dept_tree/json'));
-define('ASU_ISEARCH_EMPLOYEE_TYPES_ENDPOINT', variable_get('asu_dir_employee_types_endpoint', 'https://isearch.asu.edu/endpoints/employee-types'));
+//define('ASU_ISEARCH_DIRECTORY_SOLR_ENV', variable_get('asu_dir_solr_endpoint', 'https://asudir-solr.asu.edu/asudir/directory/select'));
 define('ASU_ISEARCH_DIRECTORY_PHOTO_ENDPOINT', 'https://webapp4.asu.edu/photo-ws/directory_photo/');
 define('ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT', 'private://isearch/feeds/');
 define('ASU_ISEARCH_MASTER_FILE_ENDPOINT', 'private://isearch/feeds/asu_isearch_master.json');
 define('ASU_ISEARCH_DEPARTMENT_IMPORT_TRACKER', variable_get('asu_isearch_dept_tracker', NULL));
+define('ASU_ISEARCH_MASTER_SOURCE_LIMIT', 250);
+define('ASU_ISEARCH_PROFILE_CLEANUP_LIMIT', 30);
+define('ASU_ISEARCH_PROFILE_ONLOAD_UPDATE_INTERVAL', 6); // interval between profile load updates, in hours
+define('ASU_ISEARCH_DEPT_CACHING_LIMIT', 10);
 
 // Feed URLs
 $asu_isearch_devmode = variable_get('asu_isearch_devmode', FALSE);
-$feed_endpoint = 'https://isearch.asu.edu/endpoints/dept-profiles/json/';
+
+
+/*
+$feed_endpoint = variable_get('asu_dir_utilities_feed_endpoint', 'https://isearch.asu.edu/endpoints/dept-profiles/json/');
 
 if ($asu_isearch_devmode) {
   $feed_endpoint = variable_get('asu_isearch_devmode_endpoint', $feed_endpoint);
 }
 
 define('ASU_ISEARCH_DIRECTORY_FEED_ENDPOINT', $feed_endpoint);
-
+*/
 
 /**
  * Implements hook_menu()
@@ -73,9 +77,19 @@ function asu_isearch_menu() {
     'weight' => 10,
   );
 
+  $items['isearch/views/ajax'] = array(
+    'title' => 'Views',
+    'page callback' => 'asu_isearch_views_ajax',
+    'theme callback' => 'ajax_base_page_theme',
+    'delivery callback' => 'ajax_deliver',
+    'access callback' => TRUE,
+    'description' => 'Ajax callback for view loading.',
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/asu_isearch.views.inc',
+  );
+
   return $items;
 }
-
 
 
 /**
@@ -184,12 +198,12 @@ function asu_isearch_prepare_quicktabs($node) {
 
     // initial settings
     $settings = array(
-      'ajax'          => 0,
+      'ajax' => 0,
       'hide_if_empty' => 1,
-      'default_tab'   => 0,
-      'title'         => 'My custom quicktab',
-      'renderer'      => 'quicktabs',
-      'style'         => 'isearch',
+      'default_tab' => 0,
+      'title' => 'My custom quicktab',
+      'renderer' => 'quicktabs',
+      'style' => 'isearch',
     );
 
     // build out quicktabs
@@ -197,9 +211,9 @@ function asu_isearch_prepare_quicktabs($node) {
 
     foreach ($tabs as $tab) {
       $custom_tabs[] = array(
-        'type'     => 'prerendered',
-        'title'    => $tab['label'],
-        'weight'   => $tab['weight'],
+        'type' => 'prerendered',
+        'title' => $tab['label'],
+        'weight' => $tab['weight'],
         'contents' => drupal_render($tab['content']),
       );
     }
@@ -207,7 +221,6 @@ function asu_isearch_prepare_quicktabs($node) {
     return quicktabs_build_quicktabs($name, $settings, $custom_tabs);
   }
 }
-
 
 
 /**
@@ -218,108 +231,26 @@ function asu_isearch_ctools_plugin_directory($module, $plugin) {
 }
 
 
-
 /**
  * Implementation of hook_entity_info_alter().
  */
 function asu_isearch_entity_info_alter(&$entity_info) {
-
-  // Add panel pane for iSearch directory
-  $entity_info['fieldable_panels_pane']['bundles']['isearch_directory'] = array(
-    'label' => t('Add iSearch directory'),
-    'description' => t('Add an iSearch Directory that is configurable.'),
-    'pane category' => t('Custom'),
-    'pane top level' => TRUE,
-    'pane icon' => drupal_get_path('module', 'asu_isearch') . '/images/icon_isearch_directory.png',
-    'admin' => array(
-      'path' => 'admin/structure/fieldable-panels-panes/manage/%fieldable_panels_panes_type',
-      'bundle argument' => 4,
-      'real path' => 'admin/structure/fieldable-panels-panes/manage/isearch-directory',
-      'access arguments' => array('administer fieldable panels panes'),
-    ),
-  );
-}
-
-
-/**
- * Get the department hierarchy tree
- */
-function asu_isearch_get_dept_tree() {
-
-  $tree = &drupal_static(__FUNCTION__);
-
-  if (!isset($tree) || $tree == "") {
-    // Check for cache
-    if ($cache = cache_get('asu_isearch_directory_tree')) {
-      $tree = $cache->data;
-    }
-    // Create content and cache if no cache available
-    else {
-
-      //set timeout of request to 60 seconds
-      $options = array(
-        'timeout' => 60,
-      );
-
-      //Get the tree and cache
-      $tree_endpoint = ASU_ISEARCH_DIRECTORY_TREE_ENDPOINT;
-      $request = drupal_http_request($tree_endpoint, $options);
-
-      if ($request->code == 200) {
-        $tree = $request->data;
-      }
-
-      // Create cache, set to hold cache for number of hours specified
-      if ($tree != NULL) {
-        $set_date = time();
-        $expire_date = time() + 3600 * ASU_ISEARCH_DIRECTORY_FORM_CACHE_DURATION;
-        cache_set('asu_isearch_directory_tree', $tree, 'cache', $expire_date);
-      }
-    }
-  }
-
-  return $tree;
-}
-
-
-
-/**
- * Returns an array of employee types from iSearch
- */
-function asu_isearch_get_employee_types() {
-  $employee_types = &drupal_static(__FUNCTION__);
-
-  if (!isset($employee_types) || $employee_types == "") {
-    // Check for cache
-    if ($cache = cache_get('asu_employee_types')) {
-      $employee_types = $cache->data;
-    }
-    // Create content and cache if no cache available
-    else {
-
-      //set timeout of request to 60 seconds
-      $options = array(
-        'timeout' => 60,
-      );
-
-      $endpoint = ASU_ISEARCH_EMPLOYEE_TYPES_ENDPOINT;
-      $request = drupal_http_request($endpoint, $options);
-
-      if ($request->code == 200) {
-        $types = $request->data;
-        $employee_types = drupal_json_decode($types);
-      }
-
-      // Cache employee types for number of hours specified
-      if ($employee_types != NULL) {
-
-        $expire_date = time() + 3600 * ASU_ISEARCH_DIRECTORY_FORM_CACHE_DURATION;
-        cache_set('asu_employee_types', $employee_types, 'cache', $expire_date);
-      }
-    }
-  }
-
-  return $employee_types;
+  //if (variable_get('asu_isearch_overrride_panel', FALSE)) {
+    // Add panel pane for iSearch directory
+    $entity_info['fieldable_panels_pane']['bundles']['isearch_directory'] = array(
+      'label' => t('Add iSearch directory'),
+      'description' => t('Add an iSearch Directory that is configurable.'),
+      'pane category' => t('Custom'),
+      'pane top level' => TRUE,
+      'pane icon' => drupal_get_path('module', 'asu_isearch') . '/images/icon_isearch_directory.png',
+      'admin' => array(
+        'path' => 'admin/structure/fieldable-panels-panes/manage/%fieldable_panels_panes_type',
+        'bundle argument' => 4,
+        'real path' => 'admin/structure/fieldable-panels-panes/manage/isearch-directory',
+        'access arguments' => array('administer fieldable panels panes'),
+      ),
+    );
+  //}
 }
 
 function asu_isearch_get_default_photo() {
@@ -332,9 +263,14 @@ function asu_isearch_format_phone($phone) {
   $phone = preg_replace('/[^\d]/', '', $phone);
 
   switch (strlen($phone)) {
-    case 7:  return preg_replace("/([0-9]{3})([0-9]{4})/", "$1-$2", $phone); break;
-    case 11: $phone = substr($phone, 1);
-    case 10: return preg_replace("/([0-9]{3})([0-9]{3})([0-9]{4})/", "$1-$2-$3", $phone); break;
+    case 7:
+      return preg_replace("/([0-9]{3})([0-9]{4})/", "$1-$2", $phone);
+      break;
+    case 11:
+      $phone = substr($phone, 1);
+    case 10:
+      return preg_replace("/([0-9]{3})([0-9]{3})([0-9]{4})/", "$1-$2-$3", $phone);
+      break;
   }
 
   return $phone;
@@ -342,33 +278,33 @@ function asu_isearch_format_phone($phone) {
 
 
 function asu_isearch_panelizer_defaults_alter(&$items) {
-        if (isset($items['node:asu_isearch_profile:default:default'])) {
-          $default_tabs_map = variable_get('asu_isearch_default_tabs', null);
+  if (isset($items['node:asu_isearch_profile:default:default'])) {
+    $default_tabs_map = variable_get('asu_isearch_default_tabs', NULL);
 
-          if (!is_null($default_tabs_map)) {
-            // we already have data, unserialize it
-            $default_tabs_map = unserialize($default_tabs_map);
-          }
-          else {
-            // create the data for the first time
-            $default_tabs_map = array(
-              'bio_tab' => array(
-                'pane_uuid' => 'adfb4591-2608-4c80-a849-1c2924acf758',
-                'fpp_uuid' => '61e05864-8ba7-4858-b9ca-3b9b078b4ca3',
-              ),
-              'teaching_tab' => array(
-                'pane_uuid' => 'bc98b089-23f9-4c8f-b93e-138b7b6083ba',
-                'fpp_uuid' => '2ffb11d5-0954-4090-a05e-d21f61573d13',
-              ),
-              'research_tab' => array(
-                'pane_uuid' => '8be2b6de-7166-4f46-9ad6-6a97b32073f1',
-                'fpp_uuid' => 'b3ac9a14-7900-413f-9c00-336674af69a5',
-              ),
-              'public_works_tab' => array(
-                'pane_uuid' => 'ad7abd4f-b4e2-4c77-902e-75b4e3bf7984',
-                'fpp_uuid' => 'e1993e63-c13a-4429-9787-9948ee480191',
-              ),
-            );
+    if (!is_null($default_tabs_map)) {
+      // we already have data, unserialize it
+      $default_tabs_map = unserialize($default_tabs_map);
+    }
+    else {
+      // create the data for the first time
+      $default_tabs_map = array(
+        'bio_tab' => array(
+          'pane_uuid' => 'adfb4591-2608-4c80-a849-1c2924acf758',
+          'fpp_uuid' => '61e05864-8ba7-4858-b9ca-3b9b078b4ca3',
+        ),
+        'teaching_tab' => array(
+          'pane_uuid' => 'bc98b089-23f9-4c8f-b93e-138b7b6083ba',
+          'fpp_uuid' => '2ffb11d5-0954-4090-a05e-d21f61573d13',
+        ),
+        'research_tab' => array(
+          'pane_uuid' => '8be2b6de-7166-4f46-9ad6-6a97b32073f1',
+          'fpp_uuid' => 'b3ac9a14-7900-413f-9c00-336674af69a5',
+        ),
+        'public_works_tab' => array(
+          'pane_uuid' => 'ad7abd4f-b4e2-4c77-902e-75b4e3bf7984',
+          'fpp_uuid' => 'e1993e63-c13a-4429-9787-9948ee480191',
+        ),
+      );
 
       $update = TRUE;
       foreach ($default_tabs_map as $tab_key => $tab) {
@@ -393,9 +329,12 @@ function asu_isearch_panelizer_defaults_alter(&$items) {
       $uuid = $tab['pane_uuid'];
       $fpid_value = 'fpid:' . $tab['fpid'];
 
-      if (isset($items['node:asu_isearch_profile:default:default']->display->content['new-'.$uuid]->subtype)) {
-        $items['node:asu_isearch_profile:default:default']->display->content['new-'.$uuid]->subtype = $fpid_value;
+      if (isset($items['node:asu_isearch_profile:default:default']->display->content['new-' . $uuid]->subtype)) {
+        $items['node:asu_isearch_profile:default:default']->display->content['new-' . $uuid]->subtype = $fpid_value;
       }
     }
   }
 }
+
+
+

@@ -8,14 +8,14 @@
  * working code.
  */
 class IsearchProfileDirectory {
-  private $instanceId = null;
+  private $instanceId = NULL;
   private $directoryListView;
   private $directoryGridView;
   private $exposedFilters;
   private $contextualFilters;
   private $sortingOptions;
-  private $view = null;
-  private $viewConfig = null;
+  private $view = NULL;
+  private $viewConfig = NULL;
 
   private static $currentInstance = 1;
 
@@ -35,6 +35,8 @@ class IsearchProfileDirectory {
   }
 
   public function renderIndex() {
+
+    /*
     $display_id = 'isearch_a_z';
     $this->view->set_display($display_id);
     $this->view->init_display(TRUE);
@@ -50,7 +52,8 @@ class IsearchProfileDirectory {
     $contextual_filters[0] = NULL;
     $this->view->set_arguments($contextual_filters);
 
-    if (isset($this->view->filter['field_isearch_affil_title_value_1'])) {
+
+    if (isset($this->viewConfig->filter_title)) {
       if ($this->viewConfig->filter_title == '') {
         $this->viewConfig->filter_title = '.*';
       }
@@ -60,15 +63,19 @@ class IsearchProfileDirectory {
     $this->view->pre_execute();
     $this->view->execute();
 
-    $items = array();
+    $lastname = $result->field_data_field_isearch_lastname_field_isearch_lastname_val;
 
+    $items = array();*/
+
+
+    /*
     foreach ($this->view->result as $key => $result) {
-      $index_letter = $result->field_isearch_lastname_value_truncated;
+
       $items[] = t('<a href="@url">@letter</a>', array(
-        '@url'    => url(current_path(), array(
+        '@url' => url(current_path(), array(
           'query' => array(
             'isrch_index' => $index_letter,
-            'isrch_id'    => $this->instanceId,
+            'isrch_id' => $this->instanceId,
           ),
         )),
         '@letter' => $index_letter,
@@ -76,13 +83,46 @@ class IsearchProfileDirectory {
     }
 
     return theme_item_list(array(
-      'items'      => $items,
-      'title'      => '',
-      'type'       => 'ul',
+      'items' => $items,
+      'title' => '',
+      'type' => 'ul',
       'attributes' => array(
         'class' => 'isearch-a-z-index',
       ),
-    ));
+    ));*/
+
+    return "<div id=\"asu-isearch-alpha-bar\">
+              <div class=\"asu-isearch-alpha-bar row\">
+            <ul class=\"alphabet\">
+              <li>A</li>
+              <li>B</li>
+              <li>C</li>
+              <li>D</li>
+              <li>E</li>
+              <li>F</li>
+              <li>G</li>
+              <li>H</li>
+              <li>I</li>
+              <li>J</li>
+              <li>K</li>
+              <li>L</li>
+              <li>M</li>
+              <li>N</li>
+              <li>O</li>
+              <li>P</li>
+              <li>Q</li>
+              <li>R</li>
+              <li>S</li>
+              <li>T</li>
+              <li>U</li>
+              <li>V</li>
+              <li>W</li>
+              <li>X</li>
+              <li>Y</li>
+              <li>Z</li>
+              <li>ALL</li>
+            </ul>
+          </div></div>";
   }
 
   public function getInstanceId() {
@@ -98,11 +138,23 @@ class IsearchProfileDirectory {
 
       $contextual_filters = $this->contextualFilters;
       $contextual_filters[0] = 'all';
-
       $view = views_get_view('isearch_directory', TRUE);
+
+      $view->view_config = $this->viewConfig;
+      $view_config = $this->viewConfig;
       $view->set_display($display_id);
       $view->init_handlers();
+
+      // Add the title filter
+      if (isset($view_config->filter_title)) {
+        if (trim($view_config->filter_title) != '') {
+          $view->filter['field_isearch_affil_title_value']->value = $view_config->filter_title;
+          $view->filter['field_isearch_affil_title_value']->options['value'] = $view_config->filter_title;
+        }
+      }
+
       $view->set_arguments($contextual_filters);
+      $view->pre_execute();
       $view->execute();
 
       foreach ($view->result as $item) {

@@ -105,8 +105,8 @@ function panels_tabs_extended_entity_info_alter(&$entity_info) {
 /**
  * Implements hook_preprocess_fieldable_panels_pane().
  */
-function panels_tabs_extended_preprocess_fieldable_panels_pane(&$variables){
-  if($variables['elements']['#bundle'] === 'panel_tabs_extended_tab'){
+function panels_tabs_extended_preprocess_fieldable_panels_pane(&$variables) {
+  if ($variables['elements']['#bundle'] === 'panel_tabs_extended_tab') {
     $title = $variables['elements']['#fieldable_panels_pane']->title;
     $variables['elements']['title'] = array(
       '#theme' => 'html_tag',
@@ -119,8 +119,8 @@ function panels_tabs_extended_preprocess_fieldable_panels_pane(&$variables){
 /**
  * Implements hook_preprocess_panels_pane().
  */
-function panels_tabs_extended_preprocess_panels_pane(&$variables){
-  if(isset($variables['content']['#bundle']) && $variables['content']['#bundle']==='panel_tabs_extended_tab' ){
+function panels_tabs_extended_preprocess_panels_pane(&$variables) {
+  if (isset($variables['content']['#bundle']) && $variables['content']['#bundle'] === 'panel_tabs_extended_tab') {
     $variables['title'] = '';
   }
 }
@@ -128,7 +128,7 @@ function panels_tabs_extended_preprocess_panels_pane(&$variables){
 /**
  * Implements hook_theme().
  */
-function panels_tabs_extended_theme(){
+function panels_tabs_extended_theme() {
   return array(
     'fieldable_panels_pane__panels_tabs_extended' => array(
       'template' => 'templates/fieldable-panels-pane--panels_tabs_extended',

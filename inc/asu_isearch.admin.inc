@@ -21,6 +21,13 @@ function asu_isearch_admin_settings_form() {
     '#default_value' => variable_get('isearch_display_affiliations', FALSE),
   );
 
+  $form['isearch_pull_isearch_weights'] = array(
+    '#type' => 'checkbox',
+    '#title' => 'Pull employee rank sorting values from iSearch?',
+    '#description' => t("This option will populate the local rank weight sorting data with the same sorting weights from iSearch."),
+    '#default_value' => variable_get('isearch_pull_isearch_weights', FALSE),
+  );
+
   $form['isearch_import_subdepts'] = array(
     '#type' => 'checkbox',
     '#title' => 'Include sub-departments on import?',
@@ -58,6 +65,14 @@ function asu_isearch_admin_settings_form() {
     '#default_value' => variable_get('isearch_link_buildings', TRUE),
     '#description' => t('Check this option to link building codes on profiles and directory listings to the ASU Campus map'),
   );
+  /*todo:  can we sensibly clear local weights?
+  $form['isearch_clear_local_weights'] = array(
+    '#type' => 'button',
+    '#value' => 'Remove All Local Weights on Affiliations',
+    '#executes_submit_callback' => TRUE,
+    // Send in part of the form_state array to know if this is initial page load or not
+    '#submit' => array('asu_isearch_remove_local_weights'),
+  );*/
 
   // retrieve global dept configuration
   $isearch_admin_feed_dept = asu_isearch_get_dept_config();
@@ -75,9 +90,9 @@ function asu_isearch_admin_settings_form() {
   asu_isearch_load_js();
   $form['#attached']['css'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/bootstrap.css';
   $form['#attached']['css'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/asu_isearch_config.css';
-  $form['#attached']['js'][]  = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/bootstrap.js';
-  $form['#attached']['js'][]  = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/asu_isearch_config.js';
-  $form['#attached']['js'][]  = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch.admin.js';
+  $form['#attached']['js'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/bootstrap.js';
+  $form['#attached']['js'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_config/asu_isearch_config.js';
+  $form['#attached']['js'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch.admin.js';
 
   $form['#prefix'] = '<div class="asu-isearch-configuration">';
   $form['#suffix'] = '</div>';
@@ -94,6 +109,16 @@ function asu_isearch_admin_settings_form() {
   $form['footer_actions']['#weight'] = 100;
 
   return $form;
+}
+
+function asu_isearch_remove_local_weights() {
+
+  $items = entity_load('field_collection_item', FALSE, 'field_isearch_affiliations');
+  /*
+  foreach( $items as $item ) {
+   $item->field_isearch_affil_local_weight = array();
+   entity_save('field_collection_item', $item);
+  }*/
 }
 
 /**
@@ -206,5 +231,7 @@ function asu_isearch_import_isearch_form_submit($form, &$form_state) {
 
 
 // Temporary function used with devel/php
-function asu_isearch_devel() { 
+function asu_isearch_devel() {
 }
+
+

@@ -7,9 +7,9 @@
  */
 
 (function ($) {
-  Drupal.behaviors.asu_isearch_admin = {
-    attach: function (context, settings) {
-      initIsearchConfig();
+    Drupal.behaviors.asu_isearch_admin = {
+        attach: function (context, settings) {
+            initIsearchConfig();
+        }
     }
-  }
 })(jQuery);

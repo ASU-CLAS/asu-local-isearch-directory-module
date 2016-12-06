@@ -6,8 +6,10 @@
 ?>
 <div class="field-type-asu-isearch-dept-picker">
   <label><?php print isset($label) ? $label : '' ?></label>
+
   <div class="actions">
-    <input id="asu-isearch-dept-picker-trigger" type="button" class="form-submit" value="Browse">
+    <input id="asu-isearch-dept-picker-trigger" type="button"
+           class="form-submit" value="Browse">
   </div>
   <ul id="asu-isearch-dept-picker-list"></ul>
 
