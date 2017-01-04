@@ -220,7 +220,6 @@ function asu_isearch_preprocess_panels_pane(&$variables) {
 
     // end edit
     $directory->setViewConfig($view_config);
-
     $directory->setContextualFilters($contextual_filters);
 
     if ($view_config->show_az_index) {
@@ -234,88 +233,106 @@ function asu_isearch_preprocess_panels_pane(&$variables) {
       '#markup' => $view_display,
     );
 
-    if (!$view_config->show_filter_titles
-      && !$view_config->show_filter_expertise
-      && !$view_config->show_filter_sort
-      && !$view_config->show_filter_omni
-    ) {
-      $view_config->show_filters = FALSE;
-    }
-
-    // display filters? - Should we display or hide the filters
-
-    if ($view_config->show_filters) {
-      // build the exposed form fields
-      $form_state = array(
-        'view' => $view,
-        'display' => $view->display_handler->display,
-        'exposed_form_plugin' => $view->display_handler->get_plugin('exposed_form'),
-        'method' => 'get',
-        'rerender' => TRUE,
-        'no_redirect' => TRUE
-        //'ajax' => TRUE
-      );
-
-      $form = drupal_build_form('views_exposed_form', $form_state);
-
-      // Attach our custom ajax handling script, if ajax is enabled
-      //if ($view->use_ajax) {
-      $form['#attached']['js'][] = drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_omni.js';
-      //}
-
-      $form['keys']['#weight'] = -100;
-      $form['keys']['#attributes']['placeholder'] = t('Name or Keyword');
-
-
-      // update search filters
-      $view->set_items_per_page(0);
-      $view->set_offset(0);
-
-      if ($view_config->show_filter_titles) {
-        _asu_isearch_update_view_form_filters($view, $form, $directory);
-      }
-
-      // change some values to correctly display the form
-      $form['#action'] = '/' . drupal_get_path_alias(current_path());
-      $form['#weight'] = -5;
-
-      $form['field_isearch_affil_title_value']['#access'] = (bool) $view_config->show_filter_titles;
-      $form['field_isearch_expertise_areas_tid']['#access'] = (bool) $view_config->show_filter_expertise;
-      $form['sort_by']['#access'] = (bool) $view_config->show_filter_sort;
-      $form['keys']['#access'] = (bool) $view_config->show_filter_omni;
-
-      // set the default sort by
-      $form['sort_by']['#value'] = $view_config->default_sort_by;
-
-      // set some form defaults when submitted ...
-      $params = drupal_get_query_parameters();
-
-      if (isset($params['field_isearch_expertise_areas_tid'])) {
-        $form['field_isearch_expertise_areas_tid']['#value'] = intval($params['field_isearch_expertise_areas_tid']);
-
-        if (isset($params['sort_by'])) {
-          $form['sort_by']['#default_value'] = check_url($params['sort_by']);
-          $form['sort_by']['#value'] = check_url($params['sort_by']);
-        }
-
-        if (isset($params['sort_order'])) {
-          // Forcing ascending sort order for now
-          $form['sort_order']['#value'] = 'ASC';
-        }
-      }
-
-      // Add our configs to the exposed form, so that they are resubmitted as
-      // part of the ajax process
-      $form['omni_configs']['#value'] = drupal_json_encode($view_config);
-
-      //$form['submit']['#ajax_processed'] = TRUE;
-      $content['isearch_view_exposed_form'] = $form;
-    }
+    //build the views filter form
+    _asu_isearch_build_contextual_filter_form($content, $view, $view_config, $directory);
 
     // hide configuration
     unset($content['field_isearch_config']);
   }
 }
+
+/****
+ * Helper function to build contextual filter form for view
+ */
+function _asu_isearch_build_contextual_filter_form(&$content, $view, $view_config, $directory) {
+
+  if (!$view_config->show_filter_titles
+    && !$view_config->show_filter_expertise
+    && !$view_config->show_filter_sort
+    && !$view_config->show_filter_omni
+  ) {
+    $view_config->show_filters = FALSE;
+  }
+
+  // Attach our custom ajax handling script, if ajax is enabled
+  drupal_add_js(drupal_get_path('module', 'asu_isearch') . '/js/asu_isearch_omni.js');
+
+  // build the exposed form fields
+  $form_state = array(
+    'view' => $view,
+    'display' => $view->display_handler->display,
+    'exposed_form_plugin' => $view->display_handler->get_plugin('exposed_form'),
+    'method' => 'get',
+    'rerender' => TRUE,
+    'no_redirect' => TRUE
+    //'ajax' => TRUE
+  );
+
+  $form = drupal_build_form('views_exposed_form', $form_state);
+
+  // display filters? - Should we display or hide the filters
+  if (!$view_config->show_filters) {
+    $form['#attached']['css'][] = array(
+      'data' => '.isearch-directory-filters { display: none; }',
+      'type' => 'inline',
+    );
+  }
+
+  $form['keys']['#weight'] = -100;
+  $form['keys']['#attributes']['placeholder'] = t('Name or Keyword');
+
+  // update search filters
+  $view->set_items_per_page(0);
+  $view->set_offset(0);
+
+  if ($view_config->show_filter_titles) {
+    _asu_isearch_update_view_form_filters($view, $form, $directory);
+  }
+
+  // change some values to correctly display the form
+  $form['#action'] = '/' . drupal_get_path_alias(current_path());
+  $form['#weight'] = -5;
+
+  $form['field_isearch_affil_title_value']['#access'] = (bool) $view_config->show_filter_titles;
+  $form['field_isearch_expertise_areas_tid']['#access'] = (bool) $view_config->show_filter_expertise;
+  $form['sort_by']['#access'] = (bool) $view_config->show_filter_sort;
+  $form['keys']['#access'] = (bool) $view_config->show_filter_omni;
+
+  // set the default sort by
+  $form['sort_by']['#value'] = $view_config->default_sort_by;
+
+  // set some form defaults when submitted ...
+  $params = drupal_get_query_parameters();
+
+  if (isset($params['field_isearch_expertise_areas_tid'])) {
+    $form['field_isearch_expertise_areas_tid']['#value'] = intval($params['field_isearch_expertise_areas_tid']);
+
+    if (isset($params['sort_by'])) {
+      $form['sort_by']['#default_value'] = check_url($params['sort_by']);
+      $form['sort_by']['#value'] = check_url($params['sort_by']);
+    }
+
+    if (isset($params['sort_order'])) {
+      // Forcing ascending sort order for now
+      $form['sort_order']['#value'] = 'ASC';
+    }
+  }
+
+  // Add our configs to the exposed form, so that they are resubmitted as
+  // part of the ajax process
+  $form['omni_configs']['#value'] = drupal_json_encode($view_config);
+  $form['field_isearch_affil_title_value']['#title'] = t('Title');
+  $form['field_isearch_affil_title_value']['#title_display'] = 'invisible';
+  $form['field_isearch_expertise_areas_tid']['#title'] = t('Expertise Areas Filter');
+  $form['field_isearch_expertise_areas_tid']['#title_display'] = 'invisible';
+  $form['sort_by']['#title'] = t('Sort By');
+  $form['sort_by']['#title_display'] = 'invisible';
+  $form['field_isearch_local_tags_tid']['#title'] = t('Local Tags');
+  $form['field_isearch_local_tags_tid']['#title_display'] = 'invisible';
+
+  $content['isearch_view_exposed_form'] = $form;
+}
+
 
 
 /***
