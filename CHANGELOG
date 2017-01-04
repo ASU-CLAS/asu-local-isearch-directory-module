@@ -1,6 +1,8 @@
 asu_isearch 7.x-1.8.1
 ---------------------
 - Fixed issue with pagination not functioning correctly when contextual form is removed
+- Webstandards pagination
+- Added iSearch profile photo styling
 
 
 asu_isearch 7.x-1.8
@@ -9,8 +11,6 @@ asu_isearch 7.x-1.8
 - First/primary affiliation on a profile is open by default on view
 - Research activity links are fixed
 - Fixed bug where title filter contained extraneous titles
-- Added iSearch profile photo styling
-- Webstandards pagination
 
 asu_isearch 7.x-1.7.1
 ---------------------
