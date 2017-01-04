@@ -1,3 +1,5 @@
+##Important Notice:  Run update.php immediately after upgrading to version 7.x-1.8
+
 ### NOTE! * currently under development *
 
 # ASU iSearch Local Directory module
