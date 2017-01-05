@@ -287,6 +287,8 @@ function _asu_isearch_build_contextual_filter_form(&$content, $view, $view_confi
 
   if ($view_config->show_filter_titles) {
     _asu_isearch_update_view_form_filters($view, $form, $directory);
+
+
   }
 
   // change some values to correctly display the form
@@ -434,9 +436,7 @@ function asu_isearch_get_rendered_view($view_config, &$view) {
   }
 
   $view->pre_execute();
-
   $view_display = $view->render($view_display_id);
-
   $view->post_execute();
 
   return $view_display;
@@ -480,7 +480,16 @@ function asu_isearch_get_filters($view_config, &$view) {
 
       // should we include all subdepartments?
       if ($department_options->$dept_id->subdepts) {
-        $contextual_departments = array_merge($contextual_departments, $dept_item->tree_nids);
+
+        // grab the nids from the freshest tree, instead of using saved, if possible
+        $the_nid = $dept_item->dept_nid;
+        $nids = asu_dir_utilities_get_subtree_nids($the_nid);
+
+        if (!empty($nids)) {
+          $contextual_departments = array_merge($contextual_departments, $nids);
+        } else {
+          $contextual_departments = array_merge($contextual_departments, $dept_item->tree_nids);
+        }
       }
     }
     $contextual_departments = implode(',', array_unique($contextual_departments));
