@@ -32,6 +32,8 @@ function asu_isearch_cron() {
 
   if ($last_clean != date('ymd', time())) {
 
+    variable_set('last_profile_cleanup', date('ymd', time()));
+
     // flush the image styles cache, so that updated photos show up
     $styles = array('asu_isearch_profile_list', 'asu_isearch_profile');
 
@@ -40,7 +42,8 @@ function asu_isearch_cron() {
       asu_isearch_image_style_flush($the_style);
     }
 
-    variable_set('last_profile_cleanup', date('ymd', time()));
+    // clear all cached content
+    cache_clear_all();
   }
 }
 
