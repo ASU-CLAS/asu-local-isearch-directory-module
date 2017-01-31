@@ -263,6 +263,11 @@ function _asu_isearch_cache_dept($url) {
     'timeout' => 60,
   );
 
+  // add the base_url for tracking of departments in Splunk
+  global $base_url;
+  $url .= '?dept=' . $base_url;
+
+
   $decoded = NULL;
   $data = NULL;
 
