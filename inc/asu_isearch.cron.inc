@@ -9,6 +9,13 @@
  */
 function asu_isearch_cron() {
 
+  // if we are locked from automatic update, then return false without updating
+  $lock = variable_get('isearch_local_lock', FALSE);
+
+  if ($lock) {
+    return FALSE;
+  }
+
   // it takes too much time to do both of these actions every cron run.
   // so switch between caching depts and migrating departments.
   $last_action = variable_get('asu_isearch_cron_action', 'import_depts');
