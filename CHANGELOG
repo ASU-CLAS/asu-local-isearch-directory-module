@@ -1,3 +1,7 @@
+asu_isearch 7.x-1.8.6
+---------------------
+- Updated asu_dir_utilities module
+
 asu_isearch 7.x-1.8.5
 ---------------------
 - Added 'isearch_local_lock' setting, allowing the disabling of automatic cron migration updates
