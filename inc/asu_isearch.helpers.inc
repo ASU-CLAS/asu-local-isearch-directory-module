@@ -105,16 +105,17 @@ function asu_isearch_get_tenure_config($setting) {
  * Returns the global dept configuration
  */
 function asu_isearch_get_dept_config() {
+
   $default_feed_dept = array(
     'items' => array(),
     'options' => new stdClass(),
   );
 
   //todo:  make sure this still works for all cases (asu_isearch legacy and new)
-  $configs = variable_get('isearch_admin_feed_dept', json_encode($default_feed_dept));
+  $configs = variable_get('isearch_admin_feed_dept', drupal_json_encode($default_feed_dept));
   $tree = asu_dir_utilities_get_isearch_data(ASU_DIR_UTILITIES_TREE_ENDPOINT, TRUE);
-  $decoded = drupal_json_decode($configs);
 
+  $decoded = drupal_json_decode($configs);
 
   // pull the subdepts dynamically, instead of using the saved copy
   foreach ($decoded['items'] as $key => $item) {
@@ -128,8 +129,13 @@ function asu_isearch_get_dept_config() {
     }
   }
 
+  // make sure options is an object
+  $decoded['options'] = (object) $decoded['options'];
+
   // use regular json_encode, to encode back into an
   $new_configs = drupal_json_encode($decoded);
+
+
 
   return $new_configs;
 }
@@ -299,7 +305,7 @@ function asu_isearch_get_field_solr_mappings() {
     'field_isearch_asurite_id' => 'asuriteId',
     'field_isearch_email' => 'emailAddress',
     'field_isearch_phone' => 'phone',
-    //'field_isearch_fax' => 'fax',
+    'field_isearch_fax' => 'fax',
     'field_isearch_campus_building' => 'addressLine1',
     'field_isearch_campus_room' => 'addressLine2',
     'field_isearch_primary_campus' => 'primaryJobCampus',
@@ -356,21 +362,15 @@ function asu_isearch_update_profile_From_solr($node, $solr_profile) {
           $current_safe = $node->$key[LANGUAGE_NONE][0]['safe_value'];
         }
 
-        if ($item == 'phone') {
-          $solr_profile[$item] = asu_isearch_format_phone($solr_profile[$item]);
-        }
-
         $markup = check_markup($solr_profile[$item], 'isearch_html');
 
         if ($current != $solr_profile[$item] && strcmp($current_safe, $markup) != 0) {
+
           $node->$key[LANGUAGE_NONE][0]['value'] = $solr_profile[$item];
+
           $changed = TRUE;
         }
       }
     }
-  }
-
-  if ($changed) {
-    node_save($node);
   }
 }
