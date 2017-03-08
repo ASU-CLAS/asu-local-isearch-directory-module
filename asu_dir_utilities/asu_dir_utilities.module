@@ -6,7 +6,7 @@
  * @author Colton Testamarck (colt@asu.edu)
  */
 
-include_once 'inc/asu_dir_utilities_functions.inc';
+include_once 'inc/asu_dir_utilities.functions.inc';
 
 // Access Permission Constants
 define('ASU_DIR_UTILITIES_ADMIN_CONFIG_SETTINGS', 'Administer ASU Directory Configuration');
