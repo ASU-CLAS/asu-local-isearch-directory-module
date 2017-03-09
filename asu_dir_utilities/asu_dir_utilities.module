@@ -16,7 +16,7 @@ define('ASU_DIR_UTILITIES_PAGE_ACCESS', 'access asu directory');
 // Form Field Variable Constants
 define('ASU_DIR_UTILITIES_TOP_LEVEL_PS_ID', 'ASU');
 define('ASU_DIR_UTILITIES_TOP_LEVEL_DEPT_NID', 1342);
-define('ASU_DIR_UTILITIES_FORM_CACHE_DURATION', 1);//# of hours, set to 1 initially
+define('ASU_DIR_UTILITIES_FORM_CACHE_DURATION', 4);//# of hours, set to 4 initially
 define('ASU_DIR_UTILITIES_MODULE_NAME', 'asu_dir_utilities');
 
 define('ASU_DIR_UTILITIES_ISEARCH_URL', variable_get('asu_dir_utilities_isearch_url', 'https://isearch.asu.edu'));
@@ -114,7 +114,8 @@ function asu_dir_utilities_short_circuit_version() {
  *Refresh the cached directory tree and employee types every cron run
  */
 function asu_dir_utilities_cron() {
-
+  asu_dir_utilities_refresh_dir_item(ASU_DIR_UTILITIES_TREE_ENDPOINT);
+  asu_dir_utilities_refresh_dir_item(ASU_DIR_UTILITIES_EMPLOYEE_TYPES_ENDPOINT);
   //set timeout of request to 60 seconds
   $options = array(
     'timeout' => 60,
