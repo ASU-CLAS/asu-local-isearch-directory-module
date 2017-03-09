@@ -347,30 +347,40 @@ function asu_isearch_get_field_solr_mappings() {
  * @param $solr_profile
  */
 function asu_isearch_update_profile_From_solr($node, $solr_profile) {
+
   $changed = FALSE;
   $mappings = asu_isearch_get_field_solr_mappings();
-
   foreach ($mappings as $key => $item) {
+
+    $temp = $node->$key;
+
     if (isset($solr_profile[$item])) {
-      if (property_exists($node, $key) && isset($node->$key[LANGUAGE_NONE][0]['value'])) {
-
+      if (property_exists($node, $key) && isset($temp[LANGUAGE_NONE][0]['value'])) {
         $current_safe = '';
+        $t2 = $node->$key;
 
-        $current = $node->$key[LANGUAGE_NONE][0]['value'];
+        $current = $t2[LANGUAGE_NONE][0]['value'];
 
-        if (isset($node->$key[LANGUAGE_NONE][0]['safe_value'])) {
-          $current_safe = $node->$key[LANGUAGE_NONE][0]['safe_value'];
+        if (isset($t2[LANGUAGE_NONE][0]['safe_value'])) {
+          $current_safe = $t2[LANGUAGE_NONE][0]['safe_value'];
+        }
+
+        if ($item == 'phone') {
+          $solr_profile[$item] = asu_isearch_format_phone($solr_profile[$item]);
         }
 
         $markup = check_markup($solr_profile[$item], 'isearch_html');
 
         if ($current != $solr_profile[$item] && strcmp($current_safe, $markup) != 0) {
-
-          $node->$key[LANGUAGE_NONE][0]['value'] = $solr_profile[$item];
+          $t2[LANGUAGE_NONE][0]['value'] = $solr_profile[$item];
+          $node->$key = $t2;
 
           $changed = TRUE;
         }
       }
     }
+  }
+  if ($changed) {
+    node_save($node);
   }
 }
