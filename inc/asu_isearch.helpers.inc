@@ -108,8 +108,10 @@ function asu_isearch_get_dept_config() {
 
   $default_feed_dept = array(
     'items' => array(),
-    'options' => new stdClass(),
+    'options' => new stdClass()
   );
+
+  $legacy = FALSE;
 
   //todo:  make sure this still works for all cases (asu_isearch legacy and new)
   $configs = variable_get('isearch_admin_feed_dept', drupal_json_encode($default_feed_dept));
@@ -127,17 +129,38 @@ function asu_isearch_get_dept_config() {
     if (!empty($dept_nids)) {
       $decoded['items'][$key]['tree_nids'] = $dept_nids;
     }
+
+    // handle case of legacy configs
+    if (isset($decoded['options']) && isset($decoded['options'][$item['dept_id']])) {
+      $decoded['items'][$key]['options'] = $decoded['options'][$item['dept_id']];
+      $legacy = TRUE;
+    }
   }
 
-  // make sure options is an object
-  $decoded['options'] = (object) $decoded['options'];
+  // remove options and resave if we are dealing with a legacy config
+  if ($legacy) {
+    unset($decoded['options']);
+    variable_set('isearch_admin_feed_dept', drupal_json_encode($decoded));
+  }
 
-  // use regular json_encode, to encode back into an
-  $new_configs = drupal_json_encode($decoded);
+  // this is needed for dept picker right now
+  //todo: get rid of this once asu_dep_picker modified
+  $options = new stdClass();
 
+  foreach($decoded['items'] as $item) {
+    $dept_id = $item['dept_id'];
+    if (isset($item['options'])) {
+      $options->$dept_id = $item['options'];
+    } else {
+      $options->$dept_id = array(
+        'subdepts' => FALSE
+      );
+    }
+  }
 
+  $decoded['options'] = $options;
 
-  return $new_configs;
+  return $decoded;
 }
 
 /**
@@ -151,14 +174,12 @@ function asu_isearch_get_migrate_source_urls($from_cache = FALSE) {
   $migrate_config = asu_isearch_get_dept_config();
 
   if (!is_null($migrate_config)) {
-    $migrate_config = json_decode($migrate_config);
 
-    foreach ($migrate_config->items as $migrate_item) {
+    foreach ($migrate_config['items'] as $migrate_item) {
       // determine which endpoint to use
-      $dept_id = $migrate_item->dept_id;
 
-      if ($migrate_config->options->$dept_id->subdepts) {
-        foreach ($migrate_item->tree_nids as $department_nid) {
+      if (isset($migrate_item['options']['subdepts']) && $migrate_item['options']['subdepts']) { //$migrate_config->options->$dept_id->subdepts) {
+        foreach ($migrate_item['tree_nids'] as $department_nid) {
 
           if ($from_cache && file_exists(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT . $department_nid)) {
             $endpoint = ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT;
@@ -172,14 +193,14 @@ function asu_isearch_get_migrate_source_urls($from_cache = FALSE) {
       }
       else {
         // determine which endpoint to use
-        if ($from_cache && file_exists(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT . $migrate_item->dept_nid)) {
+        if ($from_cache && file_exists(ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT . $migrate_item['dept_nid'])) {
           $endpoint = ASU_ISEARCH_DIRECTORY_FEED_CACHE_ENDPOINT;
         }
         else {
           $endpoint = ASU_DIR_UTILITIES_FEED_ENDPOINT;
         }
 
-        $source_urls[$migrate_item->dept_nid] = $endpoint . $migrate_item->dept_nid;
+        $source_urls[$migrate_item['dept_nid']] = $endpoint . $migrate_item['dept_nid'];
       }
     }
   }
