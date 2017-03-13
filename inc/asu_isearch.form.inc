@@ -44,10 +44,10 @@ function asu_isearch_form_alter(&$form, &$form_state, $form_id) {
       foreach ($configs['items'] as $conf) {
         $root = asu_isearch_dept_find_root($dept_tree, $conf['dept_nid']);
 
-        if (isset($conf['options']) && $conf['options']['subdepts']) {
+        if (isset($conf['options']) && !$conf['options']['subdepts']) {
           $newItem = new stdClass();
-          $newItem->name = $root->name;
-          $newItem->dept_nid = $root->dept_nid;
+          $newItem->name = $root['name'];
+          $newItem->dept_nid = $root['dept_nid'];
 
           $locations[] = $newItem;
         }
