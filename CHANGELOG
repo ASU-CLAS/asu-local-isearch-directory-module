@@ -1,3 +1,9 @@
+asu_isearch 7.x-1.8.9
+---------------------
+- Fixed bug with primary affiliation not mapping correctly
+- Removed duplicate update hooks
+- Removed access to timestamp field
+
 asu_isearch 7.x-1.8.8
 ---------------------
 - Fix for legacy isearch_admin configs
