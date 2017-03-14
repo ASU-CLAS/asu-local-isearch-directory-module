@@ -290,20 +290,20 @@ function asu_dir_utilities_dept_find_root($data, $dept_id, $lookup = 'dept_nid')
 }
 
 /**
- * Saves the ids of all departments under currently selected tree on #people's data object
+ * Returns the ids of all departments under currently selected tree
  * @param {object}
  *  Nested JSON object with department data
  */
 function asu_dir_utilities_dept_get_tree_data($tree, $tree_ids = array()) {
 
   $newItem = new stdClass();
-  $newItem->name = $tree->name;
-  $newItem->dept_nid = $tree->dept_nid;
+  $newItem->name = $tree['name'];
+  $newItem->dept_nid = $tree['dept_nid'];
 
   $tree_ids[] = $newItem;
 
-  for ($i = 0; $i < count($tree->children); $i++) {
-    $tree_ids = asu_dir_utilities_dept_get_tree_data($tree->children[$i], $tree_ids);
+  for ($i = 0; $i < count($tree['children']); $i++) {
+    $tree_ids = asu_dir_utilities_dept_get_tree_data($tree['children'][$i], $tree_ids);
   }
 
   return $tree_ids;
@@ -317,18 +317,16 @@ function asu_dir_utilities_dept_get_tree_data($tree, $tree_ids = array()) {
  * @param array $tree_ids
  * @return array
  */
-function asu_dir_utilities_dept_get_tree_nids($tree, $tree_ids = array()) {
+function asu_dir_utilities_dept_get_tree_nids($tree, &$tree_ids = array()) {
 
-
-  if (isset($tree->dept_nid)) {
-    $newItem = $tree->dept_nid;
-
+  if (isset($tree['dept_nid'])) {
+    $newItem = $tree['dept_nid'];
     $tree_ids[] = $newItem;
   }
 
-  if (isset($tree->children)) {
-    for ($i = 0; $i < count($tree->children); $i++) {
-      $tree_ids = asu_dir_utilities_dept_get_tree_data($tree->children[$i], $tree_ids);
+  if (isset($tree['children'])) {
+    for ($i = 0; $i < count($tree['children']); $i++) {
+      asu_dir_utilities_dept_get_tree_nids($tree['children'][$i], $tree_ids);
     }
   }
 
